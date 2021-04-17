@@ -14,8 +14,40 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from nalanda.authentication import views as auth_views
+from nalanda.library import views as lib_views
 
 urlpatterns = [
+    # auth views
     path('admin/', admin.site.urls),
+    path('', auth_views.Home, name='home'),
+    path('contactus', auth_views.Contact_us, name="Contact-us"),
+    path('aboutus', auth_views.About_us, name="about-us"),
+    path('login/', auth_views.Log_In, name='auth-login'),
+    path('login/emailverification',
+         auth_views.Verify_User_by_website, name='auth-verify'),
+    path('login/forgotpassword', auth_views.Forgot_Password, name='forgot_password'),
+    path('login/forgotpassword/<email>/resetpassword',
+         auth_views.Reset_Password, name='reset password'),
+    path('signup/', auth_views.Sign_Up, name='auth-signup'),
+    path('profile', auth_views.Profile, name='profile'),
+    path('home', auth_views.user, name='user'),
+    path('librarian/home', lib_views.librarian, name='librarian'),
+    path('changepassword', auth_views.ChangePassword, name="changepassword"),
+    path('librarian/changepassword', lib_views.librarian_ChangePassword,
+         name="librarian-changepassword"),
+    # user views
+    path('booksearch/', lib_views.booksearch, name='booksearch'),
+    path('booksearch/<isbn>/', lib_views.book_details, name='book_details'),
+    path('bookshelf', lib_views.bookshelf, name='bookshelf'),
+    path('mybooks', lib_views.mybooks, name='mybooks'),
+    # friends urls
+    path('friends', lib_views.friends, name='friends'),
+    path('friends/list', lib_views.friends_list, name='friends_list'),
+    path('friends/pending', lib_views.pending_requests, name='pending_requests'),
+    path('friends/add', lib_views.add_friend, name='add_friend'),
+    path('friends/list/<userId>/bookshelf',
+         lib_views.friends_bookshelf, name='friends_bookshelf')
+
 ]
