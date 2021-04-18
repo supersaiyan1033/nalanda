@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Voyage-Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Piedra&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+ <script src="https://kit.fontawesome.com/e8cc655727.js" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+
+<style>
+body{
+    margin:0px;
+    padding:0px;
+}
+nav{
+width:100vw;
+position:fixed;
+height:70px;
+background-color:#004488;
+z-index:9999;
+}
+nav .logo{
+    float:left;
+    color:black;
+    padding-top:18px;
+    padding-bottom:18px;
+    padding-left:60px;
+    font-family:'Piedra', cursive;
+}
+nav ul{
+    text-align:right;
+    margin:0px;
+    padding:0px;
+    display:flex;
+    float:right;
+}
+nav ul li{
+    list-style:none;
+    display:inline-block;
+    padding:15px;
+}
+nav ul li a{
+    float:right;
+    text-decoration:none;
+    display:block;
+    text-transform:uppercase;
+    color:#fff;
+    font-size:15px;
+    font-family:'Raleway';
+    padding:9px 10px;
+    margin-right:8px;
+}
+nav ul li a:hover{
+    text-decoration:none;
+    background-color:white;
+    color:#000;
+    border-radius:7px;
+    .icon{
+  color:red;
+}
+    
+}
+nav ul li a.active{
+background:#cc0000;
+color:#fff;
+border-radius:7px;
+
+}
+#section1{
+    width:100vw;
+    height:100vh;
+    background:url(https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NHx8bGlicmFyeXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80);
+    background-size:cover;
+    background-position:center;
+}
+#lightSlider{
+  list-style:none;
+  display:flex;
+}
+#lightslider li{
+  display:inline-block;
+}
+.box{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+#transport{
+  width:100vw;
+  height:30vh;
+  list-style:none;
+  display:flex;
+  text-align:center;
+  justify-content:center;
+}
+#transport li{
+  display:inline;
+  text-align:center;
+  width:100vw;
+  justify-content:center;
+}
+
+.carousel-inner > .item >img{
+  min-height : 300px;
+  max-height : 300px;
+  width : 80%;
+}
+.swiper-container {
+    width: 100vw;
+    height: 200px;
+}
+.swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+
+      /* Center slide text vertically */
+    }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo">
+      <h3><i class="fas fa-book" aria-hidden="true" style="padding:5px 10px;color:lightblue;"></i>IIT INDORE LIBRARY</h3>
+    </div>
+    <ul>
+      <li><a href="" class="active"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
+      <li><a href="login"><i class="fa fa-user" aria-hidden="true" style="padding-right:10px;" class="icon"></i>Login</a></li>
+      <li><a href="signup"><i class="fa fa-user-plus" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Signup</a></li>
+      <li><a href="aboutus"><i class="fa fa-info" aria-hidden="true" style="padding-right:10px;"class="icon"></i>About</a></li>
+      <li><a href="contactus"><i class="fa fa-phone" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Contact</a></li>
+    </ul>
+  </nav>
+</div>
+<div id="section1">
+  <div id="introduction" style="position:absolute;top:70px;background-color:rgba(0,0,0,0.4);padding:20px;width:100vw;height:90vh;">
+    <br><br><br>
+    <h3 style="text-align:center;color:white;font-family:serif; "> “A room without books is like a body without a soul.” <br> welcome to </h4>
+    <h1 style="text-align:center;color:#004488;font-family:'Inconsolata',serif;font-weight:bold;"><i class="fas fa-book-reader" style="color:white;margin-right:5px;"></i>IIT INDORE LIBRARY </style></h3>
+    <h2 style="text-align:center;color:white;font-family:serif;">Access to all kind of scientific journals and fabouous novels</h4>
+    <h3 style="text-align:center;color:white;font-family:serif;">Signup now and join us today!!</h4>
+    <h2 style="text-align:center;color:white;font-family:serif;">All genres of books and wide range of collections!</h4>
+  </div>
+</div>
+<div>
+  {% comment %} <h4 style="text-align:center;font-family:'Raleway';font-weight:bold;padding:15px;">Different book collections</h4>
+</div>
+<div class="wrap" style="text-align:center;position:absolute;display:flex;justify-content:center;width:100vw;">
+  <ul id="lightSlider" style="text-align:center;position:absolute;display:flex;justify-content:center;width:100vw;">
+    <li style="width:300px;height:400px;">
+      <div class="box" style="border-radius:8px;margin:15px;">
+        <img src="https://hackr.io/blog/best-java-books-for-beginners-and-advanced-programmers/thumbnail/large" height="160" width="100%" class="cardimg" style="object-fit:cover;">
+        <div style="padding:10px;background-color:white;">
+          <h5 style="text-align:center;">Subject oriented books</h5>
+          <h6>We have a vast collections books written by authors all around the world to give our students vast exposure and knowledge</h6>
+        </div>
+      </div>
+    </li>
+    <li style="width:300px;height:400px;">
+      <div class="box"  style="border-radius:8px;margin:15px;">
+        <img src="https://compote.slate.com/images/ea8e3254-563d-4095-967e-fa1599366126.gif?width=780&height=520&rect=1560x1040&offset=0x0" height="160" width="100%" class="cardimg" style="object-fit:cover;">
+        <div style="padding:10px;background-color:white">
+          <h5 style="text-align:center;">Scientific journals</h5>
+          <h6>We promote students to pursue their intrests in various fields and provide them with up to date journals invloving various discoveries </h6>
+        </div>
+      </div>
+    </li>
+    <li style="width:300px;height:400px;">
+      <div class="box"  style="border-radius:8px;margin:15px;">
+        <img src="https://ccs.in/sites/default/files/attachments/deepak-lal-book-launch.jpg" height="160" width="100%" class="cardimg" style="object-fit:cover;">
+        <div style="padding:10px;background-color:white;">
+          <h5 style="text-align:center;">Faculty publications</h5>
+          <h6>Our proffesors contribute a lot of literature to their respective fields.This is the most precious information being passed from our institute and will be available at any time too all the students</h6>
+        </div>
+      </div>
+    </li>
+    <li style="width:300px;height:400px;">
+      <div class="box"  style="border-radius:8px;margin:15px;">
+        <img src="https://www.collegiateparent.com/wp-content/uploads/2020/10/why-reading-is-beneficial.png" height="160" width="100%" class="cardimg" style="object-fit:cover;">
+        <div style="padding:10px;background-color:white;">
+          <h5 style="text-align:center;">Recreational Reading</h5>
+          <h6>One can find so much fun in reading books. this section contains books of fiction literature and general intrest in order to free minds of students who are busy in their academic activities</h6>
+        </div>
+      </div>
+    </li>
+    <li style="width:300px;height:400px;">
+      <div class="box"  style="border-radius:8px;border-style:solid;margin:15px;border:2px;">
+        <img src="https://images.unsplash.com/photo-1565453006698-a17d83b9e2af?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fG5ld3NwYXBlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80" height="160" width="100%" class="cardimg" style="object-fit:cover;">
+        <div style="padding:10px;background-color:white;">
+          <h5 style="text-align:center;">Magazines and Newspapers</h5>
+          <h6>Getting to know what is happening around you is most important thing in todays competetive world, Our library conists of many magazines from all categories and nearly 7-8 newspapers are present daily </h6>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div> 
+<br>
+<div style="width=100vw;background-color:lightblue;height:50vh;display:block;">
+</div>
+
+<br>
+<div style="background-color:lightgreen;width:100vw;height:50vh;">
+  <div style="z-index:9999;">
+    <h4 style="text-align:center;font-family:'Raleway';font-weight:bold;padding:15px;z-index:9998;color:white;">Salient Features of IIT INDORE</h4>
+    <div class="wrap" style="text-align:center;position:absolute;display:flex;justify-content:center;width:100vw;">
+      <ul id="lightSlider" style="text-align:center;position:absolute;display:flex;justify-content:center;width:100vw;">
+        <li style="width:300px;height:400px;">
+          <div class="box" style="border-radius:8px;margin:15px;">
+            <i class="fa fa-money fa-4x" style="padding:10px;"></i>
+            <div style="padding:10px;background-color:white;">
+              <h5 style="text-align:center;">30 Day Loan Policy</h5>
+                <h6>We understand the need of students and we keep sufficient copies of each book and lend it to students for 30 days for free.</h6>
+            </div>
+         </div>
+       </li>
+       <li style="width:300px;height:400px;">
+        <div class="box"  style="border-radius:8px;margin:15px;">
+          <i  class="far fa-hand-paper fa-4x " style="padding:10px;"></i>
+           <div style="padding:10px;background-color:white">
+             <h5 style="text-align:center;">On Hold Option </h5>
+             <h6>Busy in Work? No problem you can hold a book(if available) online so that you can pick it yourself whenever you like</h6>
+           </div>
+        </div>
+       </li>
+       <li style="width:300px;height:400px;">
+         <div class="box"  style="border-radius:8px;margin:15px;">
+           <i class="fa fa-book fa-4x " style="padding:10px;"></i>
+           <div style="padding:10px;background-color:white;">
+             <h5 style="text-align:center;">Add a personal bookshelf</h5>
+             <h6>Add your personal all time favourites to he personal bookshelf so that you alays dont search for them</h6>
+           </div>
+         </div>
+       </li>
+       <li style="width:300px;height:400px;">
+         <div class="box"  style="border-radius:8px;margin:15px;">
+           <i class="fa fa-users fa-4x" style="padding:10px;"></i>
+           <div style="padding:10px;background-color:white;">
+             <h5 style="text-align:center;">Add Friends</h5>
+             <h6>Do you want to share your good reading with your friends? Yes that's completely possible you can now add friends and share each other personal bookshelves</h6>
+           </div>
+         </div>
+       </li>
+       <li style="width:300px;height:400px;">
+         <div class="box"  style="border-radius:8px;border-style:solid;margin:15px;border:2px;">
+           <i class="fa fa-lightbulb-o fa-4x"  style="padding:10px;"></i>
+           <div style="padding:10px;background-color:white;">
+             <h5 style="text-align:center;">Get Suggesstions</h5>
+             <h6>Do you Want to read more books according to your taste ? We will help you with our state-of-the-art  suggestion Algorithm which exactly matches your taste</h6>
+           </div>
+         </div>
+       </li>
+     </ul>
+   </div> 
+ </div>
+</div> {% endcomment %}
+</body>
+</html>
