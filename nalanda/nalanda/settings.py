@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#HELLO GOD KARMA
 
 # Application definition
 
