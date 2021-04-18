@@ -31,7 +31,7 @@ def Home(request):
             url = "http://127.0.0.1:8000/admin/home"
         return redirect(url)
     else:
-      return render(request, 'authentication/home.html')
+        return render(request, 'authentication/home.html')
 
 
 def About_us(request):
@@ -73,14 +73,14 @@ def Log_In(request):
             dbpassword = row[0][4]
             userId = row[0][0]
             data = {
-            'UserId': row[0][0],
-            'Name': row[0][1],
-            'email': row[0][2],
-            'DOB': row[0][3],
-            'Password': row[0][4],
-            'Category': row[0][5],
-            'address': row[0][6],
-            'Unpaid_fees': row[0][7]
+                'UserId': row[0][0],
+                'Name': row[0][1],
+                'email': row[0][2],
+                'DOB': row[0][3],
+                'Password': row[0][4],
+                'Category': row[0][5],
+                'address': row[0][6],
+                'Unpaid_fees': row[0][7]
             }
             if bcrypt.checkpw(password.encode('utf8'), dbpassword.encode('utf8')):
 
@@ -100,9 +100,9 @@ def Log_In(request):
 
             else:
 
-                 messages.success(
-                     request, 'incorrect password please try again!!')
-                 return render(request, 'authentication/login.html')
+                messages.success(
+                    request, 'incorrect password please try again!!')
+                return render(request, 'authentication/login.html')
         else:
             messages.success(
                 request, 'Account does not exist with the entered credentials!! signup to create an account')
@@ -125,14 +125,14 @@ def Sign_Up(request):
         if cursor.rowcount == 0:
             request.session['Name'] = Name
             request.session['Category'] = Category
-            request.session['address'] = Address
+            request.session['address'] = address
             request.session['DOB'] = DOB
             request.session['email'] = email
-            request.session['password'] = Password
+            request.session['password'] = password
             otp = get_random_string(6, allowed_chars='0123456789')
             request.session['otp'] = otp
             send_mail(subject='{} is your Pack your bags OTP'.format(otp), message='click on the below link to Verify your email.Note that this link will only be active for 10minutes.', from_email='nalanda3306@gmail.com', recipient_list=[email], fail_silently=True,
-            html_message="<h2>Please enter the below OTP to complete your verification.Note that this OTP will only be active for 10minutes.</h2><br><h2>{}</h2>".format(otp))
+                      html_message="<h2>Please enter the below OTP to complete your verification.Note that this OTP will only be active for 10minutes.</h2><br><h2>{}</h2>".format(otp))
             request.session['email_link_is_active'] = True
             messages.success(
                 request, 'OTP sent to your email please check your inbox!!')
@@ -153,7 +153,7 @@ def Forgot_Password(request):
         cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
         if cursor.rowcount == 1:
             send_mail(subject='reset password request', message='click on the below link to reset your password.Note that this link will only be active for 10minutes.', from_email='nalanda3306@gmail.com', recipient_list=[email], fail_silently=False,
-            html_message="<h1> click on the below link to reset your password.Note that this link will only be active for 10minutes.</h1><br><a href='http://127.0.0.1:8000/login/forgotpassword/{}/resetpassword'>to reset your password click here</a>".format(email))
+                      html_message="<h1> click on the below link to reset your password.Note that this link will only be active for 10minutes.</h1><br><a href='http://127.0.0.1:8000/login/forgotpassword/{}/resetpassword'>to reset your password click here</a>".format(email))
             request.session['link_is_active'] = True
             messages.success(
                 request, 'reset link sent to the entered mail please check your inbox!!')
@@ -167,50 +167,50 @@ def Forgot_Password(request):
 
 
 def Verify_User_by_website(request):
- if request.session.get('email_link_is_active'):
-    if request.method == 'POST':
-        otp = request.POST.get('otp')
-        cursor = connection.cursor()
-        if request.session.get('otp') != None:
-         otp_from_email = request.session.get('otp')
-         if otp == otp_from_email:
-             Name = request.session.get('Name')
-             email = request.session.get('email')
-             DOB = request.session.get('DOB')
-             Category = request.session.get('Category')
-             address = request.session.get('address')
-             password = request.session.get('password')
-             password = bcrypt.hashpw(password.encode(
-                 'utf8'), bcrypt.gensalt(rounds=12))
-             cursor.execute("""INSERT INTO user(Name,Category,Address,DOB,email,Password) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
-                            (Name, Category, address, DOB, email, password))
-             messages.success(
-                 request, 'verification successful!!please  login to continue')
-             return redirect('http://127.0.0.1:8000/login')
-         else:
-             messages.success(request, 'invalid otp try again!!')
-             return redirect('http://127.0.0.1:8000/login/emailverification')
+    if request.session.get('email_link_is_active'):
+        if request.method == 'POST':
+            otp = request.POST.get('otp')
+            cursor = connection.cursor()
+            if request.session.get('otp') != None:
+                otp_from_email = request.session.get('otp')
+                if otp == otp_from_email:
+                    Name = request.session.get('Name')
+                    email = request.session.get('email')
+                    DOB = request.session.get('DOB')
+                    Category = request.session.get('Category')
+                    address = request.session.get('address')
+                    password = request.session.get('password')
+                    password = bcrypt.hashpw(password.encode(
+                        'utf8'), bcrypt.gensalt(rounds=12))
+                    cursor.execute("""INSERT INTO user(Name,Category,Address,DOB,email,Password) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
+                                   (Name, Category, address, DOB, email, password))
+                    messages.success(
+                        request, 'verification successful!!please  login to continue')
+                    return redirect('http://127.0.0.1:8000/login')
+                else:
+                    messages.success(request, 'invalid otp try again!!')
+                    return redirect('http://127.0.0.1:8000/login/emailverification')
 
+            else:
+                messages.success(request, 'Signup before email verification!!')
+                return redirect('http://127.0.0.1:8000/signup')
         else:
-            messages.success(request, 'Signup before email verification!!')
-            return redirect('http://127.0.0.1:8000/signup')
+            return render(request, 'authentication/verify_email.html')
     else:
-        return render(request, 'authentication/verify_email.html')
- else:
-     return render(request, 'authentication/error.html')
+        return render(request, 'authentication/error.html')
 
 
 def Profile(request):
- UserId = request.session.get('UserId')
- email = request.session.get('email')
- if request.session.get('email') == email:
-    cursor = connection.cursor()
-    cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
-    row = cursor.fetchall()
-    Category = ['Student', 'Faculty']
+    UserId = request.session.get('UserId')
+    email = request.session.get('email')
+    if request.session.get('email') == email:
+        cursor = connection.cursor()
+        cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
+        row = cursor.fetchall()
+        Category = ['Student', 'Faculty']
 
-    dateOfBirth = row[0][3].strftime("%Y-%m-%d")
-    data = {
+        dateOfBirth = row[0][3].strftime("%Y-%m-%d")
+        data = {
             'UserId': row[0][0],
             'Name': row[0][1],
             'email': row[0][2],
@@ -218,112 +218,110 @@ def Profile(request):
             'Password': row[0][4],
             'Category': Category,
             'address': row[0][6]
-    }
-    if request.method == "POST":
-        Name = request.session.get('Name')
-        email = request.session.get('email')
-        DOB = request.session.get('DOB')
-        Category = request.session.get('Category')
-        address = request.session.get('Address')
-        password = request.session.get('Password')
-        if bcrypt.checkpw(password.encode('utf8'), data['Password'].encode('utf8')):
-            messages.success(request, 'Profile is Updated Successfully!')
-            cursor.execute("""UPDATE user SET Name=%s,Category=%s,Address=%s,email=%s,DOB=%s WHERE UserId=%s """,
-            (Name, Category, address, email, DOB, data['userId']))
-            return redirect('http://127.0.0.1:8000/home')
-        else:
-            messages.success(request, 'incorrect password please try again!!')
-            return render(request, 'authentication/profile.html', data)
-    else:
-        return render(request, "authentication/profile.html", data)
- else:
-     return render(request,'authentication/error.html')
-
-
-
-
-
-
-
-def ChangePassword(request):
- userId=request.session.get('userId')
- email=request.session.get('email')   
- if request.session.get('email') == email:
-    cursor = connection.cursor()
-    cursor.execute("""SELECT * FROM user WHERE email= %s """, [email])
-    row = cursor.fetchall()
-    dbPassword = row[0][4]
-    if request.method == "POST":
-        oldPassword = request.POST.get('oldpassword')
-        newPassword = request.POST.get('newpassword')
-        confirmPassword = request.POST.get('confirmpassword')
-        if bcrypt.checkpw(oldPassword.encode('utf8'), dbPassword.encode('utf8')):
-            if newPassword == confirmPassword:
-                dbPassword = bcrypt.hashpw(newPassword.encode(
-                    'utf8'), bcrypt.gensalt(rounds=12))
-                cursor.execute(
-                    """UPDATE user SET Password=%s WHERE email=%s""", (dbPassword, email))
-                messages.success(request, 'Password changed successfully!')
+        }
+        if request.method == "POST":
+            Name = request.session.get('Name')
+            email = request.session.get('email')
+            DOB = request.session.get('DOB')
+            Category = request.session.get('Category')
+            address = request.session.get('Address')
+            password = request.session.get('Password')
+            if bcrypt.checkpw(password.encode('utf8'), data['Password'].encode('utf8')):
+                messages.success(request, 'Profile is Updated Successfully!')
+                cursor.execute("""UPDATE user SET Name=%s,Category=%s,Address=%s,email=%s,DOB=%s WHERE UserId=%s """,
+                               (Name, Category, address, email, DOB, data['userId']))
                 return redirect('http://127.0.0.1:8000/home')
             else:
                 messages.success(
-                    request, 'new password and confirm password must be the same!!')
-                return render(request, 'authentication/changepassword.html')
+                    request, 'incorrect password please try again!!')
+                return render(request, 'authentication/profile.html', data)
         else:
-            messages.success(request, 'incorrect password!!')
-            return render(request, 'authentication/changepassword.html')
-
+            return render(request, "authentication/profile.html", data)
     else:
-        return render(request, 'authentication/changepassword.html')
- else:
-     return render(request,'authentication/error.html')
+        return render(request, 'authentication/error.html')
 
 
-def Reset_Password(request):
+def ChangePassword(request):
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    if request.session.get('email') == email:
+        cursor = connection.cursor()
+        cursor.execute("""SELECT * FROM user WHERE email= %s """, [email])
+        row = cursor.fetchall()
+        dbPassword = row[0][4]
+        if request.method == "POST":
+            oldPassword = request.POST.get('oldpassword')
+            newPassword = request.POST.get('newpassword')
+            confirmPassword = request.POST.get('confirmpassword')
+            if bcrypt.checkpw(oldPassword.encode('utf8'), dbPassword.encode('utf8')):
+                if newPassword == confirmPassword:
+                    dbPassword = bcrypt.hashpw(newPassword.encode(
+                        'utf8'), bcrypt.gensalt(rounds=12))
+                    cursor.execute(
+                        """UPDATE user SET Password=%s WHERE email=%s""", (dbPassword, email))
+                    messages.success(request, 'Password changed successfully!')
+                    return redirect('http://127.0.0.1:8000/home')
+                else:
+                    messages.success(
+                        request, 'new password and confirm password must be the same!!')
+                    return render(request, 'authentication/changepassword.html')
+            else:
+                messages.success(request, 'incorrect password!!')
+                return render(request, 'authentication/changepassword.html')
+
+        else:
+            return render(request, 'authentication/changepassword.html')
+    else:
+        return render(request, 'authentication/error.html')
+
+
+def Reset_Password(request, email):
     if request.session.get('link_is_active'):
-        if request.method=='POST':
+        if request.method == 'POST':
             newpassword = request.POST.get('newpassword')
             confirmpassword = request.POST.get('confirmpassword')
             if newpassword == confirmpassword:
                 cursor = connection.cursor()
-                dbPassword = bcrypt.hashpw(newpassword.encode('utf8'), bcrypt.gensalt(rounds=12))
-                cursor.execute("""UPDATE user SET Password=%s WHERE email=%s""", (dbPassword, email))
+                dbPassword = bcrypt.hashpw(newpassword.encode(
+                    'utf8'), bcrypt.gensalt(rounds=12))
+                cursor.execute(
+                    """UPDATE user SET Password=%s WHERE email=%s""", (dbPassword, email))
                 messages.success(request, 'Password changed successfully!')
                 return redirect('http://127.0.0.1:8000/login')
             else:
-                messages.success(request,'both fileds must be the same!!')
-                return render(request,'authentication/reset_password.html')
-                 
+                messages.success(request, 'both fileds must be the same!!')
+                return render(request, 'authentication/reset_password.html')
+
         else:
-            return render(request,'authentication/reset_password.html')    
+            return render(request, 'authentication/reset_password.html')
     else:
-        return render(request,'authentication/error.html')
+        return render(request, 'authentication/error.html')
 
 
 def user(request):
-    userId=request.session.get('userId')
-    email=request.session.get('email')
-    if  request.session.get('Category')=='Student' or request.session.get('Category')=='Faculty' :
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    if request.session.get('Category') == 'Student' or request.session.get('Category') == 'Faculty':
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
         row = cursor.fetchall()
         dateOfBirth = row[0][3].strftime("%Y-%m-%d")
         data = {
-        'UserId': row[0][0],   
-        'Name': row[0][1],
-        'email': row[0][2],
-        'DOB': dateOfBirth,
-        'Password': row[0][4],
-        'Category': row[0][5],
-        'address': row[0][6],
-        'Unpaid_fees':row[0][7]
+            'UserId': row[0][0],
+            'Name': row[0][1],
+            'email': row[0][2],
+            'DOB': dateOfBirth,
+            'Password': row[0][4],
+            'Category': row[0][5],
+            'address': row[0][6],
+            'Unpaid_fees': row[0][7]
         }
 
         return render(request, 'authentication/user.html', data)
-    elif request.session.get('email')!=None:
-        return render(request,'authentication/page_not_found.html')
+    elif request.session.get('email') != None:
+        return render(request, 'authentication/page_not_found.html')
     else:
-        return render(request,'authentication/error.html')
+        return render(request, 'authentication/error.html')
 
 # librarian rocks
 
