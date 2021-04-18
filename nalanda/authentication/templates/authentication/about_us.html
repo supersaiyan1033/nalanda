@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About us</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+    <link href="https://fonts.googleapis.com/css2?family=Piedra&display=swap" rel="stylesheet">
+   <style>
+    @import "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css";
+body{
+    margin: 0;
+    padding: 0;
+    font-family:sans-serif;
+    background:url(http://library.iiti.ac.in/wp-content/uploads/2020/09/LRC_home-1.jpg);
+    opacity:rgba(0,0,0,0.6);
+    background-size: cover;
+}
+.login-box{
+    width: 85vw;
+    border-radius:10px;
+    color:#004488;
+    background-color:rgba(255,255,255,1);
+    padding:0px 20px;
+    position: absolute;
+    top:60%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.login-box h1{
+
+    font-size:40px;
+    border-bottom: 4px solid;
+    border-bottom-color:black;
+    margin-bottom:50px ;
+    padding:13px 0;
+    text-align:center;
+}
+.textbox{
+    width:100%;
+    overflow:hidden;
+    font-size: 20px ;
+    padding:8px 0;
+    margin:8px 0;
+    border-bottom: 1px solid;
+    border-bottom-color: black ;
+}
+.textbox i{
+    width:26px;
+   float:left;
+    color:#004488;
+    text-align: center;
+}
+.textbox input{
+    border:none;
+    outline:none;
+    background: white;
+    font-size: 18px;
+    color:black;
+    width:250px;
+    float:left;
+    margin: 0 10px;
+}
+.textbox textarea{
+     border:none;
+    outline:none;
+    background: white;
+    font-size: 18px;
+    color:black;
+    width:250px;
+    float:left;
+    margin: 0 10px;
+}
+.loginbtn{
+    text-align:center;
+    margin:0px;
+}
+.btn{
+    text-align:center;
+    color:white;
+    width:60%;
+    background: #e60000;
+    border:2px solid;
+    border-color: black;
+    padding:5px;
+    font-size: 18px;
+    cursor: pointer;
+    margin:12px 0px;
+    border-radius:7px;
+}
+.btn:hover{
+  transform:scale(1.1);
+  background:#ff1a1a
+}
+.signup{
+    color:black;
+    
+    font-size: 17px;
+    font-weight: bold;
+    text-align:center;
+}
+.signup:hover{
+    color:#ff1a1a;
+}
+nav{
+width:100%;
+position:fixed;
+height:70px;
+background-color:#004488;
+z-index:9999;
+}
+nav .logo{
+    float:left;
+    font-size:20px ;
+    color:#fff;
+    padding-bottom:5px;
+    padding-left:20px;
+    font-family:'Piedra', cursive;
+}
+nav ul{
+    text-align:right;
+    margin:0px;
+    padding:0px;
+    display:flex;
+    float:right;
+}
+nav ul li{
+    list-style:none;
+    display:inline-block;
+    padding:15px;
+}
+nav ul li a{
+    float:right;
+    text-decoration:none;
+    display:block;
+    text-transform:uppercase;
+    color:#fff;
+    font-size:15px;
+    font-family:'Raleway';
+    padding:9px 10px;
+    margin-right:8px;
+}
+nav ul li a:hover{
+    text-decoration:none;
+    background-color:#fff;
+    color:#000;
+    border-radius:7px;
+    .icon{
+  color:red;
+}
+
+}
+nav ul li a.active{
+background:#cc0000;
+color:#fff;
+border-radius:7px;
+
+}
+</style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+          <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:white;"></i>IIT INDORE LIBRARY</h3>
+        </div>
+        <ul>
+          <li><a href="{% url 'home' %}"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
+          <li><a href="{% url 'auth-signup' %}"><i class="fa fa-user" aria-hidden="true" style="padding-right:10px;" class="icon"></i>Signup</a></li>
+          <li><a href="{% url 'about-us' %}"><i class="fa fa-info" aria-hidden="true" style="padding-right:10px;"class="icon"></i>About</a></li>
+          <li><a href="{% url 'Contact-us'%}"><i class="fa fa-phone" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Contact</a></li>
+        </ul>
+      </nav>
+      <form method="POST">
+       {%csrf_token%}
+    <div class="login-box">
+       <h1>About us</h1>
+       <h2 style="color:black;">The Library has a collection of 36790+ books at present. These include books on all relevant subjects for teaching, reference and research in addition to fiction, literature and general interest books to take care of the leisure and recreational reading needs of users. The Library has also developed special collections such as Gandhian Studies, Hindi books, Children’s books, etc.
+        Online Information Resources are vital for academic and research institutes in today’s knowledge economy. The library provides its users access to more than 2540+ e-journals. In addition to this, the Library provides access to bibliographic databases such as SciFinder Scholar,  and MathSciNet, among others. The Reading Hall provides a peaceful environment conducive to study.</h2>
+       <h1>Contributers</h1>
+       <table style="margin-left: auto;margin-right: auto;">
+       <tr>
+       <td>
+       <i class="fa fa-user fa-2x" style="color:red;padding:0px 60px;" >
+       </td>
+        <td>
+        <i class="fa fa-user fa-2x" style="color:red;padding:0px 60px;"></i>
+       </td>
+        <td>
+        <i class="fa fa-user fa-2x" style="color:red;padding:0px 60px;"></i>
+       </td>
+        <td>
+        <i class="fa fa-user fa-2x" style="color:red;padding:0px 60px;"></i>
+       </td>
+        <td>
+        <i class="fa fa-user fa-2x" style="color:red;padding:0px 60px;"></i>
+       </td>
+       </tr>
+       <tr>
+       <td>
+       <h2 style="text-align:center;color:black;">Nitin</h2>
+       </td>
+        <td>
+        <h2 style="text-align:center;color:black;">Revanth</h2>
+       </td>
+        <td>
+         <h2 style="text-align:center;color:black;">Aakash</h2>
+       </td>
+        <td>
+          <h2 style="text-align:center;color:black;">Sai ram</h2>
+       </td>
+        <td>
+          <h2 style="text-align:center;color:black;">Abhiram</h2>
+       </td>
+       </tr>
+
+       </table>
+
+    </div>
+    </form>
+     {% if messages %}
+        {% for message in messages %}
+         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+
+        {% endfor %}
+
+    {% endif %}
+</body>
+</html> 

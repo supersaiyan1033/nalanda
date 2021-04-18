@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'nalanda',
+    'authentication',
+    'library',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,17 +81,19 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nalanda',
-        'USER': 'root',
+        'USER': 'project',
         'PASSWORD': 'roomno605',
         'HOST': 'localhost',
-        'PORT': '3333',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
 
     }
 }
-
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -128,7 +133,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER='nalanda3306@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS =True
+EMAIL_HOST_PASSWORD='roomno@605'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
