@@ -10,14 +10,14 @@ body{
     margin: 0;
     padding: 0;
     font-family:sans-serif;
-    background:url(https://wallpaperaccess.com/full/253332.jpg);
+    background:url(https://media.cntraveler.com/photos/5e9471d05cd3cb0009ca9612/master/pass/FranceSummerTravel-2020-GettyImages-805553090.jpg);
     opacity:rgba(0,0,0,0.6);
     background-size: cover;
 }
 .login-box{
     width: 300px;
     border-radius:10px;
-    color:#004488;
+    color:red;
     background-color:rgba(255,255,255,1);
     padding:0px 20px;
     position: absolute;
@@ -41,13 +41,13 @@ body{
     font-size: 20px ;
     padding:8px 0;
     margin:8px 0;
-    /* border-bottom: 1px solid;
-    border-bottom-color: black ; */
+    border-bottom: 1px solid;
+    border-bottom-color: black ;
 }
 .textbox i{
     width:26px;
    float:left;
-    color:green;
+    color:red;
     text-align: center;
 }
 .textbox input{
@@ -59,12 +59,6 @@ body{
     width:250px;
     float:left;
     margin: 0 10px;
-}
-#user{
-    color:blue;
-}
-#librarian{
-    color:blue;
 }
 .loginbtn{
     text-align:center;
@@ -89,7 +83,7 @@ body{
 }
 .signup{
     color:black;
-    
+    padding:20px;
     font-size: 17px;
     font-weight: bold;
     text-align:center;
@@ -101,13 +95,13 @@ nav{
 width:100%;
 position:fixed;
 height:70px;
-background-color:#004488;
+background-color:rgba(0,0,0,1);
 z-index:9999;
 }
 nav .logo{
     float:left;
     font-size:20px ;
-    color:black;
+    color:#fff;
     padding-bottom:5px;
     padding-left:20px;
     font-family:'Piedra', cursive;
@@ -156,42 +150,27 @@ border-radius:7px;
 <body>
     <nav>
         <div class="logo">
-          <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:white;"></i>IIT INDORE LIBRARY</h3>
+          <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:red;"></i>PACK YOUR BAGS</h3>
         </div>
         <ul>
           <li><a href="{% url 'home' %}"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
           <li><a href="{% url 'auth-signup' %}"><i class="fa fa-user" aria-hidden="true" style="padding-right:10px;" class="icon"></i>Signup</a></li>
-          <li><a href="{% url 'about-us'%}"><i class="fa fa-info" aria-hidden="true" style="padding-right:10px;"class="icon"></i>About</a></li>
-          <li><a href="{% url 'Contact-us'%}"><i class="fa fa-phone" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Contact</a></li>
+          <li><a href="#"><i class="fa fa-info" aria-hidden="true" style="padding-right:10px;"class="icon"></i>About</a></li>
+          <li><a href="#"><i class="fa fa-phone" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Contact</a></li>
         </ul>
       </nav>
       <form method="POST">
        {%csrf_token%}
     <div class="login-box">
-        <h1><i class="fa fa-user" style="margin-right:10px;"></i>Login</h1>
         <div class="textbox" >
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            <input type="text" placeholder="email" name="email" value="" autocomplete="off" required>
-        </div>
-        <div class="textbox">
             <i class="fa fa-lock" aria-hidden="true"></i>
-            <input type="password" placeholder="password" name="password" value="" autocomplete="off" required>
+            <input type="password" placeholder="One Time Password" name="otp" value="" autocomplete="off" required>
         </div>
-        <div class="textbox">
-            <input type="radio" id="user" name="role" value="user"
-         checked>
-  <label for="user">user</label>
-        </div>
-        <div class="textbox">
-            <input type="radio" id="librarian" name="role" value="librarian">
-  <label for="librarian">librarian</label>
-        </div>
+       
         <div class="loginbtn">
-           <input class="btn" type="submit" name="" value="Sign in">
+           <input class="btn" type="submit" name="" value="Submit">
         </div>
-         
-           <a class='signup 'href="{% url 'auth-signup' %}"><p>Don't Have An Account?SignUp</p></a>
-           <a class='signup 'href="{% url 'forgot_password' %}"><p>Forgot password</p></a> 
+          
     </div>
     </form>
      {% if messages %}

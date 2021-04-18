@@ -257,8 +257,8 @@ transform:scale(1.01);
       <span></span>
     </div>  
     <div class="list">
-      <div class="item" style="color:black;padding:6px;"><i class="fa fa-user-circle fa-4x" style="color:red;" ></i>{{firstname}} {{lastname}}</div>
-      <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{wallet}}</div>
+      <div class="item" style="color:black;padding:6px;"><i class="fa fa-user-circle fa-4x" style="color:red;" ></i>{{Name}}</div>
+      <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{Unpaid_fees}}</div>
       <div class="item"><a   href="/profile" style="text-decoration:none;" ><i class="fa fa-user" style="padding-right:10px;color:red"></i>profile</a></div>
       <div class="item"><a  href="/changepassword" style="text-decoration:none;"><i class="fa fa-key" style="padding-right:10px;color:red"></i>change password</a></div>
       <div class="item"><a href="/mybookings" style="text-decoration:none;"><i class="fa fa-suitcase" style="padding-right:10px;color:red"></i>My bookings</a></div>
@@ -279,40 +279,53 @@ transform:scale(1.01);
       <li class="nav-item"><a class="nav-link" href="#OnLoanHold" data-toggle="tab">On Loan & On Hold</a></li>
       </ul>
       <div class="tab-content">
-      <div class="tab-pane active" id="All">
 
-      </div>
-       <div class="tab-pane"id="Loaned">
+      <!-- <div class="tab-pane active" id="All">
+      </div> -->
 
+ <div class="tab-pane"id="OnHold">
+{% if onhold %}
+{% for onhold in onhold %}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
 <div class="row">
+
   <div class="col-sm-10">
-  <h5>Introduction to electrodynamics</h4>
+  <h5>{{onhold.Title}}</h4>
   <h6>By Griffiths, David.J</h5>
-  <h6>Edition:  3</h5>
-  <h6>ISBN:1234567891234</h6>
-  <h6>copy number:12<h6>
-  <h6>Publisher:New Delhi Pearson Education</h5>
-  <h6>issued:20-04-2021 11:25:00</h5>
+  <!-- <h6>Edition:  3</h5> -->
+  <h6>{{onhold.ISBN}}</h6>
+  <h6>copy number:{{onhold.Copy_Number}}<h6>
+  <h6>Year of Publication : {{onhold.Year_of_Publication}}</h5>
+  <h6>Date of Hold :{{onhold.date_of_hold}}</h5>
   </div>
+
   <div class="col-sm-2" >
   <div style="width:140px;height:170px;">
   <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
   <h5 class="stamp" style="text-align:center;">On Loan</h5>
   </div>
   </div>
+
 </div>
 </div>
+{% endfor %}
+{% else %}
+<td valign="middle" style="padding-left:50px;align:center;" >
+  <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Flights are  available  for your search</h2>
+  </div>
+  </td>
+{% endif %}
 </div>
 
-        <div class="tab-pane"id="OnHold">hii
-        </div>
-        <div class="tab-pane"id="OnLoanHold">
-       </div>
-      </div>
-      </div>
+<div class="tab-pane"id="Loaned">
+</div>
+<div class="tab-pane"id="OnLoanHold">
+</div>
+</div>
+</div>
      
-{% comment %} {% if bookings %}
+<!-- {% comment %} {% if bookings %}
 <table style="width:90vw;margin:auto;">
 {% for booking in bookings%}
 <tr>
@@ -358,7 +371,7 @@ transform:scale(1.01);
 </table>
 </div>
 </td>
-</tr>
+</tr> -->
 {% endfor %}
 </table>
 {% else %}
