@@ -358,6 +358,39 @@ def bookshelf(request):
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
+def librarian_ChangePassword(request):
+    librarianId = request.session.get('librarianId')
+    email = request.session.get('email')
+    if request.session.get('email') == email:
+        cursor = connection.cursor()
+        cursor.execute("""SELECT * FROM librarian WHERE email= %s """, [email])
+        row = cursor.fetchall()
+        dbPassword = row[0][2]
+        if request.method == "POST":
+            oldPassword = request.POST.get('oldpassword')
+            newPassword = request.POST.get('newpassword')
+            confirmPassword = request.POST.get('confirmpassword')
+            if bcrypt.checkpw(oldPassword.encode('utf8'), dbPassword.encode('utf8')):
+                if newPassword == confirmPassword:
+                    dbPassword = bcrypt.hashpw(newPassword.encode(
+                        'utf8'), bcrypt.gensalt(rounds=12))
+                    cursor.execute(
+                        """UPDATE librarian SET Password=%s WHERE email=%s""", (dbPassword, email))
+                    messages.success(request, 'Password changed successfully!')
+                    return redirect('http://127.0.0.1:8000/librarian/home')
+                else:
+                    messages.success(
+                        request, 'new password and confirm password must be the same!!')
+                    return render(request, 'library/changepassword.html')
+            else:
+                messages.success(request, 'incorrect password!!')
+                return render(request, 'library/changepassword.html')
+
+        else:
+            return render(request, 'library/changepassword.html')
+    else:
+        return render(request, 'authentication/error.html')
+
 
 # def friends(request):
 #     return

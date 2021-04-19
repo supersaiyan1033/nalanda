@@ -325,6 +325,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('5wq053v8a40dur9tu4fenez3dp9x3ioi','.eJyrVsrJTCpKLMpMzPNMUbIy1FEqys9JVbJCCCvpKKXmJmbmAMWyE_NSDY2MlWoB8u0RiA:1lYYjs:m7iOGS2poqt8wp2JPL2r1-ToLu1ijkDAIkCt2iS8dek','2021-05-03 18:35:16.470756');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -401,7 +402,7 @@ CREATE TABLE `librarian` (
   `email` varchar(45) NOT NULL,
   `DOB` date NOT NULL,
   PRIMARY KEY (`Librarian_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -410,6 +411,7 @@ CREATE TABLE `librarian` (
 
 LOCK TABLES `librarian` WRITE;
 /*!40000 ALTER TABLE `librarian` DISABLE KEYS */;
+INSERT INTO `librarian` VALUES (1,'Kane Mama','$2b$12$2Pi0UxTaEM4ywTAZiTgCcO7VzsUTPQQd4doTgr5lZp6VdmKJ/g0fe','new zealand','kane123','2015-02-13'),(2,'revanth','$2b$12$8qNsbLfNDjLVZDhjU6bCTODybZM2Nx/0T0XGioGV0ppWWttGO0gpW','hi123 to 344','cse190001063@iiti.ac.in','2001-12-11');
 /*!40000 ALTER TABLE `librarian` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -421,7 +423,7 @@ DROP TABLE IF EXISTS `on_hold`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `on_hold` (
-  `Hold_ID` int NOT NULL,
+  `Hold_ID` int NOT NULL AUTO_INCREMENT,
   `date_of_hold` datetime NOT NULL,
   `User_ID` int NOT NULL,
   `Book_ID` int NOT NULL,
@@ -450,7 +452,7 @@ DROP TABLE IF EXISTS `on_loan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `on_loan` (
-  `Loan_ID` int NOT NULL,
+  `Loan_ID` int NOT NULL AUTO_INCREMENT,
   `Book_ID` int DEFAULT NULL,
   `User_ID` int NOT NULL,
   `Date_of_Issue` datetime(6) NOT NULL,
@@ -484,7 +486,7 @@ DROP TABLE IF EXISTS `on_loan_on_hold`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `on_loan_on_hold` (
-  `Token_No` int NOT NULL,
+  `Token_No` int NOT NULL AUTO_INCREMENT,
   `User_Id` int NOT NULL,
   `Time_stamp` datetime(6) DEFAULT NULL,
   `ISBN` int DEFAULT NULL,
@@ -640,7 +642,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Revanth','thotarevanth347@gmail.com','2001-12-11','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Male','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(2,'Roomno605','roomno605','2019-08-12','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(3,'sairam','cse190001026@iiti.ac.in','2021-04-01','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',0),(4,'sumanth','thotarevanth347@yahoo.com','2021-04-06','$2b$12$S/YqFu76GrPoe6qA4ZIN2.9SDNNBjG3MAey8k3jSQpHQkDmRU0iO6','Faculty','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',0);
+INSERT INTO `user` VALUES (1,'Revanth','thotarevanth347@gmail.com','2001-12-11','$2b$12$Q/UTmfZkVjg98FtAkTq9x.GTnTP2UcqCrVmWC.PLGPB9qvrO5eKdC','Male','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(2,'Roomno605','roomno605','2019-08-12','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(3,'sairam','cse190001026@iiti.ac.in','2021-04-01','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',0),(4,'sumanth','thotarevanth347@yahoo.com','2021-04-06','$2b$12$S/YqFu76GrPoe6qA4ZIN2.9SDNNBjG3MAey8k3jSQpHQkDmRU0iO6','Faculty','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -653,4 +655,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-19 17:39:13
+-- Dump completed on 2021-04-20  0:12:09

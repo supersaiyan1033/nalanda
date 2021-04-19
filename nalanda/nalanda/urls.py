@@ -28,15 +28,15 @@ urlpatterns = [
     path('login/emailverification',
          auth_views.Verify_User_by_website, name='auth-verify'),
     path('login/forgotpassword', auth_views.Forgot_Password, name='forgot_password'),
-    path('login/forgotpassword/<email>/resetpassword',
+    path('login/forgotpassword/<role>/<email>/resetpassword',
          auth_views.Reset_Password, name='reset password'),
     path('signup/', auth_views.Sign_Up, name='auth-signup'),
     path('profile', auth_views.Profile, name='profile'),
     path('home', auth_views.user, name='user'),
     path('librarian/home', auth_views.librarian, name='librarian'),
     path('changepassword', auth_views.ChangePassword, name="changepassword"),
-    #     path('librarian/changepassword', lib_views.librarian_ChangePassword,
-    #          name="librarian-changepassword"),
+    path('librarian/changepassword', lib_views.librarian_ChangePassword,name="librarian-changepassword"),
+
     #     # user views
     path('booksearch/', lib_views.booksearch, name='booksearch'),
     #     path('booksearch/<isbn>/', lib_views.book_details, name='book_details'),
@@ -49,6 +49,7 @@ urlpatterns = [
     #     path('friends/add', lib_views.add_friend, name='add_friend'),
     #     path('friends/list/<userId>/bookshelf',
     #          lib_views.friends_bookshelf, name='friends_bookshelf'),
+
     #     # librarian urls
     #     path('librarian/book', lib_views.book, name='book'),
     #     path('librarian/book/add', lib_views.add_book, name='add_book'),
