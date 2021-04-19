@@ -204,7 +204,7 @@ def Forgot_Password(request):
 def Profile(request):
     UserId = request.session.get('UserId')
     email = request.session.get('email')
-    if request.session.get('email') == email:
+    if request.session.get('role') == 'user':
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
         row = cursor.fetchall()
@@ -316,7 +316,7 @@ def user(request):
         }
 
         return render(request, 'library/user.html', data)
-    elif request.session.get('email') != None:
+    elif request.session.get('role') != None:
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
@@ -339,7 +339,7 @@ def librarian(request):
         }
 
         return render(request, 'library/librarian.html', data)
-    elif request.session.get('email') != None:
+    elif request.session.get('role') != None:
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
