@@ -514,6 +514,7 @@ CREATE TABLE `previous_books` (
   `Book_ID` int NOT NULL,
   `Date_of_issue` datetime NOT NULL,
   `Date_of_return` datetime DEFAULT NULL,
+  `Fine` int DEFAULT NULL,
   PRIMARY KEY (`User_ID`,`Book_ID`),
   KEY `id_idx` (`User_ID`),
   KEY `ide_idx` (`Book_ID`),
@@ -647,4 +648,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-19 15:13:50
+-- Dump completed on 2021-04-19 15:15:59
