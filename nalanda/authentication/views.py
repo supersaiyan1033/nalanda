@@ -161,7 +161,7 @@ def Verify_User_by_website(request):
              address = request.session.get('address')
              password = request.session.get('password')
              password = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt(rounds=12))
-             cursor.execute("""INSERT INTO user(User_ID,Name,email,DOB,Password,Category,Address) VALUES (%s,%s,%s,%s,%s,%s,%s)""",(1,name,email,DOB,password,category,address))
+             cursor.execute("""INSERT INTO user(Name,email,DOB,Password,Category,Address) VALUES (%s,%s,%s,%s,%s,%s)""",(name,email,DOB,password,category,address))
              messages.success(request,'verification successful!!please  login to continue')
              return redirect('/login')
          else:
