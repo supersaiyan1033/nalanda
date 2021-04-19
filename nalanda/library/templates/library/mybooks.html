@@ -241,10 +241,11 @@ transform:scale(1.01);
     </div>
     <div id="navbar">
     <ul>
-      <li><a href="/home"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
-      <li><a href="/flights"><i class="fa fa-plane" aria-hidden="true" style="padding-right:10px;"></i>Flights</a></li>
-      {% comment %} <li><a href="#"><i class="fa fa-train" aria-hidden="true" style="padding-right:10px;" class="icon"></i>Trains</a></li> {% endcomment %}
-      <li><a href="/buses"><i class="fa fa-bus" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Buses</a></li>
+      <li><a href="http://127.0.0.1:8000/home"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
+            <!-- <li><a href="http://127.0.0.1:8000/friends"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Friends</a></li> -->
+      <li><a href="http://127.0.0.1:8000/booksearch"><i class="fa fa-plane" aria-hidden="true" style="padding-right:10px;"></i>Search Books</a></li>
+       <li><a href="http://127.0.0.1:8000/mybooks"><i class="fa fa-train" aria-hidden="true" style="padding-right:10px;" class="icon"></i>My Books</a></li>
+      <li><a href="http://127.0.0.1:8000/bookshelf"><i class="fa fa-bus" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Book Shelf</a></li>
       {% comment %} <li><a href="#"><i class="fa fa-suitcase" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Trips</a></li> {% endcomment %}
      
       </ul>
@@ -273,15 +274,48 @@ transform:scale(1.01);
 
       <div class="container">
       <ul class="nav nav-pills nav-fill">
-      <li class="nav-item"><a class="nav-link active" href="#All" data-toggle="tab">All</a></li>
-      <li class="nav-item"><a class="nav-link"href="#Loaned" data-toggle="tab">Loaned</a></li>
+      <li class="nav-item"><a class="nav-link active" href="#Previous" data-toggle="tab">Previous</a></li>
+      <li class="nav-item"><a class="nav-link"href="#OnLoan" data-toggle="tab">Loaned</a></li>
       <li class="nav-item"><a class="nav-link" href="#OnHold" data-toggle="tab">On Hold</a></li>
-      <li class="nav-item"><a class="nav-link" href="#OnLoanHold" data-toggle="tab">On Loan & On Hold</a></li>
+      <li class="nav-item"><a class="nav-link" href="#OnLoanOnHold" data-toggle="tab">On Loan & On Hold</a></li>
       </ul>
       <div class="tab-content">
 
-      <!-- <div class="tab-pane active" id="All">
-      </div> -->
+      <div class="tab-pane active" id="OnLoan">
+{% if onloan %}
+{% for onloan in onloan %}
+<div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
+<div class="row">
+
+  <div class="col-sm-10">
+  <h5>{{onloan.Title}}</h4>
+  <h6>Author:{{onloan.Author}}</h5>
+  <h6>Publisher:{{onloan.Publisher}}</h5>
+  <h6>ISBN : {{onloan.ISBN}}</h6>
+  <h6>copy number:{{onloan.Copy_Number}}<h6>
+  <h6>Year of Publication : {{onloan.Year_of_Publication}}</h5>
+  <h6>Date of Issue :{{onloan.date_of_issue}}</h5>
+  <h6>Fine :{{onloan.Fine}}</h5>
+  </div>
+
+  <div class="col-sm-2" >
+  <div style="width:140px;height:170px;">
+  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
+  <h5 class="stamp" style="text-align:center;">On Loan</h5>
+  </div>
+  </div>
+
+</div>
+</div>
+{% endfor %}
+{% else %}
+<td valign="middle" style="padding-left:50px;align:center;" >
+  <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are On Loan</h2>
+  </div>
+  </td>
+{% endif %}
+      </div>
 
  <div class="tab-pane"id="OnHold">
 {% if onhold %}
@@ -291,9 +325,9 @@ transform:scale(1.01);
 
   <div class="col-sm-10">
   <h5>{{onhold.Title}}</h4>
-  <h6>By Griffiths, David.J</h5>
-  <!-- <h6>Edition:  3</h5> -->
-  <h6>{{onhold.ISBN}}</h6>
+  <h6>Author:{{onhold.Author}}</h5>
+  <h6>Publisher:{{onhold.Publisher}}</h5>
+  <h6>ISBN : {{onhold.ISBN}}</h6>
   <h6>copy number:{{onhold.Copy_Number}}<h6>
   <h6>Year of Publication : {{onhold.Year_of_Publication}}</h5>
   <h6>Date of Hold :{{onhold.date_of_hold}}</h5>
@@ -312,15 +346,80 @@ transform:scale(1.01);
 {% else %}
 <td valign="middle" style="padding-left:50px;align:center;" >
   <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
-  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Flights are  available  for your search</h2>
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are On Hold</h2>
   </div>
   </td>
 {% endif %}
 </div>
 
-<div class="tab-pane"id="Loaned">
+<div class="tab-pane"id="Previous">
+  {% if previous %}
+{% for previous in previous %}
+<div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
+<div class="row">
+
+  <div class="col-sm-10">
+  <h5>{{previous.Title}}</h4>
+  <h6>Author:{{previous.Author}}</h5>
+  <h6>Publisher:{{previous.Publisher}}</h5>
+  <h6>ISBN : {{previous.ISBN}}</h6>
+  <h6>copy number:{{previous.Copy_Number}}<h6>
+  <h6>Year of Publication : {{previous.Year_of_Publication}}</h5>
+  <h6>Date of Issue :{{previous.date_of_issue}}</h5>
+  <h6>Date of Return :{{previous.date_of_return}}</h5>
+  <h6>Fine :{{previous.Fine}}</h5>
+  </div>
+
+  <div class="col-sm-2" >
+  <div style="width:140px;height:170px;">
+  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
+  <h5 class="stamp" style="text-align:center;">On Loan</h5>
+  </div>
+  </div>
+
 </div>
-<div class="tab-pane"id="OnLoanHold">
+</div>
+{% endfor %}
+{% else %}
+<td valign="middle" style="padding-left:50px;align:center;" >
+  <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are On Loan</h2>
+  </div>
+  </td>
+{% endif %}
+      </div>
+<div class="tab-pane"id="OnLoanOnHold">
+  {% if onhold_onhold %}
+  {% for onhold_onhold in onhold_onhold %}
+  <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
+  <div class="row">
+  
+    <div class="col-sm-10">
+    <h5>{{onhold_onhold.Title}}</h4>
+    <h6>Author:{{onhold_onhold.Author}}</h5>
+    <h6>Publisher:{{onhold_onhold.Publisher}}</h5>
+    <h6>ISBN : {{onhold_onhold.ISBN}}</h6>
+    <h6>Year of Publication : {{onhold_onhold.Year_of_Publication}}</h5>
+    <h6>Date of Hold Request :{{onhold_onhold.timestamp}}</h5>
+    </div>
+  
+    <div class="col-sm-2" >
+    <div style="width:140px;height:170px;">
+    <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
+    <h5 class="stamp" style="text-align:center;">On Loan</h5>
+    </div>
+    </div>
+  
+  </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <td valign="middle" style="padding-left:50px;align:center;" >
+    <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+    <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Hold Requests are Placed</h2>
+    </div>
+    </td>
+  {% endif %}
 </div>
 </div>
 </div>
@@ -372,11 +471,11 @@ transform:scale(1.01);
 </div>
 </td>
 </tr> -->
-{% endfor %}
+<!-- {% endfor %}
 </table>
 {% else %}
 <h4 style="text-align:center;">You have not done any bookings yet</h4>
-{% endif %} {% endcomment %}
+{% endif %} {% endcomment %} -->
 
 {% if messages %}
         {% for message in messages %}
