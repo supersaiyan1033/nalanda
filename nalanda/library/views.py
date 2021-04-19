@@ -43,7 +43,7 @@ def booksearch(request):
                 messages.error(request, "You have already reviewed this book")
             else:
                 cursor.execute(
-                    """ insert into review(Review,ISBN,User_Id,Rating) values(%s,%s,%s,%s) """, (review, isbn, userId, rating))
+                    """ insert into review(Review,ISBN,User_ID,Rating) values(%s,%s,%s,%s) """, (review, isbn, userId, rating))
                 cursor.execute(
                     """select avg(Rating) from review where isbn=%s""", [isbn])
                 average = cursor.fetchall()
@@ -54,7 +54,38 @@ def booksearch(request):
         elif 'hold' in request.POST:
             isbn = request.POST.get('hold')
             cursor.execute(
-                """ select User_Id from on_hold where User_Id = %s and """)
+                """ select * from on_hold join book on on_hold.Book_ID=book.Book_ID where book.ISBN=%s and on_hold.User_ID = %s """, (isbn, userId))
+            if cursor.rowcount > 0:
+                messages.error(request, "You have this book On hold already!!")
+            else:
+                cursor.execute(
+                    """select * from on_loan_on_hold where ISBN=%s and User_ID=%s""", (isbn, userId))
+                if cursor.rowcount > 0:
+                    messages.error(
+                        request, "You have this book On Loan On Hold already!!")
+                else:
+                    cursor.execute(
+                        """ select book.Copy_number,book.Book_ID from isbn join book on isbn.ISBN=book.ISBN where book.ISBN=%s and book.Status=%s""", (isbn, "On shelf"))
+                    if cursor.rowcount > 0:
+                        records = cursor.fetchall()
+                        print(records)
+                        copy_no = records[0][0]
+                        book_id = records[0][1]
+                        now = datetime.now()
+                        date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+                        cursor.execute(
+                            """ insert into on_hold(date_of_hold,User_ID,Book_ID) values(%s,%s,%s)""", (date_time, userId, book_id))
+                        messages.success(
+                            request, "Book hold successful valid for 10days from now!!")
+                    else:
+                        now = datetime.now()
+                        date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+                        cursor.execute(
+                            """update book set Status='On loan and On hold' where isbn=%s and Status='On loan'""", [isbn])
+                        cursor.execute(
+                            """ insert into on_loan_on_hold(User_Id,Time_stamp,ISBN) values(%s,%s,%s) """, (userId, date_time, isbn))
+                        messages.success(
+                            request, "Book in On Loan and On hold. Book will be alloted according to the waiting list")
         elif 'add_to_shelf' in request.POST:
             isbn = request.POST.get('add_to_shelf')
             cursor.execute(
