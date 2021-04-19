@@ -273,15 +273,29 @@ transform:scale(1.01);
 
 
       <div class="container">
-      <ul class="nav nav-pills nav-fill">
-      <li class="nav-item"><a class="nav-link active" href="#Previous" data-toggle="tab">Previous</a></li>
-      <li class="nav-item"><a class="nav-link"href="#OnLoan" data-toggle="tab">Loaned</a></li>
+      <div id="tabs">
+      <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="previous-tab" data-bs-toggle="tab" data-bs-target="#Previous" type="button" role="tab" aria-controls="Previous" aria-selected="true">Previous</button>
+     </li>
+      <li class="nav-item" role="presentation">
+    <button class="nav-link " id="OnLoan-tab" data-bs-toggle="tab" data-bs-target="#OnLoan" type="button" role="tab" aria-controls="OnLoan" aria-selected="true">Loaned</button>
+     </li>
+     <li class="nav-item" role="presentation">
+    <button class="nav-link " id="OnHold-tab" data-bs-toggle="tab" data-bs-target="#OnHold" type="button" role="tab" aria-controls="OnHold" aria-selected="true">On Hold</button>
+     </li>
+      <li class="nav-item" role="presentation">
+    <button class="nav-link " id="OnLoanOnHold-tab" data-bs-toggle="tab" data-bs-target="#OnLoanOnHold" type="button" role="tab" aria-controls="OnLoanOnHold" aria-selected="true">On Hold</button>
+     </li>
+      {% comment %} <li class="nav-item"><a class="nav-link active" href="#Previous" data-toggle="tab">Previous</a></li> {% endcomment %}
+      {% comment %} <li class="nav-item"><a class="nav-link active"href="#OnLoan" data-toggle="tab">Loaned</a></li>
       <li class="nav-item"><a class="nav-link" href="#OnHold" data-toggle="tab">On Hold</a></li>
-      <li class="nav-item"><a class="nav-link" href="#OnLoanOnHold" data-toggle="tab">On Loan & On Hold</a></li>
+      <li class="nav-item"><a class="nav-link" href="#OnLoanOnHold" data-toggle="tab">On Loan & On Hold</a></li> {% endcomment %}
       </ul>
-      <div class="tab-content">
+      </div>
+      <div class="tab-content" id="myTabContent">
 
-      <div class="tab-pane active" id="OnLoan">
+      <div class="tab-pane fade" id="OnLoan"role="tabpanel" aria-labelledby="OnLoan-tab">
 {% if onloan %}
 {% for onloan in onloan %}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
@@ -316,8 +330,8 @@ transform:scale(1.01);
   </td>
 {% endif %}
       </div>
-
- <div class="tab-pane"id="OnHold">
+  <div class="tab-pane fade" id="OnHold"role="tabpanel" aria-labelledby="OnHold-tab">
+ {% comment %} <div class="tab-pane"id="OnHold"> {% endcomment %}
 {% if onhold %}
 {% for onhold in onhold %}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
@@ -351,8 +365,8 @@ transform:scale(1.01);
   </td>
 {% endif %}
 </div>
-
-<div class="tab-pane"id="Previous">
+ <div class="tab-pane fade show active" id="Previous"role="tabpanel" aria-labelledby="Previous-tab">
+{% comment %} <div class="tab-pane"id="Previous"> {% endcomment %}
   {% if previous %}
 {% for previous in previous %}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
@@ -388,7 +402,8 @@ transform:scale(1.01);
   </td>
 {% endif %}
       </div>
-<div class="tab-pane"id="OnLoanOnHold">
+      <div class="tab-pane fade" id="OnLoanOnHold"role="tabpanel" aria-labelledby="OnLoanOnHold-tab">
+{% comment %} <div class="tab-pane"id="OnLoanOnHold"> {% endcomment %}
   {% if onhold_onhold %}
   {% for onhold_onhold in onhold_onhold %}
   <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
@@ -486,7 +501,9 @@ transform:scale(1.01);
     {% endif %}
 
  <script>
- document.getElementById("")
+
+
+
   function toggleSidebar(ref){
     document.getElementById("sidebar").classList.toggle('active');
   }
