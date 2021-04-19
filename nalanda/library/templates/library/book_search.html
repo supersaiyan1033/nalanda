@@ -222,7 +222,7 @@ transform:scale(1.01);
     <div id="navbar">
     <ul>
       <li><a href="/home"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
-       <li><a href="/flights"><i class="fa fa-search" aria-hidden="true" style="padding-right:10px;"></i>Friends</a></li>
+       <li><a href="/friends"><i class="fa fa-search" aria-hidden="true" style="padding-right:10px;"></i>Friends</a></li>
        <li><a href="/flights"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Mybooks</a></li>
        <li><a href="/flights"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Bookshelf</a></li>
        
@@ -299,14 +299,20 @@ transform:scale(1.01);
 <span>({{book.votes}} votes)</span>
 <div style="height:15px;"></div>
 <div class="row">
+<form method="POST">
+{% csrf_token %}
 <div class="col-sm-2">
-             <input class="btn btn-primary" type="submit" name="" value="Place Hold" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">
+             <button class="btn btn-primary" type="submit" name="hold" value="{{book.ISBN}}" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">Place Hold</button>
         </div>
+        </form>
+        <form method="POST">
+        {% csrf_token %}
         <div class="col-sm-2">
-             <input class="btn btn-danger" type="submit" name="" value="Add to shelf" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">
+             <button class="btn btn-danger" type="submit" name="add_to_shelf" value="{{book.ISBN}}" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">Add to Shelf</button>
         </div>
+        </form>
         <div class="col-sm-2">
-         <input class="btn btn-success" type="submit" name="" value="Rate & Review" data-toggle="modal" data-target="#exampleModalCenter" id="{{book.ISBN}}" onclick=reply_click(this.id) >
+         <button class="btn btn-success" type="submit" name="" value="Rate & Review" data-toggle="modal" data-target="#exampleModalCenter" id="{{book.ISBN}}" onclick=reply_click(this.id) >Rate Review</button>
         </div>
         </div>
   </div>
