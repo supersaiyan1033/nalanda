@@ -211,7 +211,7 @@ def bookshelf(request):
     userId = request.session.get('userId')
     email = request.session.get('email')
     if request.session.get('role') == 'user':
-        if delete in request.POST:
+        if 'delete' in request.POST:
             isbn=request.POST.get('delete')
             cursor = connection.cursor()
             cursor.execute("""DELETE FROM reading_list WHERE User_ID=%s AND ISBN=%s""",(userId,isbn))
