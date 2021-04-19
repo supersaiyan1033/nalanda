@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Voyage-login</title>
+    <title>IIT INDORE LOGIN </title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
     <link href="https://fonts.googleapis.com/css2?family=Piedra&display=swap" rel="stylesheet">
    <style>
@@ -41,8 +41,8 @@ body{
     font-size: 20px ;
     padding:8px 0;
     margin:8px 0;
-    /* border-bottom: 1px solid;
-    border-bottom-color: black ; */
+     border-bottom: 1px solid;
+    border-bottom-color: black ;
 }
 .textbox i{
     width:26px;
@@ -107,7 +107,7 @@ z-index:9999;
 nav .logo{
     float:left;
     font-size:20px ;
-    color:black;
+    color:white;
     padding-bottom:5px;
     padding-left:20px;
     font-family:'Piedra', cursive;
@@ -156,7 +156,7 @@ border-radius:7px;
 <body>
     <nav>
         <div class="logo">
-          <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:white;"></i>IIT INDORE LIBRARY</h3>
+          <h3><i class="fa fa-book fa-1.5x" aria-hidden="true" style="padding:5px 10px;color:white;"></i>IIT INDORE LIBRARY</h3>
         </div>
         <ul>
           <li><a href="{% url 'home' %}"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
@@ -177,14 +177,13 @@ border-radius:7px;
             <i class="fa fa-lock" aria-hidden="true"></i>
             <input type="password" placeholder="password" name="password" value="" autocomplete="off" required>
         </div>
-        <div class="textbox">
-            <input type="radio" id="user" name="role" value="user"
-         checked>
-  <label for="user">user</label>
-        </div>
-        <div class="textbox">
-            <input type="radio" id="librarian" name="role" value="librarian">
-  <label for="librarian">librarian</label>
+        <div class="textbox" >
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <select id="select" name="role" required>
+              <option value="" selected disabled="true">Select Category</option>
+              <option value="user">User</option>
+              <option value="librarian">Librarian</option>
+            </select>
         </div>
         <div class="loginbtn">
            <input class="btn" type="submit" name="" value="Sign in">

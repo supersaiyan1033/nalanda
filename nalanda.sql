@@ -369,7 +369,7 @@ CREATE TABLE `isbn` (
   `Genre` varchar(45) NOT NULL,
   `Author` varchar(200) NOT NULL,
   `Publisher` varchar(100) DEFAULT NULL,
-  `Rating` int DEFAULT NULL,
+  `Rating` int DEFAULT '0',
   `Total_no_of_copies` int NOT NULL,
   `Img_link` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`ISBN`)
@@ -631,7 +631,7 @@ CREATE TABLE `user` (
   `Address` varchar(100) CHARACTER SET utf8 NOT NULL,
   `Unpaid_fees` int DEFAULT '0',
   PRIMARY KEY (`User_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -640,7 +640,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Revanth','thotarevanth347@gmail.com','2001-12-11','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Male','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(2,'Roomno605','roomno605','2019-08-12','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(3,'sairam','cse190001026@iiti.ac.in','2021-04-01','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',0);
+INSERT INTO `user` VALUES (1,'Revanth','thotarevanth347@gmail.com','2001-12-11','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Male','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(2,'Roomno605','roomno605','2019-08-12','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(3,'sairam','cse190001026@iiti.ac.in','2021-04-01','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',0),(4,'sumanth','thotarevanth347@yahoo.com','2021-04-06','$2b$12$S/YqFu76GrPoe6qA4ZIN2.9SDNNBjG3MAey8k3jSQpHQkDmRU0iO6','Faculty','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -653,4 +653,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-19 16:27:33
+-- Dump completed on 2021-04-19 17:39:13

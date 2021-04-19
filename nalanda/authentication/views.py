@@ -212,7 +212,7 @@ def Profile(request):
             'email': row[0][2],
             'DOB': dateOfBirth,
             'Password': row[0][4],
-            'Category': Categories,
+            'Categories': Categories,
             'address': row[0][6]
         }
         if request.method == "POST":
