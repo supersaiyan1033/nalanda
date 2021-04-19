@@ -88,7 +88,7 @@ def Log_In(request):
             cursor.execute("""SELECT * FROM librarian WHERE email= %s""", [email])
             row = cursor.fetchall()
             if cursor.rowcount == 1:
-                dbpassword = row[0][4]
+                dbpassword = row[0][2]
                 librarianId = row[0][0]
                 if bcrypt.checkpw(password.encode('utf8'), dbpassword.encode('utf8')):
 
@@ -96,7 +96,7 @@ def Log_In(request):
                     request.session['role'] = role
                     request.session['email'] = email
                     messages.success(request, 'Login successful!!')
-                    url = "http://127.0.0.1:8000/librarian\home"
+                    url = "http://127.0.0.1:8000/home"
                     return redirect(url)
 
                 else:
@@ -314,19 +314,20 @@ def user(request):
         return render(request, 'authentication/error.html')
 
 def librarian(request):
-    librarianId = request.session.get('librarian')
+    librarianId = request.session.get('librarianId')
     email = request.session.get('email')
     if request.session.get('role') == 'librarian':
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM librarian WHERE email= %s""", [email])
         row = cursor.fetchall()
-        dateOfBirth = row[0][3].strftime("%Y-%m-%d")
+        dateOfBirth = row[0][5].strftime("%Y-%m-%d")
         data = {
             'librarianId': row[0][0],
             'Name': row[0][1],
-            'email': row[0][2],
+            'address': row[0][3],
+            'email': row[0][4],
             'DOB': dateOfBirth,
-            'address': row[0][5],
+            
         }
 
         return render(request, 'library/librarian.html', data)
