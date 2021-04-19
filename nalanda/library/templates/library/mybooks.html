@@ -285,7 +285,7 @@ transform:scale(1.01);
     <button class="nav-link " id="OnHold-tab" data-bs-toggle="tab" data-bs-target="#OnHold" type="button" role="tab" aria-controls="OnHold" aria-selected="true">On Hold</button>
      </li>
       <li class="nav-item" role="presentation">
-    <button class="nav-link " id="OnLoanOnHold-tab" data-bs-toggle="tab" data-bs-target="#OnLoanOnHold" type="button" role="tab" aria-controls="OnLoanOnHold" aria-selected="true">On Hold</button>
+    <button class="nav-link " id="OnLoanOnHold-tab" data-bs-toggle="tab" data-bs-target="#OnLoanOnHold" type="button" role="tab" aria-controls="OnLoanOnHold" aria-selected="true">Hold Requests</button>
      </li>
       {% comment %} <li class="nav-item"><a class="nav-link active" href="#Previous" data-toggle="tab">Previous</a></li> {% endcomment %}
       {% comment %} <li class="nav-item"><a class="nav-link active"href="#OnLoan" data-toggle="tab">Loaned</a></li>
@@ -324,7 +324,7 @@ transform:scale(1.01);
 {% endfor %}
 {% else %}
 <td valign="middle" style="padding-left:50px;align:center;" >
-  <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <div class="results" style="margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
   <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are On Loan</h2>
   </div>
   </td>
@@ -359,7 +359,7 @@ transform:scale(1.01);
 {% endfor %}
 {% else %}
 <td valign="middle" style="padding-left:50px;align:center;" >
-  <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <div class="results" style="margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
   <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are On Hold</h2>
   </div>
   </td>
@@ -396,8 +396,8 @@ transform:scale(1.01);
 {% endfor %}
 {% else %}
 <td valign="middle" style="padding-left:50px;align:center;" >
-  <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
-  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are On Loan</h2>
+  <div class="results" style="margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>You have No Previous Readings </h2>
   </div>
   </td>
 {% endif %}
@@ -430,7 +430,7 @@ transform:scale(1.01);
   {% endfor %}
   {% else %}
   <td valign="middle" style="padding-left:50px;align:center;" >
-    <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+    <div class="results" style="margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
     <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Hold Requests are Placed</h2>
     </div>
     </td>
