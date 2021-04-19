@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
  <meta charset="UTF-8">
- <title>Bookshelf</title>
+ <title>Book search</title>
   <link href="https://fonts.googleapis.com/css2?family=Piedra&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -217,19 +217,15 @@ transform:scale(1.01);
 <div class="wrap">
   <nav>
     <div class="logo">
-      <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:red;"></i>NALANDA LIBRARY</h3>
+      <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:red;"></i>NALANDA LIBRARY</h3> 
     </div>
     <div id="navbar">
     <ul>
       <li><a href="/home"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
-      <li><a href="/flights"><i class="fa fa-search" aria-hidden="true" style="padding-right:10px;"></i>Search books</a></li>
-       <li><a href="/flights"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Mybooks</a></li>
        <li><a href="/flights"><i class="fa fa-search" aria-hidden="true" style="padding-right:10px;"></i>Friends</a></li>
-       <li><a href="/flights" class="active"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Bookshelf</a></li>
-
-
-
-     
+       <li><a href="/flights"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Mybooks</a></li>
+       <li><a href="/flights"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Bookshelf</a></li>
+       
       </ul>
       </div>
        <div id="side-navbar">
@@ -241,44 +237,34 @@ transform:scale(1.01);
     </div>  
     <div class="list">
       <div class="item" style="color:black;padding:6px;"><i class="fa fa-hand-paper fa-4x" style="color:red;" ></i>{{firstname}} {{lastname}}</div>
-      <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{pending fines}}</div>
+      <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{fines}}</div>
       <div class="item"><a   href="/profile" style="text-decoration:none;" ><i class="fa fa-user" style="padding-right:10px;color:red"></i>profile</a></div>
       <div class="item"><a  href="/changepassword" style="text-decoration:none;"><i class="fa fa-key" style="padding-right:10px;color:red"></i>change password</a></div>
-    
+      
       <div class="item" ><a  href="{% url 'auth-login' %}" style="text-decoration:none;" onclick="return confirm('Do you really want to logout?');"><i class="fa fa-sign-out" style="padding-right:10px;color:red"></i>log out</a></div>
     </div>
   </div>
       </nav>
       </div>
       <br><br><br>
-<table class="center">
+<!-- <table class="center">
 <tr>
   <form method="GET">
   
 <td style="padding:10px 20px;">
 <div class="ui-select">
-<select class="form-control" aria-label="Default select example">
-  <option selected>Library catalogue</option>
-  <option value="1">Title</option>
-  <option value="2">Subject</option>
-  <option value="3">ISBN</option>
+<select class="form-control" aria-label="Default select example" name="search_category">
+  <option selected value="catalogue">Library catalogue</option>
+  <option value="Title">Title</option>
+  <option value="Genre">Genre</option>
+  <option value="ISBN">ISBN</option>
 </select>
 </div>
  
 </td>
 
 <td width="60%">
-    <input type="text" class="form-control" placeholder="Search" list="search_options">
-    <datalist id="search_options">
-    <option value="Atom">Atom
-    <option value="Brackets">Brackets
-    <option value="Notepad ++">Notepad ++
-    <option value="Notepad">Notepad
-    <option value="Sublime Text">Sublime Text
-    <option value="TextEdit">TextEdit
-    <option value="TextMate">TextMate
-    <option value="Wordpad">Wordpad
-</datalist>
+    <input type="text" class="form-control" placeholder="Search" name="search_key" list="search_options" required>
  
 </td>
 <td>
@@ -288,29 +274,93 @@ transform:scale(1.01);
 </td>
 </form>
 </tr>
-</table>
+</table> -->
 <hr>
 <table style="width=80vw;">
 <tr>
-
+{% if list %}
+<div class="results" style="margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; text-align:justify; ">
+{% for list in list%}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;">
 <div class="row">
   <div class="col-sm-10">
-  <h5>Introduction to electrodynamics</h4>
-  <h6>By Griffiths, David.J</h5>
-  <h6>Edition:  3</h5>
-  <h6>Publisher:New Delhi Pearson Education</h5>
-  <h6>Items available for loan</h5>
-  <h6>checked out(18) withdrawn(3)</h5>
+  <h5>{{list.Title}}</h4>
+  <h6>Author:{{list.Author}}</h5>
+  <h6>published in:{{list.Year_of_Publication}}</h5>
+  <h6>Genre:{{list.Genre}}</h6><h6>ISBN:{{list.ISBN}}</h6>
+  <h6>Publisher:{{list.Publisher}}</h5>
+  {% for s in book.stars%}
 <span class="fa fa-star checked"></span>
-<span class="fa fa-star checked"></span>
-<span class="fa fa-star checked"></span>
+{% endfor %}
+{% for s in book.no_stars %}
 <span class="fa fa-star"></span>
-<span class="fa fa-star">(10 votes)</span>
+{% endfor %}
 
-  
+<span>({{book.votes}} votes)</span>
+<div class="row">
+<div class="col-sm-2">
+         <button class="btn" type="submit" name="delete" value="{{list.ISBN}}">Remove Book</button>
+        </div>
+        </div>
+  </div>
+  <div class="col-sm-2" >
+  <div style="border:2px solid;width:140px;">
+  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="height:128px;width:128px;">
+  </div>
+  </div>
+</div>
+</div>
+{%endfor%}
+</div>
+{%else%}
+<div class="results" style="margin:auto; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are  available  for your search</h2>
+  </div>
+  {%endif%}
+</tr>
+<!-- <tr>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Rate and Review</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form method="POST">
+       {% csrf_token %}
+  <div class="form-group">
+    <label for="exampleInputEmail1">Rating</label>
+    <div class="ui-select">
+<select class="form-control" aria-label="Default select example" name="rating">
+  <option selected>Rating</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+   <option value="4">4</option>
+    <option value="5">5</option>
+</select>
+</div>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Review</label>
+    <textarea  class="form-control"rows = "5" id="exampleInputPassword1" name="review_content" placeholder="Write a Review..."></textarea>
+  </div>
 
-{% comment %} {% if buses %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" data-dismiss="modal">Close</button>
+        <div width="20px"></div>
+        <button type="submit" id="myBtn" name="review" onclick="myFunction()" class="btn">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- {% comment %} {% if buses %}
 <td style="text-align:right;padding-left:50px;vertical-align:text-top;align:left;">
 <div class="results" style="float:right;margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; text-align:justify; ">
 {% for bus in buses %}
@@ -344,7 +394,7 @@ transform:scale(1.01);
 </td> {% endcomment %}
 </tr>
 </table>
-</div>
+{% comment %} </div>
 {% endfor %}
 </div>
 </td>
@@ -354,9 +404,9 @@ transform:scale(1.01);
   <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are  available  for your search</h2>
   </div>
   </td>
-{% endif %}
-</tr>
-</table>
+{% endif %} -->
+<!-- </tr> -->
+</table> {% endcomment %}
 {% if messages %}
         {% for message in messages %}
          {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
@@ -366,6 +416,15 @@ transform:scale(1.01);
     {% endif %}
 
  <script>
+  var id;
+  function reply_click(clicked_id)
+  {
+      id = clicked_id;
+      console.log(id);
+  }
+  function myFunction() {
+  document.getElementById("myBtn").value = id;
+}
   function toggleSidebar(ref){
     document.getElementById("sidebar").classList.toggle('active');
   }
