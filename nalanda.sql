@@ -196,13 +196,16 @@ DROP TABLE IF EXISTS `book`;
 CREATE TABLE `book` (
   `Book_ID` int NOT NULL AUTO_INCREMENT,
   `ISBN` int NOT NULL,
+  `Title` varchar(45) NOT NULL,
+  `Year of Publication` year NOT NULL,
+  `Total_no_of_copies` int NOT NULL,
   `Shelf_ID` int NOT NULL,
   `Copy_number` int NOT NULL,
+  `Genre` varchar(45) NOT NULL,
+  `Rating` int DEFAULT NULL,
   `Status` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`Book_ID`),
   KEY `s_id_idx` (`Shelf_ID`),
-  KEY `inder_idx` (`ISBN`),
-  CONSTRAINT `inder` FOREIGN KEY (`ISBN`) REFERENCES `isbn` (`ISBN`),
   CONSTRAINT `s_id` FOREIGN KEY (`Shelf_ID`) REFERENCES `shelf` (`Shelf_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -324,7 +327,6 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('1v87xs8ad7yld2nx3ld194fd2at5pm1y','eyJ1c2VySWQiOjEsImVtYWlsIjoidGhvdGFyZXZhbnRoMzQ3QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiY2F0ZWdvcnkiOiJNYWxlIn0:1lYKey:dodawAAONhijSy8faejaCLEknlM3YMdYmRcfdIUj0Mg','2021-05-03 03:33:16.353289');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,35 +358,6 @@ LOCK TABLES `friend_list` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `isbn`
---
-
-DROP TABLE IF EXISTS `isbn`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `isbn` (
-  `ISBN` int NOT NULL,
-  `Title` varchar(45) NOT NULL,
-  `Year_of_Publication` year NOT NULL,
-  `Genre` varchar(45) NOT NULL,
-  `Author` varchar(200) NOT NULL,
-  `Publisher` varchar(100) DEFAULT NULL,
-  `Rating` int DEFAULT NULL,
-  `Total_no_of_copies` int NOT NULL,
-  PRIMARY KEY (`ISBN`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `isbn`
---
-
-LOCK TABLES `isbn` WRITE;
-/*!40000 ALTER TABLE `isbn` DISABLE KEYS */;
-/*!40000 ALTER TABLE `isbn` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `librarian`
 --
 
@@ -392,9 +365,9 @@ DROP TABLE IF EXISTS `librarian`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `librarian` (
-  `Librarian_ID` int NOT NULL AUTO_INCREMENT,
+  `Librarian_ID` int NOT NULL,
   `Name` varchar(45) NOT NULL,
-  `Password` varchar(100) NOT NULL,
+  `Password` varchar(45) NOT NULL,
   `Address` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
   `DOB` date NOT NULL,
@@ -420,13 +393,13 @@ DROP TABLE IF EXISTS `on_hold`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `on_hold` (
   `Hold_ID` int NOT NULL,
-  `date_of_hold` datetime NOT NULL,
+  `date_of_hold` date NOT NULL,
   `User_ID` int NOT NULL,
   `Book_ID` int NOT NULL,
   PRIMARY KEY (`Hold_ID`),
   KEY `usiid_idx` (`User_ID`),
-  KEY `bnf_idx` (`Book_ID`),
-  CONSTRAINT `bnf` FOREIGN KEY (`Book_ID`) REFERENCES `book` (`Book_ID`),
+  KEY `booid_idx` (`Book_ID`),
+  CONSTRAINT `booid` FOREIGN KEY (`Book_ID`) REFERENCES `book` (`Book_ID`),
   CONSTRAINT `usiid` FOREIGN KEY (`User_ID`) REFERENCES `user` (`User_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -451,16 +424,16 @@ CREATE TABLE `on_loan` (
   `Loan_ID` int NOT NULL,
   `Book_ID` int DEFAULT NULL,
   `User_ID` int NOT NULL,
-  `Date_of_Issue` datetime(6) NOT NULL,
-  `last_email_date` datetime DEFAULT NULL,
-  `Fine` int DEFAULT '0',
+  `Date_of_Issue` date NOT NULL,
+  `last_email_date` date DEFAULT NULL,
+  `Fine` int DEFAULT NULL,
   `librarian_ID` int DEFAULT NULL,
   PRIMARY KEY (`Loan_ID`),
   KEY `ud_idx` (`User_ID`),
   KEY `bd_idx` (`Book_ID`),
-  KEY `lde_idx` (`librarian_ID`),
+  KEY `ld_idx` (`librarian_ID`),
   CONSTRAINT `bd` FOREIGN KEY (`Book_ID`) REFERENCES `book` (`Book_ID`),
-  CONSTRAINT `lde` FOREIGN KEY (`librarian_ID`) REFERENCES `librarian` (`Librarian_ID`),
+  CONSTRAINT `ld` FOREIGN KEY (`librarian_ID`) REFERENCES `librarian` (`Librarian_ID`),
   CONSTRAINT `ud` FOREIGN KEY (`User_ID`) REFERENCES `user` (`User_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -475,32 +448,32 @@ LOCK TABLES `on_loan` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `on_loan_on_hold`
+-- Table structure for table `on_loan&on_hold`
 --
 
-DROP TABLE IF EXISTS `on_loan_on_hold`;
+DROP TABLE IF EXISTS `on_loan&on_hold`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `on_loan_on_hold` (
+CREATE TABLE `on_loan&on_hold` (
   `Token_No` int NOT NULL,
   `User_Id` int NOT NULL,
   `Time_stamp` datetime(6) DEFAULT NULL,
-  `ISBN` int DEFAULT NULL,
+  `Book_ID` int DEFAULT NULL,
   PRIMARY KEY (`Token_No`),
   KEY `userid_idx` (`User_Id`),
-  KEY `inm_idx` (`ISBN`),
-  CONSTRAINT `inm` FOREIGN KEY (`ISBN`) REFERENCES `isbn` (`ISBN`),
+  KEY `bookid_idx` (`Book_ID`),
+  CONSTRAINT `bookid` FOREIGN KEY (`Book_ID`) REFERENCES `book` (`Book_ID`),
   CONSTRAINT `userid` FOREIGN KEY (`User_Id`) REFERENCES `user` (`User_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `on_loan_on_hold`
+-- Dumping data for table `on_loan&on_hold`
 --
 
-LOCK TABLES `on_loan_on_hold` WRITE;
-/*!40000 ALTER TABLE `on_loan_on_hold` DISABLE KEYS */;
-/*!40000 ALTER TABLE `on_loan_on_hold` ENABLE KEYS */;
+LOCK TABLES `on_loan&on_hold` WRITE;
+/*!40000 ALTER TABLE `on_loan&on_hold` DISABLE KEYS */;
+/*!40000 ALTER TABLE `on_loan&on_hold` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -513,7 +486,6 @@ DROP TABLE IF EXISTS `previous_books`;
 CREATE TABLE `previous_books` (
   `User_ID` int NOT NULL,
   `Book_ID` int NOT NULL,
-  `timestamp` datetime NOT NULL,
   PRIMARY KEY (`User_ID`,`Book_ID`),
   KEY `id_idx` (`User_ID`),
   KEY `ide_idx` (`Book_ID`),
@@ -565,13 +537,13 @@ DROP TABLE IF EXISTS `review`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `review` (
   `Review` varchar(250) DEFAULT NULL,
-  `ISBN` int NOT NULL,
+  `Book_ID` int NOT NULL,
   `User_ID` int NOT NULL,
   `Rating` int DEFAULT NULL,
-  PRIMARY KEY (`ISBN`,`User_ID`),
+  PRIMARY KEY (`Book_ID`,`User_ID`),
   KEY `rs_idx` (`User_ID`),
-  CONSTRAINT `akis` FOREIGN KEY (`ISBN`) REFERENCES `isbn` (`ISBN`),
-  CONSTRAINT `rs` FOREIGN KEY (`User_ID`) REFERENCES `user` (`User_ID`)
+  CONSTRAINT `rs` FOREIGN KEY (`User_ID`) REFERENCES `user` (`User_ID`),
+  CONSTRAINT `sr` FOREIGN KEY (`Book_ID`) REFERENCES `book` (`Book_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -604,7 +576,6 @@ CREATE TABLE `shelf` (
 
 LOCK TABLES `shelf` WRITE;
 /*!40000 ALTER TABLE `shelf` DISABLE KEYS */;
-INSERT INTO `shelf` VALUES (1,20),(2,30),(3,50),(4,45);
 /*!40000 ALTER TABLE `shelf` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -617,15 +588,15 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `User_ID` int NOT NULL AUTO_INCREMENT,
-  `Name` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8 NOT NULL,
+  `Name` varchar(45) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `DOB` date NOT NULL,
-  `Password` varchar(100) NOT NULL,
-  `Category` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `Address` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `Unpaid_fees` int DEFAULT '0',
+  `Password` varchar(45) NOT NULL,
+  `Category` varchar(45) NOT NULL,
+  `Address` varchar(100) NOT NULL,
+  `Unpaid_fees` int DEFAULT NULL,
   PRIMARY KEY (`User_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -634,7 +605,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Revanth','thotarevanth347@gmail.com','2001-12-11','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Male','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(2,'Roomno605','roomno605','2019-08-12','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -647,4 +617,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-19 11:09:46
+-- Dump completed on 2021-04-18 19:40:31

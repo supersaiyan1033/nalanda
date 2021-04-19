@@ -42,15 +42,15 @@
               <form class="form-horizontal" role="form" method="POST">
                 {%csrf_token%}
                 <div class="form-group">
-                  <label class="col-lg-3 control-label">Name:</label>
+                  <label class="col-lg-3 control-label">First Name:</label>
                   <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{Name}}" name="Name" required>
+                    <input class="form-control" type="text" value="{{firstname}}" name="firstname" required>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-lg-3 control-label">Address:</label>
                   <div class="col-lg-8">
-                    <input class="form-control" type="text" value="{{Address}}" name="Address" required>
+                    <input class="form-control" type="text" value="{{address}}" name="address" required>
                   </div>
                 </div>
                 <div class="form-group">
@@ -66,26 +66,32 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-lg-3 control-label">Category:</label>
+                  <label class="col-lg-3 control-label">Gender:</label>
                   <div class="col-lg-8">
                     <div class="ui-select">
-                      <select id="Category" class="form-control" name="Category"  required >
-                       {% for list_Category in Categories %}
+                      <select id="Gender" class="form-control" name="gender"  required >
+                       {% for list_gender in genders %}
                    <option
-                    value="{{ list_Category}}"
-                    {% if list_Category == Category %}
+                    value="{{ list_gender}}"
+                    {% if list_gender == gender %}
                         selected="selected"
                     {% endif %}
-                   >{{ list_Category }}</option>
+                   >{{ list_gender }}</option>
                {% endfor %}
                       </select>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-md-3 control-label">Mobileno:</label>
+                  <div class="col-md-8">
+                    <input class="form-control" type="text" value="{{mobileno}}" name="mobileno" required>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="col-md-4 control-label"> Type Password to confirm:</label>
                   <div class="col-md-8">
-                    <input class="form-control" type="Password"  name="Password" required minlength="8">
+                    <input class="form-control" type="password"  name="password" required minlength="8">
                   </div>
                 </div>
                 <div class="form-group">

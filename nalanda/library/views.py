@@ -146,7 +146,7 @@ def mybooks(request):
         onloan_onhold = []
         cursor = connection.cursor()
         cursor.execute(
-            """SELECT  ISBN,Title,Year_of_Publication,Genre,Rating,Time_stamp FROM (on_loan_on_hold JOIN book ON on_loan_on_hold.Book_ID=book.Book_ID) WHERE User_ID= %s""", [userId])
+            """SELECT  ISBN,Title,Year_of_Publication,Genre,Rating,Time_stamp FROM on_loan_on_hold JOIN book ON on_loan_on_hold.Book_ID=book.Book_ID WHERE User_ID= %s""", [userId])
         row = cursor.fetchall()
         a = cursor.rowcount
         for n in range(a):

@@ -203,7 +203,7 @@ def Profile(request):
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
         row = cursor.fetchall()
-        Categories = ['Student', 'Faculty']
+        Category = ['Student', 'Faculty']
 
         dateOfBirth = row[0][3].strftime("%Y-%m-%d")
         data = {
@@ -212,7 +212,7 @@ def Profile(request):
             'email': row[0][2],
             'DOB': dateOfBirth,
             'Password': row[0][4],
-            'Category': Categories,
+            'Category': Category,
             'address': row[0][6]
         }
         if request.method == "POST":
