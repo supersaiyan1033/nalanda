@@ -237,7 +237,7 @@ transform:scale(1.01);
     </div>  
     <div class="list">
       <div class="item" style="color:black;padding:6px;"><i class="fa fa-hand-paper fa-4x" style="color:red;" ></i>{{firstname}} {{lastname}}</div>
-      <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{pending fines}}</div>
+      <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{fines}}</div>
       <div class="item"><a   href="/profile" style="text-decoration:none;" ><i class="fa fa-user" style="padding-right:10px;color:red"></i>profile</a></div>
       <div class="item"><a  href="/changepassword" style="text-decoration:none;"><i class="fa fa-key" style="padding-right:10px;color:red"></i>change password</a></div>
       
@@ -253,28 +253,18 @@ transform:scale(1.01);
   
 <td style="padding:10px 20px;">
 <div class="ui-select">
-<select class="form-control" aria-label="Default select example">
-  <option selected>Library catalogue</option>
-  <option value="1">Title</option>
-  <option value="2">Subject</option>
-  <option value="3">ISBN</option>
+<select class="form-control" aria-label="Default select example" name="search_category">
+  <option selected value="catalogue">Library catalogue</option>
+  <option value="Title">Title</option>
+  <option value="Genre">Genre</option>
+  <option value="ISBN">ISBN</option>
 </select>
 </div>
  
 </td>
 
 <td width="60%">
-    <input type="text" class="form-control" placeholder="Search" list="search_options">
-    <datalist id="search_options">
-    <option value="Atom">Atom
-    <option value="Brackets">Brackets
-    <option value="Notepad ++">Notepad ++
-    <option value="Notepad">Notepad
-    <option value="Sublime Text">Sublime Text
-    <option value="TextEdit">TextEdit
-    <option value="TextMate">TextMate
-    <option value="Wordpad">Wordpad
-</datalist>
+    <input type="text" class="form-control" placeholder="Search" name="search_key" list="search_options" required>
  
 </td>
 <td>
@@ -288,27 +278,31 @@ transform:scale(1.01);
 <hr>
 <table style="width=80vw;">
 <tr>
-
+{% if books %}
+<div class="results" style="margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; text-align:justify; ">
+{% for book in books%}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;">
 <div class="row">
   <div class="col-sm-10">
-  <h5>Introduction to electrodynamics</h4>
-  <h6>By Griffiths, David.J</h5>
-  <h6>Edition:  3</h5>
-  <h6>Publisher:New Delhi Pearson Education</h5>
-  <h6>Items available for loan</h5>
-  <h6>checked out(18) withdrawn(3)</h5>
+  <h5>{{book.Title}}</h4>
+  <h6>Author:{{book.Author}}</h5>
+  <h6>published in:{{book.Year}}</h5>
+  <h6>Genre:{{book.Genre}}</h6><h6>ISBN:{{book.ISBN}}</h6>
+  <h6>Publisher:{{book.Publisher}}</h5>
+  {% for s in book.stars%}
 <span class="fa fa-star checked"></span>
-<span class="fa fa-star checked"></span>
-<span class="fa fa-star checked"></span>
+{% endfor %}
+{% for s in book.no_stars %}
 <span class="fa fa-star"></span>
-<span class="fa fa-star">(10 votes)</span>
+{% endfor %}
+
+<span>({{book.votes}} votes)</span>
 <div class="row">
 <div class="col-sm-2">
              <input class="btn" type="submit" name="" value="Place Hold" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">
         </div>
         <div class="col-sm-2">
-         <input class="btn" type="submit" name="" value="Rate & Review" data-toggle="modal" data-target="#exampleModalCenter" >
+         <input class="btn" type="submit" name="" value="Rate & Review" data-toggle="modal" data-target="#exampleModalCenter" id="{{book.ISBN}}" onclick=reply_click(this.id) >
         </div>
         </div>
   </div>
@@ -319,7 +313,13 @@ transform:scale(1.01);
   </div>
 </div>
 </div>
+{%endfor%}
 </div>
+{%else%}
+<div class="results" style="margin:auto; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are  available  for your search</h2>
+  </div>
+  {%endif%}
 </tr>
 <tr>
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -332,11 +332,12 @@ transform:scale(1.01);
         </button>
       </div>
       <div class="modal-body">
-      <form>
+      <form method="POST">
+       {% csrf_token %}
   <div class="form-group">
     <label for="exampleInputEmail1">Rating</label>
     <div class="ui-select">
-<select class="form-control" aria-label="Default select example">
+<select class="form-control" aria-label="Default select example" name="rating">
   <option selected>Rating</option>
   <option value="1">1</option>
   <option value="2">2</option>
@@ -348,14 +349,15 @@ transform:scale(1.01);
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Review</label>
-    <textarea  class="form-control"rows = "5" id="exampleInputPassword1" placeholder="Write a Review..."></textarea>
+    <textarea  class="form-control"rows = "5" id="exampleInputPassword1" name="review_content" placeholder="Write a Review..."></textarea>
   </div>
-</form>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn" data-dismiss="modal">Close</button>
         <div width="20px"></div>
-        <button type="button" class="btn">Submit</button>
+        <button type="submit" id="myBtn" name="review" onclick="myFunction()" class="btn">Submit</button>
+        </form>
       </div>
     </div>
   </div>
@@ -395,7 +397,7 @@ transform:scale(1.01);
 </td> {% endcomment %}
 </tr>
 </table>
-</div>
+{% comment %} </div>
 {% endfor %}
 </div>
 </td>
@@ -407,7 +409,7 @@ transform:scale(1.01);
   </td>
 {% endif %}
 </tr>
-</table>
+</table> {% endcomment %}
 {% if messages %}
         {% for message in messages %}
          {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
@@ -417,6 +419,15 @@ transform:scale(1.01);
     {% endif %}
 
  <script>
+  var id;
+  function reply_click(clicked_id)
+  {
+      id = clicked_id;
+      console.log(id);
+  }
+  function myFunction() {
+  document.getElementById("myBtn").value = id;
+}
   function toggleSidebar(ref){
     document.getElementById("sidebar").classList.toggle('active');
   }

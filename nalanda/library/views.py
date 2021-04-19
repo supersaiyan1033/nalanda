@@ -26,28 +26,35 @@ def booksearch(request):
     category = request.session.get('Category')
     if category == 'student' or category == 'faculty' or category == None:
         cursor = connection.cursor()
+        user = cursor.execute(
+            """ select Unpaid_fees from user where User_Id=%s""", [1])
+        print(user)
+        fines = user
+        if fines == None:
+            fines = 0
+
         if 'review' in request.POST:
-            book_id = int(request.POST.get('review'))
+            isbn = request.POST.get('review')
             rating = request.POST.get('rating'),
             review = request.POST.get('review_content')
             cursor.execute(
-                """ insert into review(Review,Book_Id,User_Id,Rating) values(%s,%s,%s,%s) """, (review, book_id, 1, rating))
+                """ insert into review(Review,ISBN,User_Id,Rating) values(%s,%s,%s,%s) """, (review, isbn, 1, rating))
             messages.success(
                 request, 'rating and review submitted successfully!')
         search_category = request.GET.get('search_category')
         search_key = request.GET.get('search_key')
         if search_category == 'ISBN':
             cursor.execute(
-                """ select * from  book where ISBN=%s and Copy_number=%s """, (search_key, 1))
+                """ select * from  isbn where ISBN=%s""", [search_key])
         if search_category == 'Genre':
             cursor.execute(
-                """  select * from book where Genre=%s and Copy_number=%s """, (search_key, 1))
+                """  select * from isbn where Genre=%s""", [search_key])
         if search_category == 'Title':
             cursor.execute(
-                """ select * from book where Title=%s and Copy_number=%s  """, (search_key, 1))
+                """ select * from isbn where Title=%s""",  [search_key])
         if search_category == 'catalogue':
             cursor.execute(
-                """ select * from book where Genre=%s or Title=%s or ISBN=%s and Copy_number=%s  """, (search_key, search_key, search_key, 1))
+                """ select * from isbn where Genre=%s or Title=%s or ISBN=%s """, [search_key, search_key, search_key])
         if search_category == None:
             cursor.execute("""select * from book""")
         row = cursor.fetchall()
@@ -57,29 +64,32 @@ def booksearch(request):
             books = []
             for n in range(a):
                 cursor.execute(
-                    """ select  count(*) from review where Book_Id=%s""", [row[n][0]])
+                    """ select  count(*) from review where ISBN=%s""", [row[n][0]])
                 col = cursor.fetchall()
                 books.append({
-                    'ISBN': row[n][1],
-                    'Book_Id': row[n][0],
-                    'Title': row[n][2],
-                    'Year': row[n][3],
-                    'Genre': row[n][7],
-                    'stars': range(1, row[n][8]+1),
-                    'no_stars': range(1, 5-row[n][8]+1),
+                    'ISBN': row[n][0],
+                    'Title': row[n][1],
+                    'Year': row[n][2],
+                    'Genre': row[n][3],
+                    'Author': row[n][4],
+                    'Publisher': row[n][5],
+                    'stars': range(1, row[n][6]+1),
+                    'no_stars': range(1, 5-row[n][6]+1),
                     'votes': col[0][0]
                 })
         if a != 0:
             data = {
                 'books': books,
                 'category': search_category,
-                'key': search_key
+                'key': search_key,
+                'fines': fines
             }
         else:
             data = {
                 'books': None,
                 'category': None,
-                'key': None
+                'key': None,
+                'fines': fines
             }
 
         return render(request, 'library/book_search.html', data)
@@ -89,7 +99,6 @@ def booksearch(request):
         # return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'library/book_search.html')
-        # return render(request, 'authentication/error.html')
 
 
 # def book_details(request):
@@ -146,7 +155,7 @@ def mybooks(request):
         onloan_onhold = []
         cursor = connection.cursor()
         cursor.execute(
-            """SELECT  ISBN,Title,Year_of_Publication,Genre,Rating,Time_stamp FROM (on_loan_on_hold JOIN book ON on_loan_on_hold.Book_ID=book.Book_ID) WHERE User_ID= %s""", [userId])
+            """SELECT  ISBN,Title,Year_of_Publication,Genre,Rating,Time_stamp FROM on_loan_on_hold JOIN book ON on_loan_on_hold.Book_ID=book.Book_ID WHERE User_ID= %s""", [userId])
         row = cursor.fetchall()
         a = cursor.rowcount
         for n in range(a):

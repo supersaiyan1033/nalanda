@@ -33,7 +33,7 @@ urlpatterns = [
     path('signup/', auth_views.Sign_Up, name='auth-signup'),
     path('profile', auth_views.Profile, name='profile'),
     path('home', auth_views.user, name='user'),
-    #     path('librarian/home', lib_views.librarian, name='librarian'),
+    path('librarian/home', auth_views.librarian, name='librarian'),
     #     path('changepassword', auth_views.ChangePassword, name="changepassword"),
     #     path('librarian/changepassword', lib_views.librarian_ChangePassword,
     #          name="librarian-changepassword"),
@@ -41,7 +41,7 @@ urlpatterns = [
     path('booksearch/', lib_views.booksearch, name='booksearch'),
     #     path('booksearch/<isbn>/', lib_views.book_details, name='book_details'),
     #     path('bookshelf', lib_views.bookshelf, name='bookshelf'),
-    #     path('mybooks', lib_views.mybooks, name='mybooks'),
+    path('mybooks', lib_views.mybooks, name='mybooks'),
     #     # friends urls
     #     path('friends', lib_views.friends, name='friends'),
     #     path('friends/list', lib_views.friends_list, name='friends_list'),
