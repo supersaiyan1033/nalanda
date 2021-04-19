@@ -324,7 +324,6 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('1v87xs8ad7yld2nx3ld194fd2at5pm1y','eyJ1c2VySWQiOjEsImVtYWlsIjoidGhvdGFyZXZhbnRoMzQ3QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiY2F0ZWdvcnkiOiJNYWxlIn0:1lYKey:dodawAAONhijSy8faejaCLEknlM3YMdYmRcfdIUj0Mg','2021-05-03 03:33:16.353289');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -513,7 +512,8 @@ DROP TABLE IF EXISTS `previous_books`;
 CREATE TABLE `previous_books` (
   `User_ID` int NOT NULL,
   `Book_ID` int NOT NULL,
-  `timestamp` datetime NOT NULL,
+  `Date_of_issue` datetime NOT NULL,
+  `Date_of_return` datetime DEFAULT NULL,
   PRIMARY KEY (`User_ID`,`Book_ID`),
   KEY `id_idx` (`User_ID`),
   KEY `ide_idx` (`Book_ID`),
@@ -625,7 +625,7 @@ CREATE TABLE `user` (
   `Address` varchar(100) CHARACTER SET utf8 NOT NULL,
   `Unpaid_fees` int DEFAULT '0',
   PRIMARY KEY (`User_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -634,7 +634,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Revanth','thotarevanth347@gmail.com','2001-12-11','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Male','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(2,'Roomno605','roomno605','2019-08-12','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL);
+INSERT INTO `user` VALUES (1,'Revanth','thotarevanth347@gmail.com','2001-12-11','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Male','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(2,'Roomno605','roomno605','2019-08-12','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',NULL),(3,'sairam','cse190001026@iiti.ac.in','2021-04-01','$2b$12$HTJ3KHyEfxQlA/VQDnLvGuxqv1H.bOvo2X53i96XzDjBI3Ss5xBCe','Student','Flat no:CS3,My Home Complex,Beside SRR College, Machavaram, Vijayawada.',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -647,4 +647,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-19 11:09:46
+-- Dump completed on 2021-04-19 15:13:50
