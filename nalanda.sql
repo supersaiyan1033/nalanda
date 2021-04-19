@@ -513,6 +513,7 @@ DROP TABLE IF EXISTS `previous_books`;
 CREATE TABLE `previous_books` (
   `User_ID` int NOT NULL,
   `Book_ID` int NOT NULL,
+  `timestamp` datetime NOT NULL,
   PRIMARY KEY (`User_ID`,`Book_ID`),
   KEY `id_idx` (`User_ID`),
   KEY `ide_idx` (`Book_ID`),
@@ -646,4 +647,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-19 11:03:46
+-- Dump completed on 2021-04-19 11:09:46
