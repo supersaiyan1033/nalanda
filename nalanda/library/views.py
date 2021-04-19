@@ -28,7 +28,6 @@ def booksearch(request):
         cursor = connection.cursor()
         user = cursor.execute(
             """ select Unpaid_fees from user where User_Id=%s""", [userId])
-        print(user)
         fines = user
         if fines == None:
             fines = 0
@@ -45,6 +44,12 @@ def booksearch(request):
             else:
                 cursor.execute(
                     """ insert into review(Review,ISBN,User_Id,Rating) values(%s,%s,%s,%s) """, (review, isbn, userId, rating))
+                cursor.execute(
+                    """select avg(Rating) from review where isbn=%s""", [isbn])
+                average = cursor.fetchall()
+                print(average)
+                cursor.execute(
+                    """update isbn set Rating=%s where isbn=%s""", (average, isbn))
                 messages.success(
                     request, 'rating and review submitted successfully!')
         elif 'hold' in request.POST:
@@ -159,8 +164,8 @@ def mybooks(request):
                 'Genre': row[n][4],
                 'Rating': row[n][5],
                 'date_of_hold': row[n][6],
-                'Author':row[n][7],
-                'Publisher':row[n][8]
+                'Author': row[n][7],
+                'Publisher': row[n][8]
             })
         onloan = []
         cursor = connection.cursor()
@@ -178,8 +183,8 @@ def mybooks(request):
                 'Rating': row[n][5],
                 'date_of_issue': row[n][6],
                 'Fine': row[n][7],
-                'Author':row[n][8],
-                'Publisher':row[n][9]                
+                'Author': row[n][8],
+                'Publisher': row[n][9]
             })
         onloan_onhold = []
         cursor = connection.cursor()
@@ -195,15 +200,15 @@ def mybooks(request):
                 'Genre': row[n][3],
                 'Rating': row[n][4],
                 'timestamp': row[n][5],
-                'Author':row[n][6],
-                'Publisher':row[n][7]                
+                'Author': row[n][6],
+                'Publisher': row[n][7]
             })
         cursor = connection.cursor()
         cursor.execute(
             """SELECT isbn.ISBN,Title,Year_of_Publication,Copy_number,Genre,Rating,Date_of_issue,Date_of_return,Fine,Author,Publisher FROM previous_books JOIN book ON previous_books.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE User_ID= %s""", [userId])
         row = cursor.fetchall()
         a = cursor.rowcount
-        previous= []
+        previous = []
         for n in range(a):
             previous.append({
                 'ISBN': row[n][0],
@@ -214,9 +219,9 @@ def mybooks(request):
                 'Rating': row[n][5],
                 'date_of_issue': row[n][6],
                 'date_of_return': row[n][7],
-                'Fine':row[0][8],
-                'Author':row[n][9],
-                'Publisher':row[n][10]                 
+                'Fine': row[0][8],
+                'Author': row[n][9],
+                'Publisher': row[n][10]
             })
         data = {
             'Name': name,
@@ -224,7 +229,7 @@ def mybooks(request):
             'onhold': onhold,
             'onloan': onloan,
             'onloan_onhold': onloan_onhold,
-            'previous':previous
+            'previous': previous
         }
         return render(request, 'library/mybooks.html', data)
     elif request.session.get('email') != None:
@@ -232,14 +237,16 @@ def mybooks(request):
     else:
         return render(request, 'authentication/error.html')
 
+
 def bookshelf(request):
     userId = request.session.get('userId')
     email = request.session.get('email')
     if request.session.get('role') == 'user':
         if 'delete' in request.POST:
-            isbn=request.POST.get('delete')
+            isbn = request.POST.get('delete')
             cursor = connection.cursor()
-            cursor.execute("""DELETE FROM reading_list WHERE User_ID=%s AND ISBN=%s""",(userId,isbn))
+            cursor.execute(
+                """DELETE FROM reading_list WHERE User_ID=%s AND ISBN=%s""", (userId, isbn))
             cursor = connection.cursor()
             cursor.execute(
                 """SELECT Name,Unpaid_fees FROM user WHERE email= %s""", [email])
@@ -251,7 +258,7 @@ def bookshelf(request):
                 """SELECT isbn.ISBN,Title,Year_of_Publication,Genre,Rating,Author,Publisher FROM reading_list JOIN isbn ON reading_list.ISBN=isbn.ISBN  WHERE User_ID= %s""", [userId])
             row = cursor.fetchall()
             a = cursor.rowcount
-            reading_list= []
+            reading_list = []
             for n in range(a):
                 reading_list.append({
                     'ISBN': row[n][0],
@@ -259,8 +266,8 @@ def bookshelf(request):
                     'Year_of_Publication': row[n][2],
                     'Genre': row[n][3],
                     'Rating': row[n][4],
-                    'Author':row[n][5],
-                    'Publisher':row[n][6]                    
+                    'Author': row[n][5],
+                    'Publisher': row[n][6]
                 })
             data = {
                 'Name': name,
@@ -280,7 +287,7 @@ def bookshelf(request):
                 """SELECT isbn.ISBN,Title,Year_of_Publication,Genre,Rating,Author,Publisher FROM reading_list JOIN isbn ON reading_list.ISBN=isbn.ISBN  WHERE User_ID= %s""", [userId])
             row = cursor.fetchall()
             a = cursor.rowcount
-            reading_list= []
+            reading_list = []
             for n in range(a):
                 reading_list.append({
                     'ISBN': row[n][0],
@@ -288,19 +295,19 @@ def bookshelf(request):
                     'Year_of_Publication': row[n][2],
                     'Genre': row[n][3],
                     'Rating': row[n][4],
-                    'Author':row[n][5],
-                    'Publisher':row[n][6]
-                         })
+                    'Author': row[n][5],
+                    'Publisher': row[n][6]
+                })
             data = {
                 'Name': name,
                 'Unpaid_fees': unpaid_fees,
                 'list': reading_list
             }
-            return render(request, 'library/bookshelf.html', data)        
+            return render(request, 'library/bookshelf.html', data)
     elif request.session.get('email') != None:
         return render(request, 'authentication/page_not_found.html')
     else:
-        return render(request, 'authentication/error.html')   
+        return render(request, 'authentication/error.html')
 
 # def friends(request):
 #     return
