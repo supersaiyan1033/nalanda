@@ -113,7 +113,7 @@ left:0;
     text-align:center;
     margin:0 10px;
 }
-.btn{
+{% comment %} .btn{
     text-align:center;
     color:white;
     background: #e60000;
@@ -125,7 +125,7 @@ left:0;
 }
 .btn:hover{
   background:#ff1a1a
-}
+} {% endcomment %}
 .signup{
     color:black;
     padding:20px;
@@ -276,6 +276,7 @@ transform:scale(1.01);
 </form>
 </tr>
 </table> -->
+ <h3 style="text-align:center;padding:20px;margin:auto;">My Shelf</h3>
 <hr>
 <table style="width=80vw;">
 <tr>
@@ -290,18 +291,22 @@ transform:scale(1.01);
   <h6>published in:{{list.Year_of_Publication}}</h5>
   <h6>Genre:{{list.Genre}}</h6><h6>ISBN:{{list.ISBN}}</h6>
   <h6>Publisher:{{list.Publisher}}</h5>
-  {% for s in book.stars%}
+  {% for s in list.stars%}
 <span class="fa fa-star checked"></span>
 {% endfor %}
-{% for s in book.no_stars %}
+{% for s in list.no_stars %}
 <span class="fa fa-star"></span>
 {% endfor %}
 
-<span>({{book.votes}} votes)</span>
+<span>({{list.votes}} votes)</span>
+<div style="height:15px;"></div>
 <div class="row">
-<div class="col-sm-2">
-         <button class="btn" type="submit" name="delete" value="{{list.ISBN}}">Remove Book</button>
+<form method='POST' onsubmit="return confirm('Confirm book deletion from book shelf?');">
+{% csrf_token %}
+<div class="col-sm-3">
+         <button class="btn btn-danger" type="submit" name="delete" value="{{list.ISBN}}"><span><i class="fa fa-trash" style="color:white;padding-right:10px;" ></i></span>Remove Book</button>
         </div>
+        </form>
         </div>
   </div>
   <div class="col-sm-2" >

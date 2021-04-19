@@ -47,7 +47,6 @@ def booksearch(request):
                 cursor.execute(
                     """select avg(Rating) from review where isbn=%s""", [isbn])
                 average = cursor.fetchall()
-                print(average)
                 cursor.execute(
                     """update isbn set Rating=%s where isbn=%s""", (average, isbn))
                 messages.success(
@@ -58,15 +57,15 @@ def booksearch(request):
                 """ select User_Id from on_hold where User_Id = %s and """)
         elif 'add_to_shelf' in request.POST:
             isbn = request.POST.get('add_to_shelf')
-            print(userId)
             cursor.execute(
                 """ select User_Id from reading_list where User_Id=%s and ISBN=%s""", (userId, isbn))
             b = cursor.rowcount
             if b > 0:
                 messages.error(request, "Book already in your shelf!!")
-            cursor.execute(
-                """insert into reading_list(User_Id,ISBN) values(%s,%s) """, (userId, isbn))
-            messages.success(request, "Book added to shelf")
+            else:
+                cursor.execute(
+                    """insert into reading_list(User_Id,ISBN) values(%s,%s) """, (userId, isbn))
+                messages.success(request, "Book added to shelf")
         search_category = request.GET.get('search_category')
         search_key = request.GET.get('search_key')
         if search_category == 'ISBN':
@@ -260,6 +259,13 @@ def bookshelf(request):
             a = cursor.rowcount
             reading_list = []
             for n in range(a):
+                cursor.execute(
+                    """ select  count(*) from review where ISBN=%s""", [row[n][0]])
+                col = cursor.fetchall()
+                if row[n][4] == None:
+                    range_of_rating = 0
+                else:
+                    range_of_rating = row[n][4]
                 reading_list.append({
                     'ISBN': row[n][0],
                     'Title': row[n][1],
@@ -267,7 +273,10 @@ def bookshelf(request):
                     'Genre': row[n][3],
                     'Rating': row[n][4],
                     'Author': row[n][5],
-                    'Publisher': row[n][6]
+                    'Publisher': row[n][6],
+                    'stars': range(1, range_of_rating+1),
+                    'no_stars': range(1, 5-range_of_rating+1),
+                    'votes': col[0][0]
                 })
             data = {
                 'Name': name,
@@ -289,6 +298,13 @@ def bookshelf(request):
             a = cursor.rowcount
             reading_list = []
             for n in range(a):
+                cursor.execute(
+                    """ select  count(*) from review where ISBN=%s""", [row[n][0]])
+                col = cursor.fetchall()
+                if row[n][4] == None:
+                    range_of_rating = 0
+                else:
+                    range_of_rating = row[n][4]
                 reading_list.append({
                     'ISBN': row[n][0],
                     'Title': row[n][1],
@@ -296,7 +312,10 @@ def bookshelf(request):
                     'Genre': row[n][3],
                     'Rating': row[n][4],
                     'Author': row[n][5],
-                    'Publisher': row[n][6]
+                    'Publisher': row[n][6],
+                    'stars': range(1, range_of_rating+1),
+                    'no_stars': range(1, 5-range_of_rating+1),
+                    'votes': col[0][0]
                 })
             data = {
                 'Name': name,
