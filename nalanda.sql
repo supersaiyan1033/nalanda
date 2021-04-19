@@ -204,7 +204,7 @@ CREATE TABLE `book` (
   KEY `inder_idx` (`ISBN`),
   CONSTRAINT `inder` FOREIGN KEY (`ISBN`) REFERENCES `isbn` (`ISBN`),
   CONSTRAINT `s_id` FOREIGN KEY (`Shelf_ID`) REFERENCES `shelf` (`Shelf_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,6 +213,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
+INSERT INTO `book` VALUES (2,2746893,1,2,'On shelf'),(3,1445658,2,23,'On shelf'),(4,2874123,2,15,'On shlef'),(5,1523254,3,20,'On shelf'),(6,4123965,1,11,'On shelf'),(7,6352369,5,19,'On shelf'),(8,8564123,4,25,'On shelf'),(9,3658942,5,11,'On shelf'),(10,6352369,5,23,'On shelf');
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -363,13 +364,14 @@ DROP TABLE IF EXISTS `isbn`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `isbn` (
   `ISBN` int NOT NULL,
-  `Title` varchar(45) NOT NULL,
+  `Title` varchar(255) NOT NULL,
   `Year_of_Publication` year NOT NULL,
   `Genre` varchar(45) NOT NULL,
   `Author` varchar(200) NOT NULL,
   `Publisher` varchar(100) DEFAULT NULL,
   `Rating` int DEFAULT NULL,
   `Total_no_of_copies` int NOT NULL,
+  `Img_link` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`ISBN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -380,6 +382,7 @@ CREATE TABLE `isbn` (
 
 LOCK TABLES `isbn` WRITE;
 /*!40000 ALTER TABLE `isbn` DISABLE KEYS */;
+INSERT INTO `isbn` VALUES (1198563,'Artemis Fowl',2009,'Fiction','Eoin Colfer','Viking Press',NULL,35,NULL),(1362598,'Evolution of Geographical Thought',2004,'History',' Majid Husain','Coleman Press',NULL,55,NULL),(1369802,'The Time Machine',1923,'Fiction ','H.G.Wells','Henry Holt and Company',NULL,60,NULL),(1445658,'War and Peace',1916,'Fiction','Leo Tolstoy','Mockra',NULL,30,NULL),(1523254,'Introduction to Engineering Mathematics',1998,'Science','Erzwig keigser','Pearson',NULL,60,NULL),(1568947,'Genghis Khan and the Making of the Modern World',2004,'History','Jack Weatherford','NormanPress',NULL,50,NULL),(1587432,'21 Lessons for the 21st Century',2018,'History','Yuval Noah Harari','Spiegel & Grau',NULL,15,NULL),(1956874,'Computer Fundamentals and Programming in C',1994,'Science','Reema Thareja','Suchithra Raman press',NULL,45,NULL),(2398756,'The Subtle Art of Not Giving a F*ck',2016,'Motivational','Mark Menson','HarperOne',NULL,50,NULL),(2746893,'The Origin of Species.',1912,'History','Charles Darwin','Scholastic',NULL,100,NULL),(2874123,'Girl in Room 105',2018,'Fiction','Chetan Bhagat','Vermillion',NULL,30,NULL),(2912356,'Introduction to Electrodynamics',1981,'Science','David J. Griffiths','Cambridge University Press',NULL,60,NULL),(3624756,'Wings of Fire',1999,'Motivational',' Dr A. P. J. Abdul Kalam','Universities Press',NULL,50,NULL),(3658942,'Rich Dad Poor Dad',1990,'Motivational','Robert.T.Kiyosaki','Plata Publishing',NULL,25,NULL),(4123965,'History of Modern India ',2001,'History',' Bipan Chandra','Black Swan',NULL,40,NULL),(5237152,'Mechanical Vibrations',1986,'Science','Singiresu S. Rao','JP Bathra',NULL,80,NULL),(5489723,'Pride and Prejudice.',1956,'Fiction','Jane Austen.','Cambridge Press',NULL,40,NULL),(6352369,'Python Crash Course',2019,'Science','Eric mathews','merryweather Press',NULL,25,NULL),(7892361,'The Immortals of Meluha',2010,'Fiction',' Amish Tripathi','Westland Press',NULL,23,NULL),(8564123,'The 7 Habits of Highly Effective People',1989,'Motivational','Stephen Covey','Free Press',NULL,30,'');
 /*!40000 ALTER TABLE `isbn` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -541,9 +544,11 @@ DROP TABLE IF EXISTS `reading_list`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reading_list` (
   `User_ID` int NOT NULL,
-  `Book_no` int NOT NULL,
-  PRIMARY KEY (`Book_no`,`User_ID`),
+  `ISBN` int NOT NULL,
+  PRIMARY KEY (`User_ID`,`ISBN`),
   KEY `ui_idx` (`User_ID`),
+  KEY `isbnidfor_idx` (`ISBN`),
+  CONSTRAINT `isbnidfor` FOREIGN KEY (`ISBN`) REFERENCES `isbn` (`ISBN`),
   CONSTRAINT `ui` FOREIGN KEY (`User_ID`) REFERENCES `user` (`User_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -605,7 +610,7 @@ CREATE TABLE `shelf` (
 
 LOCK TABLES `shelf` WRITE;
 /*!40000 ALTER TABLE `shelf` DISABLE KEYS */;
-INSERT INTO `shelf` VALUES (1,20),(2,30),(3,50),(4,45);
+INSERT INTO `shelf` VALUES (1,20),(2,30),(3,50),(4,45),(5,100);
 /*!40000 ALTER TABLE `shelf` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -648,4 +653,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-19 15:15:59
+-- Dump completed on 2021-04-19 16:27:33
