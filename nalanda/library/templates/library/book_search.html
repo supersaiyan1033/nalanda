@@ -113,7 +113,7 @@ left:0;
     text-align:center;
     margin:0 10px;
 }
-.btn{
+{% comment %} .btn{
     text-align:center;
     color:white;
     background: #e60000;
@@ -125,7 +125,7 @@ left:0;
 }
 .btn:hover{
   background:#ff1a1a
-}
+} {% endcomment %}
 .signup{
     color:black;
     padding:20px;
@@ -279,7 +279,7 @@ transform:scale(1.01);
 </td>
 <td>
 <div class="loginbtn">
-           <input class="btn" type="submit" name="" value="Search">
+           <input class="btn btn-danger" type="submit" name="" value="Search">
         </div>
 </td>
 </form>
@@ -302,13 +302,19 @@ transform:scale(1.01);
 <span class="fa fa-star checked"></span>
 <span class="fa fa-star checked"></span>
 <span class="fa fa-star"></span>
-<span class="fa fa-star">(10 votes)</span>
+{% endfor %}
+
+<span>({{book.votes}} votes)</span>
+<div style="height:10px;"></div>
 <div class="row">
 <div class="col-sm-2">
-             <input class="btn" type="submit" name="" value="Place Hold" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">
+             <input class="btn btn-primary" type="submit" name="hold" value="Place Hold" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">
+        </div>
+         <div class="col-sm-2">
+             <input class="btn btn-danger" type="submit" name="add_to_shelf" value="Add to Shelf" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">
         </div>
         <div class="col-sm-2">
-         <input class="btn" type="submit" name="" value="Rate & Review" data-toggle="modal" data-target="#exampleModalCenter" >
+         <input class="btn btn-success" type="submit" name="" value="Rate & Review" data-toggle="modal" data-target="#exampleModalCenter" id="{{book.ISBN}}" onclick=reply_click(this.id) >
         </div>
         </div>
   </div>
@@ -336,8 +342,7 @@ transform:scale(1.01);
   <div class="form-group">
     <label for="exampleInputEmail1">Rating</label>
     <div class="ui-select">
-<select class="form-control" aria-label="Default select example">
-  <option selected>Rating</option>
+<select class="form-control" aria-label="Default select example" name="rating">
   <option value="1">1</option>
   <option value="2">2</option>
   <option value="3">3</option>
@@ -353,9 +358,10 @@ transform:scale(1.01);
 </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         <div width="20px"></div>
-        <button type="button" class="btn">Submit</button>
+        <button type="submit" id="myBtn" name="review" onclick="myFunction()" class="btn btn-success">Submit</button>
+        </form>
       </div>
     </div>
   </div>

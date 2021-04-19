@@ -23,15 +23,22 @@ from django.utils.crypto import get_random_string
 def booksearch(request):
     userId = request.session.get('UserId')
     email = request.session.get('email')
-    category = request.session.get('Category')
-    if category == 'student' or category == 'faculty' or category == None:
+    category = request.session.get('category')
+    if category == 'Student' or category == 'Faculty':
         cursor = connection.cursor()
+        user = cursor.execute(
+            """ select Unpaid_fees from user where User_Id=%s""", [userId])
+        print(user)
+        fines = user
+        if fines == None:
+            fines = 0
+
         if 'review' in request.POST:
-            book_id = int(request.POST.get('review'))
+            isbn = request.POST.get('review')
             rating = request.POST.get('rating'),
             review = request.POST.get('review_content')
             cursor.execute(
-                """ insert into review(Review,Book_Id,User_Id,Rating) values(%s,%s,%s,%s) """, (review, book_id, 1, rating))
+                """ insert into review(Review,ISBN,User_Id,Rating) values(%s,%s,%s,%s) """, (review, isbn, userId, rating))
             messages.success(
                 request, 'rating and review submitted successfully!')
         search_category = request.GET.get('search_category')
@@ -85,11 +92,10 @@ def booksearch(request):
         return render(request, 'library/book_search.html', data)
 
     elif request.session.get('email') != None:
-        return render(request, 'library/book_search.html')
-        # return render(request, 'authentication/page_not_found.html')
+        # return render(request, 'library/book_search.html')
+        return render(request, 'authentication/page_not_found.html')
     else:
-        return render(request, 'library/book_search.html')
-        # return render(request, 'authentication/error.html')
+        return render(request, 'authentication/error.html')
 
 
 # def book_details(request):
