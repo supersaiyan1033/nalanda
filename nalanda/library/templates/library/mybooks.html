@@ -280,8 +280,43 @@ transform:scale(1.01);
       <li class="nav-item"><a class="nav-link" href="#OnLoanOnHold" data-toggle="tab">On Loan & On Hold</a></li>
       </ul>
       <div class="tab-content">
-
-      <div class="tab-pane active" id="OnLoan">
+        <div class="tab-pane"id="Previous">
+          {% if previous %}
+        {% for previous in previous %}
+        <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
+        <div class="row">
+        
+          <div class="col-sm-10">
+          <h5>{{previous.Title}}</h4>
+          <h6>Author:{{previous.Author}}</h5>
+          <h6>Publisher:{{previous.Publisher}}</h5>
+          <h6>ISBN : {{previous.ISBN}}</h6>
+          <h6>copy number:{{previous.Copy_Number}}<h6>
+          <h6>Year of Publication : {{previous.Year_of_Publication}}</h5>
+          <h6>Date of Issue :{{previous.date_of_issue}}</h5>
+          <h6>Date of Return :{{previous.date_of_return}}</h5>
+          <h6>Fine :{{previous.Fine}}</h5>
+          </div>
+        
+          <div class="col-sm-2" >
+          <div style="width:140px;height:170px;">
+          <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
+          <h5 class="stamp" style="text-align:center;">On Loan</h5>
+          </div>
+          </div>
+        
+        </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <td valign="middle" style="padding-left:50px;align:center;" >
+          <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+          <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are On Loan </h2>
+          </div>
+          </td>
+        {% endif %}
+              </div>
+<div class="tab-pane active" id="OnLoan">
 {% if onloan %}
 {% for onloan in onloan %}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
@@ -315,7 +350,7 @@ transform:scale(1.01);
   </div>
   </td>
 {% endif %}
-      </div>
+</div>
 
  <div class="tab-pane"id="OnHold">
 {% if onhold %}
@@ -352,55 +387,19 @@ transform:scale(1.01);
 {% endif %}
 </div>
 
-<div class="tab-pane"id="Previous">
-  {% if previous %}
-{% for previous in previous %}
-<div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
-<div class="row">
-
-  <div class="col-sm-10">
-  <h5>{{previous.Title}}</h4>
-  <h6>Author:{{previous.Author}}</h5>
-  <h6>Publisher:{{previous.Publisher}}</h5>
-  <h6>ISBN : {{previous.ISBN}}</h6>
-  <h6>copy number:{{previous.Copy_Number}}<h6>
-  <h6>Year of Publication : {{previous.Year_of_Publication}}</h5>
-  <h6>Date of Issue :{{previous.date_of_issue}}</h5>
-  <h6>Date of Return :{{previous.date_of_return}}</h5>
-  <h6>Fine :{{previous.Fine}}</h5>
-  </div>
-
-  <div class="col-sm-2" >
-  <div style="width:140px;height:170px;">
-  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
-  <h5 class="stamp" style="text-align:center;">On Loan</h5>
-  </div>
-  </div>
-
-</div>
-</div>
-{% endfor %}
-{% else %}
-<td valign="middle" style="padding-left:50px;align:center;" >
-  <div class="results" style="border-left-style:solid;margin:auto;border-color:grey; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
-  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are On Loan</h2>
-  </div>
-  </td>
-{% endif %}
-      </div>
 <div class="tab-pane"id="OnLoanOnHold">
-  {% if onhold_onhold %}
-  {% for onhold_onhold in onhold_onhold %}
+  {% if onloan_onhold %}
+  {% for onloan_onhold in onloan_onhold %}
   <div class="flights" style="background-color:white;border-radius:7px;margin:20px 10px;padding:20px  15px 20px 25px;">
   <div class="row">
   
     <div class="col-sm-10">
-    <h5>{{onhold_onhold.Title}}</h4>
-    <h6>Author:{{onhold_onhold.Author}}</h5>
-    <h6>Publisher:{{onhold_onhold.Publisher}}</h5>
-    <h6>ISBN : {{onhold_onhold.ISBN}}</h6>
-    <h6>Year of Publication : {{onhold_onhold.Year_of_Publication}}</h5>
-    <h6>Date of Hold Request :{{onhold_onhold.timestamp}}</h5>
+    <h5>{{onloan_onhold.Title}}</h4>
+    <h6>Author:{{onloan_onhold.Author}}</h5>
+    <h6>Publisher:{{onloan_onhold.Publisher}}</h5>
+    <h6>ISBN : {{onloan_onhold.ISBN}}</h6>
+    <h6>Year of Publication : {{onloan_onhold.Year_of_Publication}}</h5>
+    <h6>Date of Hold Request :{{onloan_onhold.timestamp}}</h5>
     </div>
   
     <div class="col-sm-2" >
