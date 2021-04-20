@@ -485,17 +485,24 @@ def update_book(request):
             book_id = request.POST.get('delete')
             cursor.execute("""delete from book where Book_ID=%s""", [book_id])
             messages.success(request, "Copy deletion successful!!")
-        elif 'add_to_shelf' in request.POST:
-            isbn = request.POST.get('add_to_shelf')
+        elif 'update_copy' in request.POST:
+            book_id = request.POST.get('update_copy')
+            shelf_input = request.POST.get('shelf_input')
             cursor.execute(
-                """ select User_Id from reading_list where User_Id=%s and ISBN=%s""", (userId, isbn))
-            b = cursor.rowcount
-            if b > 0:
-                messages.error(request, "Book already in your shelf!!")
-            else:
+                """ select * from shelf where Shelf_ID=%s""", [shelf_input])
+            if cursor.rowcount > 0:
+                records = cursor.fetchall()
+                capacity = records[0][1]
                 cursor.execute(
-                    """insert into reading_list(User_Id,ISBN) values(%s,%s) """, (userId, isbn))
-                messages.success(request, "Book added to shelf")
+                    """ select count(*) from book where Shelf_ID=%s""", [shelf_input])
+                if cursor.rowcount < capacity:
+                    cursor.execute(
+                        """ update book set Shelf_ID=%s where Book_ID=%s""", (shelf_input, book_id))
+                    messages.success(request, "update successful")
+                else:
+                    messages.error(request, "capacity reached!!")
+            else:
+                messages.error(request, "shelf does not exist")
         search_key = request.GET.get('search_key')
         if search_key != None:
             cursor.execute(
@@ -509,22 +516,22 @@ def update_book(request):
             books = []
             for n in range(a):
                 books.append({
-                    'ISBN': row[n][1],
-                    'book_id': row[n][0],
-                    'shelf_id': row[n][2],
-                    'copy_number': row[n][3],
-                    'status': row[n][4]
+                    "ISBN": row[n][1],
+                    "book_id": row[n][0],
+                    "shelf_id": row[n][2],
+                    "copy_number": row[n][3],
+                    "status": row[n][4]
                 })
         if a != 0:
             data = {
-                'books': books,
-                'key': search_key,
+                "books": books,
+                "key": search_key,
             }
         else:
             data = {
-                'books': None,
-                'category': None,
-                'key': None,
+                "books": None,
+                "category": None,
+                "key": None,
             }
 
         return render(request, 'library/edit_book.html', data)
