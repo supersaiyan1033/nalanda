@@ -288,7 +288,7 @@ transform:scale(1.01);
              <button class="btn btn-primary" type="submit" name="edit" value="{{book.book_id}}" id ="{{book.book_id}},{{book.copy_number}},{{book.shelf_id}},{{book.status}}"data-toggle="modal" data-target="#exampleModalCenter" onclick=reply_click(this.id)><span><i class="fa fa-edit" style="color:white;padding-right:10px;" ></i></span>Update</button>
         </div>
         {% comment %} </form> {% endcomment %}
-        <form method="POST">
+        <form method="POST" onsubmit="return confirm('Confirm book deletion from book shelf?');">
         {% csrf_token %}
         <div class="col-sm-2">
              <button class="btn btn-danger" type="submit" name="delete" value="{{book.book_id}}"><span><i class="fa fa-trash" style="color:white;padding-right:10px;" ></i></span>Remove</button>

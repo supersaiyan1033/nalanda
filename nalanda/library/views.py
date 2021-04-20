@@ -135,7 +135,8 @@ def booksearch(request):
                     'Publisher': row[n][5],
                     'stars': range(1, range_of_rating+1),
                     'no_stars': range(1, 5-range_of_rating+1),
-                    'votes': col[0][0]
+                    'votes': col[0][0],
+                    'image_url': row[n][8]
                 })
         if a != 0:
             data = {
@@ -307,7 +308,8 @@ def bookshelf(request):
                     'Publisher': row[n][6],
                     'stars': range(1, range_of_rating+1),
                     'no_stars': range(1, 5-range_of_rating+1),
-                    'votes': col[0][0]
+                    'votes': col[0][0],
+                    'image_url': row[n][8]
                 })
             data = {
                 'Name': name,
@@ -324,7 +326,7 @@ def bookshelf(request):
             unpaid_fees = row[0][1]
             cursor = connection.cursor()
             cursor.execute(
-                """SELECT isbn.ISBN,Title,Year_of_Publication,Genre,Rating,Author,Publisher FROM reading_list JOIN isbn ON reading_list.ISBN=isbn.ISBN  WHERE User_ID= %s""", [userId])
+                """SELECT isbn.ISBN,Title,Year_of_Publication,Genre,Rating,Author,Publisher,Img_link FROM reading_list JOIN isbn ON reading_list.ISBN=isbn.ISBN  WHERE User_ID= %s""", [userId])
             row = cursor.fetchall()
             a = cursor.rowcount
             reading_list = []
@@ -346,7 +348,8 @@ def bookshelf(request):
                     'Publisher': row[n][6],
                     'stars': range(1, range_of_rating+1),
                     'no_stars': range(1, 5-range_of_rating+1),
-                    'votes': col[0][0]
+                    'votes': col[0][0],
+                    'image_url': row[n][7]
                 })
             data = {
                 'Name': name,
@@ -442,14 +445,15 @@ def add_book(request):
             isbn = request.POST.get('isbn')
             year = request.POST.get('year')
             title = request.POST.get('title')
+            image = request.POST.get('image')
             cursor = connection.cursor()
-            cursor.execute("""select * from isbn where ISBN=%s and Author=%s and Title=%s and Genre=%s and Publisher=%s and Year_of_Publication=%s""",
-                           (isbn, author, title, genre, publisher, year))
+            cursor.execute("""select * from isbn where ISBN=%s""",
+                           [isbn])
             if cursor.rowcount > 0:
                 messages.error(request, "Book details already exist!!")
             else:
-                cursor.execute("""insert into isbn(ISBN,Title,Year_of_Publication,Genre,Author,Publisher) values(%s,%s,%s,%s,%s,%s)""",
-                               (isbn, title, year, genre, author, publisher))
+                cursor.execute("""insert into isbn(ISBN,Title,Year_of_Publication,Genre,Author,Publisher,Img_link) values(%s,%s,%s,%s,%s,%s,%s)""",
+                               (isbn, title, year, genre, author, publisher, image))
                 messages.success(request, "Book details added successfully!!")
         elif 'add_copy' in request.POST:
             isbn = request.POST.get('isbn')
