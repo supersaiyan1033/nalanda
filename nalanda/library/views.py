@@ -688,3 +688,92 @@ def issue_onHold(request):
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
+
+def shelf(request):
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'librarian':
+
+        return render(request, 'library/librarian_shelf.html')
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')
+
+    # return render(request,'library/page_not_found.html')
+def shelf_add(request):
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    # category = request.session.get('category')
+    if request.session.get('role') == 'librarian':
+        if 'add_shelf' in request.POST:
+            shelf_id = request.POST.get('shelf_ID')
+            capacity = request.POST.get('capacity')
+            cursor = connection.cursor()
+            cursor.execute("""select * from shelf where Shelf_ID=%s""",
+                           [shelf_id])
+            if cursor.rowcount > 0:
+                messages.error(request, "Shelf with given details already exist!!")
+            else:
+                cursor.execute("""insert into shelf(Shelf_ID,Capacity) values(%s,%s)""",
+                               (shelf_id, capacity))
+                messages.success(request, "Shelf details added successfully!!")
+        return render(request, 'library/add_shelf.html')
+    elif request.session.get('role') != None:
+            return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')
+
+def shelf_update(request):
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    category = request.session.get('category')
+    if request.session.get('role') == 'librarian':
+        cursor = connection.cursor()
+        if 'delete' in request.POST:
+            shelf_id = request.POST.get('delete')
+            cursor.execute("""delete from shelf where Shelf_ID=%s""", [shelf_id])
+            messages.success(request, "Shelf deletion successful!!")
+        elif 'update_shelf' in request.POST:
+            shelf_id = request.POST.get('update_shelf')
+            capacity = request.POST.get('capacity_input')
+            cursor.execute(
+                """ select * from shelf where Shelf_ID=%s""", [shelf_id])
+            if cursor.rowcount > 0:
+                records = cursor.fetchall()
+                capacity = records[0][1]
+                cursor.execute(""" update shelf set Capacity=%s where Shelf_ID=%s""", (capacity,shelf_id))
+                messages.success(request, "update successful")
+                
+            else:
+                messages.error(request, "shelf does not exist")
+        
+        cursor.execute("""select * from shelf""")
+        row = cursor.fetchall()
+        a = cursor.rowcount
+        if a != 0:
+
+            shelves = []
+            for n in range(a):
+                shelves.append({
+                    "shelf_id": row[n][0],
+                    "capacity": row[n][1],
+                    
+                })
+        if a != 0:
+            data = {
+                "shelves": shelves
+                
+            }
+        else:
+            data = {
+                "shelves": None,
+                
+            }
+
+        return render(request, 'library/edit_shelf.html', data)
+
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')    

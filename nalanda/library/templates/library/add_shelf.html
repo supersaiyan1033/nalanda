@@ -231,54 +231,56 @@ transform:scale(1.01);
   </table>
   </div style="float:right;">
   <div>
-   <h4 style="text-align:center">SHELF</h3>
-    <td style="text-align:left;padding-left:50px;vertical-align:text-top;align:left">
-      <div class="results" style="float:left;margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  text-align:justify; ">
-      <div class="flights"  id ="flights" style="background-color:white;border-radius:7px;margin:20px;padding:20px;">
-      <table>
-      <tr>
-      <td style="padding:5px 30px;width:6vw">
-      <i class="fa fa-plus fa-2x" style="padding:20px;color:black;"></i>
-      </td>
-      <td style="padding:5px 30px;width:20vw;">
-      <div class="loginbtn">
-                   <input class="btn" type="submit" name="" value="Add Shelf" onclick="window.location.href='/librarian/shelf/add'">
+   <h4 style="text-align:center">SHELF</h4>
+    <!-- <td style="text-align:left;padding-left:50px;vertical-align:text-top;align:left"> -->
+        <form class="form-horizontal" role="form" method="POST">
+            {%csrf_token%}
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Shelf_ID:</label>
+              <div class="col-lg-8">
+                <input class="form-control" type="text" value="" name="shelf_ID" required>
               </div>
-      </td>
-      </tr>
-      </table>
-      </div>
-           <div class="flights" id="routes" style="background-color:white;border-radius:7px;margin:20px;padding:20px;">
-          <table>
-          <tr>
-          <td style="padding:5px 30px;width:6vw">
-          <i class="fa fa-pencil-square-o fa-2x" style="padding:20px;"></i>
-          </td>
-          <td style="padding:5px 30px;width:20vw;">
-          <div class="loginbtn">
-                       <input class="btn" type="submit" name="" value="Update/Delete Shelf" onclick="window.location.href='/librarian/shelf/update'">
-                  </div>
-          </td>
-          </tr>
-          </table>
-          </div>
-          
-      </div>
-      </td>
-      </tr>
-      </table>  
+            </div>
 
-  
- 
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Capacity:</label>
+              <div class="col-lg-8">
+                <input class="form-control" type="text" value="" name="capacity" required>
+              </div>
+            </div>
+            
+            <div style="height:20px;"></div>
+            {% comment %} <div class="form-group">
+              <label class="row control-label"></label> {% endcomment %}
+              
+              <div class="row">
+              <div class="col-sm-2">
+                <input type="submit" class="btn btn-success" name="add_shelf" value="Add Shelf">
+                </div>
+                  <div class="col-sm-2">
+                <input type="reset" class="btn btn-primary" value="Clear">
+                </div>
+              </div>
+            {% comment %} </div> {% endcomment %}
+          </form> 
+  </div>
+<!-- </td> -->
+{% if messages %}
+        {% for message in messages %}
+         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+
+        {% endfor %}
+
+    {% endif %}
+
+ <script>
+ document.getElementById("")
+  function toggleSidebar(ref){
+    document.getElementById("sidebar").classList.toggle('active');
+  }
+ </script>
+</body>   
+</html>
 
 
-
-
-
-
-</form>
-</div>
-</td>
-
-{
   
