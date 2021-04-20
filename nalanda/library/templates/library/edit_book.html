@@ -248,70 +248,57 @@ transform:scale(1.01);
       </nav>
       </div>
       <br><br><br>
-<!-- <table class="center">
+<table class="center">
 <tr>
   <form method="GET">
   
-<td style="padding:10px 20px;">
-<div class="ui-select">
-<select class="form-control" aria-label="Default select example" name="search_category">
-  <option selected value="catalogue">Library catalogue</option>
-  <option value="Title">Title</option>
-  <option value="Genre">Genre</option>
-  <option value="ISBN">ISBN</option>
-</select>
-</div>
- 
-</td>
 
-<td width="60%">
-    <input type="text" class="form-control" placeholder="Search" name="search_key" list="search_options" required>
+
+<td style="padding:10px 20px;">
+    <input type="text" class="form-control" placeholder="Search by ISBN" name="search_key" list="search_options" required>
  
 </td>
 <td>
 <div class="loginbtn">
-           <input class="btn" type="submit" name="" value="Search">
+           <button class="btn btn-danger" id="{{books}}" type="submit" name="" value="Search"><span><i class="fa fa-search" style="color:white;padding-right:10px;" onclick=reply_click(this.id)></i></span>Search</button>
         </div>
 </td>
 </form>
 </tr>
-</table> -->
- <h3 style="text-align:center;padding:20px;margin:auto;">My Shelf</h3>
+</table>
 <hr>
 <table style="width=80vw;">
 <tr>
-{% if list %}
+{% if books %}
 <div class="results" style="margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; text-align:justify; ">
-{% for list in list%}
+{% for book in books%}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;">
 <div class="row">
   <div class="col-sm-10">
-  <h5>{{list.Title}}</h4>
-  <h6>Author:{{list.Author}}</h5>
-  <h6>published in:{{list.Year_of_Publication}}</h5>
-  <h6>Genre:{{list.Genre}}</h6><h6>ISBN:{{list.ISBN}}</h6>
-  <h6>Publisher:{{list.Publisher}}</h5>
-  {% for s in list.stars%}
-<span class="fa fa-star checked"></span>
-{% endfor %}
-{% for s in list.no_stars %}
-<span class="fa fa-star"></span>
-{% endfor %}
-
-<span>({{list.votes}} votes)</span>
+  
+  <h6>ISBN:{{book.ISBN}}</h6>
+  <h6>Copy number: {{book.copy_number}}
+  <h6>shelf no: {{book.shelf_id}}</h6>
+  <h6>status: {{book.status}}</h6>
 <div style="height:15px;"></div>
 <div class="row">
-<form method='POST' onsubmit="return confirm('Confirm book deletion from book shelf?');">
-{% csrf_token %}
-<div class="col-sm-3">
-         <button class="btn btn-danger" type="submit" name="delete" value="{{list.ISBN}}"><span><i class="fa fa-trash" style="color:white;padding-right:10px;" ></i></span>Remove Book</button>
+{% comment %} <form method="POST">
+{% csrf_token %} {% endcomment %}
+<div class="col-sm-2">
+             <button class="btn btn-primary" type="submit" name="edit" value="{{book.book_id}}" id ="{{book.book_id}},{{book.copy_number}},{{book.shelf_id}},{{book.status}}"data-toggle="modal" data-target="#exampleModalCenter" onclick=reply_click(this.id)><span><i class="fa fa-edit" style="color:white;padding-right:10px;" ></i></span>Update</button>
+        </div>
+        {% comment %} </form> {% endcomment %}
+        <form method="POST" onsubmit="return confirm('Confirm book deletion from book shelf?');">
+        {% csrf_token %}
+        <div class="col-sm-2">
+             <button class="btn btn-danger" type="submit" name="delete" value="{{book.book_id}}"><span><i class="fa fa-trash" style="color:white;padding-right:10px;" ></i></span>Remove</button>
         </div>
         </form>
         </div>
   </div>
   <div class="col-sm-2" >
-  <div>
-   <img src="{% if list.image_url%}{{list.image_url}}{%else%}https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1{% endif %}" class="img-thumbnail">
+  <div style="border:2px solid;width:140px;">
+  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="height:128px;width:128px;">
   </div>
   </div>
 </div>
@@ -320,16 +307,16 @@ transform:scale(1.01);
 </div>
 {%else%}
 <div class="results" style="margin:auto; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
-  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>You Don't have any Book in your Bookshelf</h2>
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are  available  for your search</h2>
   </div>
   {%endif%}
 </tr>
-<!-- <tr>
+<tr>
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Rate and Review</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Update Book Copy</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -337,82 +324,37 @@ transform:scale(1.01);
       <div class="modal-body">
       <form method="POST">
        {% csrf_token %}
+ 
   <div class="form-group">
-    <label for="exampleInputEmail1">Rating</label>
-    <div class="ui-select">
-<select class="form-control" aria-label="Default select example" name="rating">
-  <option selected>Rating</option>
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-   <option value="4">4</option>
-    <option value="5">5</option>
-</select>
-</div>
+    <label for="exampleInputPassword1">Shelf</label>
+    <input type="number" class="form-control" id="shelf_input" name="shelf_input" placeholder="Shelf no">
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1">Review</label>
-    <textarea  class="form-control"rows = "5" id="exampleInputPassword1" name="review_content" placeholder="Write a Review..."></textarea>
-  </div>
+                  <label for="exampleInputPassword1">Copy number:</label>
+                 
+                    <input  id="copy_input"class="form-control" type="number" value="" name="copy_input" readonly>
+                 
+                </div>
+                 <div class="form-group">
+                  <label for="exampleInputPassword1">Status:</label>
+                 
+                    <input  id="status_input"class="form-control" type="text" value="" name="status_input" readonly>
+                 
+                </div>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         <div width="20px"></div>
-        <button type="submit" id="myBtn" name="review" onclick="myFunction()" class="btn">Submit</button>
+        <button type="submit" id="myBtn" name="update_copy" onclick="myFunction()" class="btn btn-success">Submit</button>
         </form>
       </div>
     </div>
   </div>
-</div> -->
-
-<!-- {% comment %} {% if buses %}
-<td style="text-align:right;padding-left:50px;vertical-align:text-top;align:left;">
-<div class="results" style="float:right;margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; text-align:justify; ">
-{% for bus in buses %}
-<div class="flights" style="background-color:white;border-radius:7px;margin:20px;padding:20px;">
-<table>
-<tr>
- <td style="padding:5px 30px;width:6vw">
-<i class="{{bus.image}}" style="padding:20px;"></i>
- {% comment %} <img src= "{% static bus.image %}" height="70">  {% endcomment %}
-{% comment %} </td> 
-<td style="padding:5px 30px;width:6vw;">
-<h6>{{bus.company}}</h6>
-</td>
-<td style="padding:5px 30px;width:15vw;">
-<h6>{{bus.from_p}} - {{bus.to_p}}</h6>
-</td>
-
-<td style="padding:5px 30px;width:20vw;">
-<h6>{{bus.time_from}} - {{bus.time_to}}</h6>
-</td>
-<td style="padding:5px 30px;width:10vw;">
-<h6>Available:{{bus.available}}</h6>
-</td>
-<td style="padding:5px 30px;width:8vw">
-<h6><i class="fa fa-inr"></i>&nbsp&nbsp{{bus.price}}</h6>
-</td>
-<td style="padding:5px 30px;width:5vw;">
-<div class="loginbtn">
-             <input class="btn" type="submit" name="" value="Book" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">
-        </div>
-</td> {% endcomment %}
+</div>
 </tr>
 </table>
-{% comment %} </div>
-{% endfor %}
-</div>
-</td>
-{% else %}
-<td valign="middle" style="padding-left:50px;align:center;" >
-  <div class="results" style="margin:auto; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
-  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are  available  for your search</h2>
-  </div>
-  </td>
-{% endif %} -->
-<!-- </tr> -->
-</table> {% endcomment %}
+
 {% if messages %}
         {% for message in messages %}
          {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
@@ -423,13 +365,19 @@ transform:scale(1.01);
 
  <script>
   var id;
+  var data;
+  var isbn;
   function reply_click(clicked_id)
   {
-      id = clicked_id;
-      console.log(id);
+      data = clicked_id.split(',');
+      var copy = document.getElementById("copy_input");
+      copy.value = data[1];
+      var shelf = document.getElementById("shelf_input");
+      shelf.value = data[2];
+      document.getElementById("status_input").value = data[3];
   }
   function myFunction() {
-  document.getElementById("myBtn").value = id;
+  document.getElementById("myBtn").value = data[0];
 }
   function toggleSidebar(ref){
     document.getElementById("sidebar").classList.toggle('active');

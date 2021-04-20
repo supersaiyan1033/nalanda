@@ -51,12 +51,12 @@ urlpatterns = [
     #          lib_views.friends_bookshelf, name='friends_bookshelf'),
 
     #     # librarian urls
-    #     path('librarian/book', lib_views.book, name='book'),
-    #     path('librarian/book/add', lib_views.add_book, name='add_book'),
-    #     path('librarian/book/update', lib_views.update_book, name='update_book'),
-    #     path('librarian/book/update/<isbn>/',
-    #          lib_views.update_book_isbn, name='update_book_isbn'),
-    #     path('librarian/book/delete', lib_views.delete, name='delete'),
+    path('librarian/book', lib_views.book, name='book'),
+    path('librarian/book/add', lib_views.add_book, name='add_book'),
+    path('librarian/book/update', lib_views.update_book, name='update_book'),
+    # path('librarian/book/update/<isbn>/',
+    #      lib_views.update_book_isbn, name='update_book_isbn'),
+    # path('librarian/book/delete', lib_views.delete, name='delete'),
 
         path('librarian/issue', lib_views.issue, name='issue'),
         path('librarian/issue/available',
