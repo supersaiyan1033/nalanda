@@ -227,65 +227,53 @@ transform:scale(1.01);
        <li><a href="http://127.0.0.1:8000/librarian/return"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Return</a></li>
       </ul>
       </div>
-
+    </form>
+  </table>
+  </div style="float:right;">
+  <div>
+   <h4 style="text-align:center">SHELF</h3>
+    <td style="text-align:left;padding-left:50px;vertical-align:text-top;align:left">
+      <div class="results" style="float:left;margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  text-align:justify; ">
+      <div class="flights"  id ="flights" style="background-color:white;border-radius:7px;margin:20px;padding:20px;">
+      <table>
+      <tr>
+      <td style="padding:5px 30px;width:6vw">
+      <i class="fa fa-plus fa-2x" style="padding:20px;color:black;"></i>
+      </td>
+      <td style="padding:5px 30px;width:20vw;">
+      <div class="loginbtn">
+                   <input class="btn" type="submit" name="" value="Add Shelf" onclick="window.location.href='/librarian/shelf/add'">
+              </div>
+      </td>
+      </tr>
+      </table>
+      </div>
+           <div class="flights" id="routes" style="background-color:white;border-radius:7px;margin:20px;padding:20px;">
+          <table>
+          <tr>
+          <td style="padding:5px 30px;width:6vw">
+          <i class="fa fa-pencil-square-o fa-2x" style="padding:20px;"></i>
+          </td>
+          <td style="padding:5px 30px;width:20vw;">
+          <div class="loginbtn">
+                       <input class="btn" type="submit" name="" value="Update/Delete Shelf" onclick="window.location.href='/librarian/shelf/update'">
+                  </div>
+          </td>
+          </tr>
+          </table>
+          </div>
+          
+      </div>
+      </td>
+      </tr>
+      </table>  
 
   
  
 
 
-<div>
- <table style="width:80vw;margin:auto;">
-<form method="POST"  onsubmit="return confirm('Do you really want to add this shelf?');">
- {%csrf_token%}
-<tr>
- <td>
- <input class="form-control" type="number" value="" name="Shelf_ID" placeholder="Shelf id" required > 
- </td>
 
-<td>
- <input class="form-control" type="text" value="" name="Capacity" placeholder="capacity" required onfocus="this.type='date'" onfocusout="this.type='text'">
-</td>
-<td>
-<div class="loginbtn">
-  <input class="btn" type="submit" name="" value="Add Shelf" >
-</td>
-</tr>
-<tr>
- <td>
- <input class="form-control" type="number" value="" name="Shelf_ID" placeholder="Shelf id" required > 
- </td>
 
-<td>
- <input class="form-control" type="text" value="" name="Capacity" placeholder="capacity" required onfocus="this.type='date'" onfocusout="this.type='text'">
-</td>
-<td>
-<div class="loginbtn">
-  <input class="btn" type="submit" name="" value="Delete Shelf" >
-</td>
-</tr>
-<tr>
- <td>
- <input class="form-control" type="number" value="" name="Shelf_ID" placeholder="Shelf id" required > 
- </td>
- <td>
- <input class="form-control" type="text" value="" name="Capacity" placeholder="old capacity" required onfocus="this.type='date'" onfocusout="this.type='text'">
-</td>
-
-<td>
- <input class="form-control" type="text" value="" name="Capacity" placeholder="new capacity" required onfocus="this.type='date'" onfocusout="this.type='text'">
-</td>
-<td>
-<div class="loginbtn">
-  <input class="btn" type="submit" name="" value="Update Shelf" >
-</td>
-</tr>
-
-</form>
-</table>
-</div style="float:right;">
-<div>
- <h4 style="text-align:center">SHELF</h3>
- 
 
 
 </form>
