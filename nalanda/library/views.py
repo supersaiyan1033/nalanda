@@ -316,6 +316,8 @@ def bookshelf(request):
                 'Unpaid_fees': unpaid_fees,
                 'list': reading_list
             }
+            messages.success(
+                    request, 'Book Removed From Shelf successfully !')
             return render(request, 'library/bookshelf.html', data)
         else:
             cursor = connection.cursor()
@@ -586,26 +588,61 @@ def issue_available(request):
             isbn = request.method.get('isbn')
             copy_number = request.method.get('copy_number')
             cursor = connection.cursor()
-            cursor.execute(
-                """SELECT Book_ID FROM book WHERE ISBN=%s AND Copy_number=%s""", (isbn, copy_number))
-            row = cursor.fetchall()
-            bookId = row[0][0]
+            cursor.execute("""SELECT Unpaid_fees FROM user Where User_ID=%s""",[userId])
+            row=cursor.fetchall()
+            unpaid_fees=row[0][0]
             cursor = connection.cursor()
-            cursor.execute(
-                """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On loan', bookId))
-            now = datetime.now()
-            date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-            cursor = connection.cursor()
-            cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""",
-                           (bookId, userId, date_time, librarianId))
-            cursor = connection.cursor()
-            cursor.execute(
-                """SELECT Name FROM librarian WHERE email= %s""", [email])
-            row = cursor.fetchall()
-            data = {
-                'Name': row[0][0]
-            }
-            return render(request, 'library/home', data)
+            cursor.execute("""SELECT Loan_ID FROM on_loan WHERE User_ID=%s """,[userId])
+            row=cursor.fetchall()
+            b=cursor.rowcount
+            if b>=3 or unpaid_fees>1000:
+                cursor = connection.cursor()
+                cursor.execute("""SELECT Name FROM librarian WHERE email= %s""", [email])
+                data = {
+                    'Name': row[0][0]
+                }
+                if b>=3 and unpaid_fees>1000:
+                    messages.success(
+                        request, 'Maximum Isuue Limit  Exceeded and Unpaid Fines exceeds 1000 rupees ! Book Cannot Be Issued')
+                elif b>=3:
+                    messages.success(
+                        request, 'Maximum Isuue Limit  Exceeded ! Book Cannot Be Issued')
+                else:
+                     messages.success(
+                        request, 'Unpaid Fines Exceed 1000 rupees ! Book Cannot Be Issued')
+                return  redirect('http://127.0.0.1:8000/librarian/home')
+            else:
+                cursor = connection.cursor()
+                cursor.execute("""SELECT Book_ID FROM book WHERE ISBN=%s AND Copy_number=%s AND Status=%s""",(isbn,copy_number,'On shelf'))
+                row=cursor.fetchall()
+                a=cursor.rowcount
+                if a>0:
+                    bookId=row[0][0]
+                    cursor = connection.cursor()
+                    cursor.execute("""UPDATE book SET Status=%s WHERE Book_ID=%s""",('On loan',bookId))
+                    now = datetime.now()
+                    date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+                    cursor = connection.cursor()
+                    cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""",(bookId,userId,date_time,librarianId))
+                    cursor = connection.cursor()
+                    cursor.execute("""SELECT Name FROM librarian WHERE email= %s""", [email])
+                    row = cursor.fetchall()
+                    data = {
+                        'Name': row[0][0]
+                    }
+                    messages.success(
+                    request, 'Book Issued successfully !')
+                    return redirect('http://127.0.0.1:8000/librarian/home')
+                else:
+                    cursor.execute("""SELECT Name FROM librarian WHERE email= %s""", [email])
+                    row = cursor.fetchall()
+                    data = {
+                        'Name': row[0][0]
+                    }                
+                    messages.success(
+                        request, 'Book Is On Hold by Other User! Cannot Be Issued !')
+                    return redirect('http://127.0.0.1:8000/librarian/home')
+
         else:
             cursor = connection.cursor()
             cursor.execute(
@@ -665,20 +702,44 @@ def issue_onHold(request):
             userId = row[0][0]
             bookId = row[0][1]
             cursor = connection.cursor()
-            cursor.execute(
-                """DELETE FROM on_hold Where Hold_ID=%s""", [holdId])
-            now = datetime.now()
-            date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+            cursor.execute("""SELECT Unpaid_fees FROM user Where User_ID=%s""",[userId])
+            row=cursor.fetchall()
+            unpaid_fees=row[0][0]
             cursor = connection.cursor()
-            cursor.execute(
-                """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On loan', bookId))
-            cursor = connection.cursor()
-            cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""",
-                           (bookId, userId, date_time, librarianId))
-            data = {
-                'Name': name
-            }
-            return render(request, 'library/home', data)
+            cursor.execute("""SELECT Loan_ID FROM on_loan WHERE User_ID=%s """,[userId])
+            row=cursor.fetchall()
+            b=cursor.rowcount
+            if b>=3 or unpaid_fees>1000:
+                cursor = connection.cursor()
+                cursor.execute("""SELECT Name FROM librarian WHERE email= %s""", [email])
+                data = {
+                    'Name': row[0][0]
+                }
+                if b>=3 and unpaid_fees>1000:
+                    messages.success(
+                        request, 'Maximum Isuue Limit  Exceeded and Unpaid Fines exceeds 1000 rupees ! Book Cannot Be Issued')
+                elif b>=3:
+                    messages.success(
+                        request, 'Maximum Isuue Limit  Exceeded ! Book Cannot Be Issued')
+                else:
+                     messages.success(
+                        request, 'Unpaid Fines Exceed 1000 rupees ! Book Cannot Be Issued')
+                return  redirect('http://127.0.0.1:8000/librarian/home')
+            else:                        
+                cursor = connection.cursor()
+                cursor.execute("""DELETE FROM on_hold Where Hold_ID=%s""",[holdId])
+                now = datetime.now()
+                date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+                cursor = connection.cursor()
+                cursor.execute("""UPDATE book SET Status=%s WHERE Book_ID=%s""",('On loan',bookId))
+                cursor = connection.cursor()
+                cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""",(bookId,userId,date_time,librarianId))
+                data = {
+                    'Name': name
+                }
+                messages.success(
+                    request, 'Book Issued successfully !')
+                return redirect('http://127.0.0.1:8000/librarian/home')
         else:
             data = {
                 'Name': name
@@ -777,3 +838,72 @@ def shelf_update(request):
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')    
+def return_book(request):
+    librarianId = request.session.get('librarianId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'librarian':
+        cursor = connection.cursor()
+        cursor.execute("""SELECT Name FROM librarian WHERE email= %s""", [email])
+        row = cursor.fetchall()
+        data = {
+            'Name': row[0][0]
+        }
+        if request.method=="POST":
+            isbn=request.method.get('isbn')
+            copy_number=request.method.get('copy_number')
+            cursor = connection.cursor()
+            cursor.execute("""SELECT Book_ID FROM book WHERE ISBN=%s AND Copy_number=%s""",(isbn,copy_number))
+            row = cursor.fetchall()
+            bookId=row[0][0]
+            cursor = connection.cursor()
+            cursor.execute("""SELECT Loan_ID,User_ID FROM on_loan WHERE Book_ID=%s""",(bookId))
+            row = cursor.fetchall()
+            loanId=row[0][0]
+            userId=row[0][1]
+            cursor = connection.cursor()
+            cursor.execute("""SELECT Unpaid_fees FROM user Where User_ID=%s""",[userId])
+            row = cursor.fetchall()
+            unpaid_fees=row[0][0]
+            cursor = connection.cursor()
+            cursor.execute("""SELECT Fine,Date_of_Issue FROM on_loan Where Loan_ID=%s""",[loanId])
+            row = cursor.fetchall()
+            fine=row[0][0]
+            Date_Of_Issue=row[0][1]
+            unpaid_fees=unpaid_fees+fine
+            cursor = connection.cursor()
+            cursor.execute("""UPDATE user SET Unpaid_fees=%s WHERE User_ID=%s""",(unpaid_fees,userId))
+            cursor = connection.cursor()
+            cursor.execute("""DELETE FROM on_loan Where Loan_ID=%s""",[loanId]) 
+            now = datetime.now() 
+            date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+            cursor = connection.cursor()
+            cursor.execute("""INSERT into previous_books(User_ID,Book_ID,Date_of_issue,Date_of_return,Fine)""",(userId,bookId,Date_Of_Issue,date_time,fine))         
+            cursor = connection.cursor()
+            cursor.execute("""SELECT User_Id FROM on_loan_on_hold WHERE ISBN= %s ORDER BY Time_stamp""",[isbn])
+            row = cursor.fetchall()
+            a=cursor.rowcount
+            if a>0:
+                newuserId=row[0][0]
+                cursor = connection.cursor()
+                cursor.execute("""UPDATE book SET Status=%s WHERE Book_ID=%s""",('On hold',bookId))
+                cursor = connection.cursor()
+                now = datetime.now()
+                date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+                cursor.execute("""INSERT into on_hold(date_of_hold,User_ID,Book_ID)""",(date_time,newuserId,bookId))
+                #####################      Email to newuser about hold ##################
+                messages.success(
+                    request, 'Book returned successfully !')
+                return redirect('http://127.0.0.1:8000/librarian/home')
+            else:
+                cursor = connection.cursor()
+                cursor.execute("""UPDATE book SET Status=%s WHERE Book_ID=%s""",('On shelf',bookId))
+                messages.success(
+                    request, 'Book returned successfully !')
+                return redirect('http://127.0.0.1:8000/librarian/home')
+        else:
+            return render(request, 'library/returnbook.html', data)
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')
+
