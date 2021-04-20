@@ -380,3 +380,122 @@ def bookshelf(request):
 
 
 # librarian rocks
+
+def book(request):
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'librarian':
+
+        return render(request, 'library/librarian_books.html')
+    return render(request, 'library/librarian_books.html')
+    # return render(request,'library/page_not_found.html')
+
+
+def add_book(request):
+    if 'add_details' in request.POST:
+        author = request.POST.get('author')
+        genre = request.POST.get('genre')
+        publisher = request.POST.get('publisher')
+        isbn = request.POST.get('isbn')
+        year = request.POST.get('year')
+        title = request.POST.get('title')
+        cursor = connection.cursor()
+        cursor.execute("""select * from isbn where ISBN=%s and Author=%s and Title=%s and Genre=%s and Publisher=%s and Year_of_Publication=%s""",
+                       (isbn, author, title, genre, publisher, year))
+        if cursor.rowcount > 0:
+            messages.error(request, "Book details already exist!!")
+        else:
+            cursor.execute("""insert into isbn(ISBN,Title,Year_of_Publication,Genre,Author,Publisher) values(%s,%s,%s,%s,%s,%s)""",
+                           (isbn, title, year, genre, author, publisher))
+            messages.success(request, "Book details added successfully!!")
+    elif 'add_copy' in request.POST:
+        isbn = request.POST.get('isbn')
+        copy = request.POST.get('copy')
+        shelf = request.POST.get('shelf')
+        cursor = connection.cursor()
+        cursor.execute(
+            """select * from book where ISBN=%s and Copy_number=%s and Shelf_ID=%s""", (isbn, copy, shelf))
+        if cursor.rowcount > 0:
+            messages.error(request, "This copy already exists!!")
+        else:
+            cursor.execute(
+                """select Shelf_ID,Capacity from shelf where Shelf_ID=%s """, (shelf))
+            if cursor.rowcount == 0:
+                messages.error(request, "Shelf doesn't exist")
+            else:
+                cursor.execute(
+                    """select * from isbn where ISBN=%s""", [isbn])
+                if cursor.rowcount == 0:
+                    messages.error(
+                        request, "Book details for the book does not exist add them first!!")
+                else:
+                    cursor.execute(
+                        """select A.Shelf_ID from shelf A where A.Shelf_ID=%s and (select count(*) from book where Shelf_ID=A.Shelf_ID)<A.Capacity""", [shelf])
+                    if cursor.rowcount > 0:
+                        cursor.execute(
+                            """ insert into book(ISBN,Copy_number,Shelf_ID,Status) values(%s,%s,%s,%s)""", (isbn, copy, shelf, "On shelf"))
+                        messages.success(request, "Copy added successfully!!")
+                    else:
+                        messages.error(request, "shelf capacity full!!")
+    return render(request, 'library/add_book.html')
+
+
+def update_book(request):
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    category = request.session.get('category')
+    if request.session.get('role') == 'librarian' or request.session.get('role') == None:
+        cursor = connection.cursor()
+        if 'delete' in request.POST:
+            book_id = request.POST.get('delete')
+            cursor.execute("""delete from book where Book_ID=%s""", [book_id])
+            messages.success(request, "Copy deletion successful!!")
+        elif 'add_to_shelf' in request.POST:
+            isbn = request.POST.get('add_to_shelf')
+            cursor.execute(
+                """ select User_Id from reading_list where User_Id=%s and ISBN=%s""", (userId, isbn))
+            b = cursor.rowcount
+            if b > 0:
+                messages.error(request, "Book already in your shelf!!")
+            else:
+                cursor.execute(
+                    """insert into reading_list(User_Id,ISBN) values(%s,%s) """, (userId, isbn))
+                messages.success(request, "Book added to shelf")
+        search_key = request.GET.get('search_key')
+        if search_key != None:
+            cursor.execute(
+                """ select * from  book where ISBN=%s""", [search_key])
+        if search_key == None:
+            cursor.execute("""select * from book""")
+        row = cursor.fetchall()
+        a = cursor.rowcount
+        if a != 0:
+
+            books = []
+            for n in range(a):
+                books.append({
+                    'ISBN': row[n][1],
+                    'book_id': row[n][0],
+                    'shelf_id': row[n][2],
+                    'copy_number': row[n][3],
+                    'status': row[n][4]
+                })
+        if a != 0:
+            data = {
+                'books': books,
+                'key': search_key,
+            }
+        else:
+            data = {
+                'books': None,
+                'category': None,
+                'key': None,
+            }
+
+        return render(request, 'library/edit_book.html', data)
+
+    elif request.session.get('email') != None:
+        # return render(request, 'library/book_search.html')
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')
