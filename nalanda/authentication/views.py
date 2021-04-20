@@ -88,7 +88,7 @@ def Log_In(request):
             cursor.execute("""SELECT * FROM librarian WHERE email= %s""", [email])
             row = cursor.fetchall()
             if cursor.rowcount == 1:
-                dbpassword = row[0][4]
+                dbpassword = row[0][2]
                 librarianId = row[0][0]
                 if bcrypt.checkpw(password.encode('utf8'), dbpassword.encode('utf8')):
 
@@ -96,7 +96,7 @@ def Log_In(request):
                     request.session['role'] = role
                     request.session['email'] = email
                     messages.success(request, 'Login successful!!')
-                    url = "http://127.0.0.1:8000/librarian\home"
+                    url = "http://127.0.0.1:8000/librarian/home"
                     return redirect(url)
 
                 else:
@@ -180,11 +180,16 @@ def Verify_User_by_website(request):
 def Forgot_Password(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-        cursor = connection.cursor()
-        cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
+        role  = request.POST.get('role') 
+        if role =='user':
+            cursor = connection.cursor()
+            cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
+        else:
+            cursor = connection.cursor()
+            cursor.execute("""SELECT * FROM librarian WHERE email= %s""", [email])    
         if cursor.rowcount == 1:
             send_mail(subject='reset password request', message='click on the below link to reset your password.Note that this link will only be active for 10minutes.', from_email='nalanda3306@gmail.com', recipient_list=[email], fail_silently=False,
-                      html_message="<h1> click on the below link to reset your password.Note that this link will only be active for 10minutes.</h1><br><a href='http://127.0.0.1:8000/login/forgotpassword/{}/resetpassword'>to reset your password click here</a>".format(email))
+                      html_message="<h1> click on the below link to reset your password.Note that this link will only be active for 10minutes.</h1><br><a href='http://127.0.0.1:8000/login/forgotpassword/{}/{}/resetpassword'>to reset your password click here</a>".format(role,email))
             request.session['link_is_active'] = True
             messages.success(
                 request, 'reset link sent to the entered mail please check your inbox!!')
@@ -199,11 +204,11 @@ def Forgot_Password(request):
 def Profile(request):
     UserId = request.session.get('UserId')
     email = request.session.get('email')
-    if request.session.get('email') == email:
+    if request.session.get('role') == 'user':
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
         row = cursor.fetchall()
-        Categories = ['Student', 'Faculty']
+        
 
         dateOfBirth = row[0][3].strftime("%Y-%m-%d")
         data = {
@@ -212,7 +217,6 @@ def Profile(request):
             'email': row[0][2],
             'DOB': dateOfBirth,
             'Password': row[0][4],
-            'Categories': Categories,
             'address': row[0][6]
         }
         if request.method == "POST":
@@ -224,8 +228,8 @@ def Profile(request):
             password = request.session.get('Password')
             if bcrypt.checkpw(password.encode('utf8'), data['Password'].encode('utf8')):
                 messages.success(request, 'Profile is Updated Successfully!')
-                cursor.execute("""UPDATE user SET Name=%s,Category=%s,Address=%s,email=%s,DOB=%s WHERE UserId=%s """,
-                               (Name, Category, address, email, DOB, data['userId']))
+                cursor.execute("""UPDATE user SET Name=%s,Address=%s,email=%s,DOB=%s WHERE UserId=%s """,
+                               (Name, address, email, DOB, data['userId']))
                 return redirect('http://127.0.0.1:8000/home')
             else:
                 messages.success(
@@ -271,7 +275,7 @@ def ChangePassword(request):
         return render(request, 'authentication/error.html')
 
 
-def Reset_Password(request, email):
+def Reset_Password(request,role,email):
     if request.session.get('link_is_active'):
         if request.method == 'POST':
             newpassword = request.POST.get('newpassword')
@@ -280,8 +284,12 @@ def Reset_Password(request, email):
                 cursor = connection.cursor()
                 dbPassword = bcrypt.hashpw(newpassword.encode(
                     'utf8'), bcrypt.gensalt(rounds=12))
-                cursor.execute(
-                    """UPDATE user SET Password=%s WHERE email=%s""", (dbPassword, email))
+                if role=='user':    
+                    cursor.execute(
+                        """UPDATE user SET Password=%s WHERE email=%s""", (dbPassword, email))
+                else:
+                    cursor.execute(
+                        """UPDATE librarian SET Password=%s WHERE email=%s""", (dbPassword, email))    
                 messages.success(request, 'Password changed successfully!')
                 return redirect('http://127.0.0.1:8000/login')
             else:
@@ -308,39 +316,33 @@ def user(request):
         }
 
         return render(request, 'library/user.html', data)
-    elif request.session.get('email') != None:
+    elif request.session.get('role') != None:
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
 
 def librarian(request):
-    librarianId = request.session.get('librarian')
+    librarianId = request.session.get('librarianId')
     email = request.session.get('email')
     if request.session.get('role') == 'librarian':
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM librarian WHERE email= %s""", [email])
         row = cursor.fetchall()
-        dateOfBirth = row[0][3].strftime("%Y-%m-%d")
+        dateOfBirth = row[0][5].strftime("%Y-%m-%d")
         data = {
             'librarianId': row[0][0],
             'Name': row[0][1],
-            'email': row[0][2],
+            'address': row[0][3],
+            'email': row[0][4],
             'DOB': dateOfBirth,
-            'address': row[0][5],
+            
         }
 
         return render(request, 'library/librarian.html', data)
-    elif request.session.get('email') != None:
+    elif request.session.get('role') != None:
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
 
-# librarian rocks
 
 
-# def librarian(request):
-#     return
-
-
-# def librarian_ChangePassword(request):
-#     return

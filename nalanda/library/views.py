@@ -24,7 +24,7 @@ def booksearch(request):
     userId = request.session.get('userId')
     email = request.session.get('email')
     category = request.session.get('category')
-    if category == 'Student' or category == 'Faculty':
+    if request.session.get('role') == 'user':
         cursor = connection.cursor()
         user = cursor.execute(
             """ select Unpaid_fees from user where User_Id=%s""", [userId])
@@ -81,7 +81,7 @@ def booksearch(request):
                         now = datetime.now()
                         date_time = now.strftime("%Y-%m-%d %H:%M:%S")
                         cursor.execute(
-                            """update book set Status='On loan and On hold' where isbn=%s and Status='On loan'""", [isbn])
+                            """update book set Status=%s where isbn=%s and Status=%s""", ('On loan and On hold', isbn, 'On loan'))
                         cursor.execute(
                             """ insert into on_loan_on_hold(User_Id,Time_stamp,ISBN) values(%s,%s,%s) """, (userId, date_time, isbn))
                         messages.success(
@@ -154,7 +154,7 @@ def booksearch(request):
 
         return render(request, 'library/book_search.html', data)
 
-    elif request.session.get('email') != None:
+    elif request.session.get('role') != None:
         # return render(request, 'library/book_search.html')
         return render(request, 'authentication/page_not_found.html')
     else:
@@ -262,7 +262,7 @@ def mybooks(request):
             'previous': previous
         }
         return render(request, 'library/mybooks.html', data)
-    elif request.session.get('email') != None:
+    elif request.session.get('role') != None:
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
@@ -354,10 +354,45 @@ def bookshelf(request):
                 'list': reading_list
             }
             return render(request, 'library/bookshelf.html', data)
-    elif request.session.get('email') != None:
+    elif request.session.get('role') != None:
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
+
+
+def librarian_ChangePassword(request):
+    librarianId = request.session.get('librarianId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'librarian':
+        cursor = connection.cursor()
+        cursor.execute("""SELECT * FROM librarian WHERE email= %s """, [email])
+        row = cursor.fetchall()
+        dbPassword = row[0][2]
+        if request.method == "POST":
+            oldPassword = request.POST.get('oldpassword')
+            newPassword = request.POST.get('newpassword')
+            confirmPassword = request.POST.get('confirmpassword')
+            if bcrypt.checkpw(oldPassword.encode('utf8'), dbPassword.encode('utf8')):
+                if newPassword == confirmPassword:
+                    dbPassword = bcrypt.hashpw(newPassword.encode(
+                        'utf8'), bcrypt.gensalt(rounds=12))
+                    cursor.execute(
+                        """UPDATE librarian SET Password=%s WHERE email=%s""", (dbPassword, email))
+                    messages.success(request, 'Password changed successfully!')
+                    return redirect('http://127.0.0.1:8000/librarian/home')
+                else:
+                    messages.success(
+                        request, 'new password and confirm password must be the same!!')
+                    return render(request, 'library/changepassword.html')
+            else:
+                messages.success(request, 'incorrect password!!')
+                return render(request, 'library/changepassword.html')
+
+        else:
+            return render(request, 'library/changepassword.html')
+    else:
+        return render(request, 'authentication/error.html')
+
 
 # def friends(request):
 #     return
@@ -494,8 +529,138 @@ def update_book(request):
 
         return render(request, 'library/edit_book.html', data)
 
-    elif request.session.get('email') != None:
-        # return render(request, 'library/book_search.html')
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')
+
+
+def issue(request):
+    librarianId = request.session.get('librarianId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'librarian':
+        cursor = connection.cursor()
+        cursor.execute(
+            """SELECT Name FROM librarian WHERE email= %s""", [email])
+        row = cursor.fetchall()
+        data = {
+            'Name': row[0][0]
+        }
+        return render(request, 'library/issue.html', data)
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')
+
+
+def issue_available(request):
+    librarianId = request.session.get('librarianId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'librarian':
+        if request.method == "POST":
+            userId = request.method.get('userId')
+            isbn = request.method.get('isbn')
+            copy_number = request.method.get('copy_number')
+            cursor = connection.cursor()
+            cursor.execute(
+                """SELECT Book_ID FROM book WHERE ISBN=%s AND Copy_number=%s""", (isbn, copy_number))
+            row = cursor.fetchall()
+            bookId = row[0][0]
+            cursor = connection.cursor()
+            cursor.execute(
+                """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On loan', bookId))
+            now = datetime.now()
+            date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+            cursor = connection.cursor()
+            cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""",
+                           (bookId, userId, date_time, librarianId))
+            cursor = connection.cursor()
+            cursor.execute(
+                """SELECT Name FROM librarian WHERE email= %s""", [email])
+            row = cursor.fetchall()
+            data = {
+                'Name': row[0][0]
+            }
+            return render(request, 'library/home', data)
+        else:
+            cursor = connection.cursor()
+            cursor.execute(
+                """SELECT Name FROM librarian WHERE email= %s""", [email])
+            row = cursor.fetchall()
+            data = {
+                'Name': row[0][0]
+            }
+            return render(request, 'library/issueavailable.html', data)
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')
+
+
+def issue_onHold(request):
+    librarianId = request.session.get('librarianId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'librarian':
+        cursor = connection.cursor()
+        cursor.execute(
+            """SELECT Name FROM librarian WHERE email= %s""", [email])
+        row = cursor.fetchall()
+        name = row[0][0]
+        if 'userId' in request.POST:
+            userId = request.method.get('userId')
+            cursor = connection.cursor()
+            cursor.execute(
+                """SELECT isbn.ISBN,Title,Year_of_Publication,Copy_number,Genre,Rating,date_of_hold,Author,Publisher,on_hold.Hold_ID FROM on_hold JOIN book ON on_hold.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE User_ID= %s""", [userId])
+            row = cursor.fetchall()
+            a = cursor.rowcount
+            books = []
+            for n in range(a):
+                books.append({
+                    'ISBN': row[n][0],
+                    'Title': row[n][1],
+                    'Year_of_Publication': row[n][2],
+                    'Copy_Number': row[n][3],
+                    'Genre': row[n][4],
+                    'Rating': row[n][5],
+                    'date_of_hold': row[n][6],
+                    'Author': row[n][7],
+                    'Publisher': row[n][8],
+                    'Hold_ID': row[n][9]
+                })
+            data = {
+                'Name': name,
+                'books': books
+            }
+            return render(request, 'library/issueonhold.html', data)
+        elif 'issue' in request.POST:
+            holdId = request.method.get('issue')
+            cursor = connection.cursor()
+            cursor.execute(
+                """SELECT User_ID,Book_ID FROM on_hold Where Hold_ID=%s""", [holdId])
+            row = cursor.fetchall()
+            userId = row[0][0]
+            bookId = row[0][1]
+            cursor = connection.cursor()
+            cursor.execute(
+                """DELETE FROM on_hold Where Hold_ID=%s""", [holdId])
+            now = datetime.now()
+            date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+            cursor = connection.cursor()
+            cursor.execute(
+                """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On loan', bookId))
+            cursor = connection.cursor()
+            cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""",
+                           (bookId, userId, date_time, librarianId))
+            data = {
+                'Name': name
+            }
+            return render(request, 'library/home', data)
+        else:
+            data = {
+                'Name': name
+            }
+            return render(request, 'library/issueonhold.html', data)
+    elif request.session.get('role') != None:
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
