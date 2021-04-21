@@ -1152,3 +1152,167 @@ def pending_requests(request):
         }
 
     return render(request, 'library/friends_pending.html', data)
+
+
+def friends_bookshelf(request, friendId):
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'user':
+        cursor = connection.cursor()
+        cursor.execute(
+            """SELECT Name,Unpaid_fees FROM user WHERE email= %s""", [email])
+        row = cursor.fetchall()
+        name = row[0][0]
+        unpaid_fees = row[0][1]
+        cursor.execute(
+            """SELECT Name FROM user WHERE User_ID= %s""", [friendId])
+        row = cursor.fetchall()
+        friendName = row[0][0]
+        cursor.execute(
+            """SELECT isbn.ISBN,Title,Year_of_Publication,Genre,Rating,Author,Publisher,Img_link FROM reading_list JOIN isbn ON reading_list.ISBN=isbn.ISBN  WHERE User_ID= %s""", [friendId])
+        row = cursor.fetchall()
+        a = cursor.rowcount
+        reading_list = []
+        for n in range(a):
+            cursor.execute(
+                """ select  count(*) from review where ISBN=%s""", [row[n][0]])
+            col = cursor.fetchall()
+            if row[n][4] == None:
+                range_of_rating = 0
+            else:
+                range_of_rating = row[n][4]
+            reading_list.append({
+                'ISBN': row[n][0],
+                'Title': row[n][1],
+                'Year_of_Publication': row[n][2],
+                'Genre': row[n][3],
+                'Rating': row[n][4],
+                'Author': row[n][5],
+                'Publisher': row[n][6],
+                'stars': range(1, range_of_rating+1),
+                'no_stars': range(1, 5-range_of_rating+1),
+                'votes': col[0][0],
+                'image_url': row[n][7]
+            })
+        data = {
+            'Name': name,
+            'friendName': friendName,
+            'Unpaid_fees': unpaid_fees,
+            'list': reading_list
+        }
+        return render(request, 'library/friend_bookshelf.html', data)
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')
+
+
+def add_friend(request):
+    userId = request.session.get('userId')
+    cursor = connection.cursor()
+    if request.method == "POST":
+
+        id = request.POST.get('AddFriend')
+        cursor.execute(
+            """INSERT INTO friend_list (Friend_ID,User_ID,Status) VALUES (%s,%s,'Pending')""", (id, userId))
+        messages.success(request, "Friend request sent successfully")
+
+    cursor.execute(
+        """ SELECT Friend_ID,User_ID FROM friend_list WHERE User_ID =%s OR Friend_ID=%s""", (userId, userId))
+    row = cursor.fetchall()
+    a = cursor.rowcount
+    FriendIds = []
+    if a != 0:
+        for n in range(a):
+            # if row[n][0] != userId and row[n][1] != userId:
+            if row[n][0] not in FriendIds:
+                FriendIds.append(row[n][0])
+
+            if row[n][1] not in FriendIds:
+                FriendIds.append(row[n][1])
+    for id in FriendIds:
+        if id == userId:
+            FriendIds.remove(userId)
+
+    row = cursor.execute("""SELECT Name,User_ID FROM user""")
+    row = cursor.fetchall()
+    a = cursor.rowcount
+
+    NonFriendIds = []
+    NonFriendNames = []
+
+    for n in range(a):
+
+        if row[n][1] != userId:
+
+            if row[n][1] not in FriendIds:
+
+                NonFriendIds.append(row[n][1])
+                NonFriendNames.append(row[n][0])
+
+    nonfriends = []
+    for i in range(0, len(NonFriendIds)):
+        nonfriends.append({
+            'nonfriendId': NonFriendIds[i],
+            'nonfriendName': NonFriendNames[i]
+        })
+
+    data = {
+        'nonfriends': nonfriends
+    }
+
+    if request.GET.get('Search_by') == 'Roll No':
+
+        NonFriendIds = request.GET.get('SearchData')
+
+        cursor.execute(
+            """SELECT Name FROM user WHERE User_ID = %s""", [NonFriendIds])
+        row = cursor.fetchall()
+        nonfriends = []
+        if cursor.rowcount > 0:
+            NonFriendNames = row[0][0]
+            cursor.execute(
+                """ select * from friend_list where Friend_ID=%s""", [NonFriendIds])
+
+            if cursor.rowcount == 0:
+
+                for i in range(0, 1):
+                    nonfriends.append({
+                        'nonfriendId': NonFriendIds,
+                        'nonfriendName': NonFriendNames
+                    })
+
+        data = {
+            'nonfriends': nonfriends
+        }
+
+    if request.GET.get('Search_by') == 'Name':
+
+        NonFriendNames = request.GET.get('SearchData')
+
+        cursor.execute(
+            """SELECT User_ID FROM user WHERE Name = %s""", [NonFriendNames])
+        row = cursor.fetchall()
+        a = cursor.rowcount
+        NonFriendIds = []
+        if a != 0:
+            for n in range(a):
+                cursor.execute("""SELECT User_ID,Friend_ID FROM friend_list WHERE (Friend_ID = %s AND User_Id = %s) OR (Friend_ID = %s AND User_Id = %s) """, [
+                    row[n][0], userId, userId, row[n][0]])
+                col = cursor.fetchall()
+                m = cursor.rowcount
+                if cursor.rowcount == 0:
+                    NonFriendIds.append(row[n][0])
+        nonfriends = []
+        if len(NonFriendIds) > 0:
+            for i in range(0, len(NonFriendIds)):
+                nonfriends.append({
+                    'nonfriendId': NonFriendIds[i],
+                    'nonfriendName': NonFriendNames
+                })
+
+        data = {
+            'nonfriends': nonfriends
+        }
+
+    return render(request, 'library/friend_add.html', data)

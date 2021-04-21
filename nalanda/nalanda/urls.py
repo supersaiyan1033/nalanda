@@ -47,9 +47,9 @@ urlpatterns = [
     # path('friends', lib_views.friends, name='friends'),
     path('friends/list', lib_views.friends_list, name='friends_list'),
     path('friends/pending', lib_views.pending_requests, name='pending_requests'),
-    #     path('friends/add', lib_views.add_friend, name='add_friend'),
-    #     path('friends/list/<userId>/bookshelf',
-    #          lib_views.friends_bookshelf, name='friends_bookshelf'),
+    path('friends/add', lib_views.add_friend, name='add_friend'),
+    path('friends/list/<friendId>/bookshelf',
+         lib_views.friends_bookshelf, name='friends_bookshelf'),
 
     #     # librarian urls
     path('librarian/book', lib_views.book, name='book'),
