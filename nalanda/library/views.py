@@ -822,7 +822,6 @@ def shelf_update(request):
                 """ select * from shelf where Shelf_ID=%s""", [shelf_id])
             if cursor.rowcount > 0:
                 records = cursor.fetchall()
-                capacity = records[0][1]
                 cursor.execute(
                     """ update shelf set Capacity=%s where Shelf_ID=%s""", (capacity, shelf_id))
                 messages.success(request, "update successful")
