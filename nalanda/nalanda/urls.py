@@ -70,6 +70,7 @@ urlpatterns = [
     path('librarian/shelf', lib_views.shelf, name='shelf'),
     path('librarian/shelf/update', lib_views.shelf_update, name='shelf_update'),
     path('librarian/shelf/add', lib_views.shelf_add, name='shelf_add'),
+    path('librarian/onholdbooks', lib_views.onholdbooks, name='book')
     # path('librarian/shelf/delete', lib_views.shelf_delete, name='shelf_delete'),
 
 

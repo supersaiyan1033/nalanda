@@ -1388,3 +1388,6 @@ def add_friend(request):
 
 
 # def suggestions(request):
+
+def onholdbooks(request):
+    return render(request, 'library/onholdbooks.html')
