@@ -224,7 +224,7 @@ def mybooks(request):
         row = cursor.fetchall()
         a = cursor.rowcount
         for n in range(a):
-            onhold.append({
+            onloan_onhold.append({
                 'ISBN': row[n][0],
                 'Title': row[n][1],
                 'Year_of_Publication': row[n][2],
