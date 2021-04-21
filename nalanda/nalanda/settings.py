@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-#Commited changes
+# Commited changes
 
 from pathlib import Path
 
@@ -28,12 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-#HELLO GOD KARMA
+# HELLO GOD KARMA
 
 # Application definition
 
 INSTALLED_APPS = [
-    #revanth
+    # revanth
     'nalanda',
     'authentication',
     'library',
@@ -75,7 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'nalanda.wsgi.application'
 
-#SAIRAM KOLA 
+# SAIRAM KOLA
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -134,13 +134,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER='nalanda3306@gmail.com'
+SESSION_COOKIE_AGE = 2500
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER = 'nalanda3306@gmail.com'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS =True
-EMAIL_HOST_PASSWORD='roomno@605'
-
-
-
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'roomno@605'
