@@ -293,8 +293,17 @@ transform:scale(1.01);
 </div>
 </tr>
     {%endfor%}
-
+{%else%}
+<div class="results" style="margin:auto; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>Search Found 0 results</h2>
+  </div>
 {%endif%}
- </script>
+{% if messages %}
+        {% for message in messages %}
+         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+
+        {% endfor %}
+
+    {% endif %}
 </body>   
 </html>
