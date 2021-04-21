@@ -19,7 +19,7 @@ width:100%;
 margin:auto;
 position:fixed;
 height:70px;
-background-color:rgba(0,0,0,1);
+background-color:#004488;
 z-index:9999;
 }
 nav .logo{
@@ -217,16 +217,17 @@ transform:scale(1.01);
 <div class="wrap">
   <nav>
     <div class="logo">
-      <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:red;"></i>PACK YOUR BAGS</h3>
+      <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:blue;"></i>IIT INDORE LIBRARY</h3>
     </div>
     <div id="navbar">
     <ul>
-      <li><a href="/home"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
-      <li><a href="/flights" ><i class="fa fa-hand-paper fa-4x" aria-hidden="true" style="padding-right:10px;"></i>Flights</a></li>
-      {% comment %} <li><a href="#"><i class="fa fa-train" aria-hidden="true" style="padding-right:10px;" class="icon"></i>Trains</a></li> {% endcomment %}
-      <li><a href="/buses" class="active"><i class="fa fa-bus" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Buses</a></li>
-      {% comment %} <li><a href="#"><i class="fa fa-suitcase" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Trips</a></li> {% endcomment %}
-     
+      <li><a href="/home" class="active"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
+      <!-- <li><a href="http://127.0.0.1:8000/friends"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Friends</a></li> -->
+      <li><a href="/booksearch"><i class="fa fa-search" aria-hidden="true" style="padding-right:10px;"></i>Search books</a></li>
+       <li><a href="/mybooks"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Mybooks</a></li>
+       <li><a href="/bookshelf"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Bookshelf</a></li>
+       <li><a href="/friends"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Friends</a></li>
+
       </ul>
       </div>
        <div id="side-navbar">
