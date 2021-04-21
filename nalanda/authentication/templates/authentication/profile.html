@@ -17,13 +17,13 @@
 </head>
 <body>
     <div class="container">
-        <!-- {% if messages %}
-              {% for message in messages %}
-               {% if message.tags %}  <script>window.alert("{{ message }}")</script> {% endif %}
-      
-              {% endfor %}
-      
-          {% endif %} -->
+      {% if messages %}
+      {% for message in messages %}
+       {% if message.tags %}  <script>window.alert("{{ message }}")</script> {% endif %}
+
+      {% endfor %}
+
+  {% endif %}
           <br>
           <h1 style="text-align:center;">Edit Profile</h1>
             <hr>
@@ -68,17 +68,8 @@
                 <div class="form-group">
                   <label class="col-lg-3 control-label">Category:</label>
                   <div class="col-lg-8">
-                    <div class="ui-select">
-                      <select id="Category" class="form-control" name="Category"  required >
-                       {% for list_Category in Categories %}
-                   <option
-                    value="{{ list_Category}}"
-                    {% if list_Category == Category %}
-                        selected="selected"
-                    {% endif %}
-                   >{{ list_Category }}</option>
-               {% endfor %}
-                      </select>
+                    <div class="form-group">
+                      <input class="form-control" type="text" value="{{Category}}"name="Category"  readonly >
                     </div>
                   </div>
                 </div>
@@ -92,6 +83,7 @@
                   <label class="col-md-3 control-label"></label>
                   <div class="col-md-8">
                     <input type="submit" class="btn btn-primary" value="Save Changes" style="background-color:red;border-color:red;">
+                    
                     <span></span>
                     <input type="reset" class="btn btn-default" value="Cancel">
                   </div>

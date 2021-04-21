@@ -23,7 +23,7 @@ width:100%;
 margin:auto;
 position:fixed;
 height:70px;
-background-color:rgba(0,0,0,1);
+background-color:#004488;
 z-index:9999;
 }
 nav .logo{
@@ -117,7 +117,7 @@ left:0;
     text-align:center;
     margin:0 10px;
 }
-.btn{
+{% comment %}.btn{
     text-align:center;
     color:white;
     background: #e60000;
@@ -129,7 +129,7 @@ left:0;
 }
 .btn:hover{
   background:#ff1a1a
-}
+}{% endcomment %}
 .signup{
     color:black;
     padding:20px;
@@ -237,7 +237,7 @@ transform:scale(1.01);
 <div class="wrap">
   <nav>
     <div class="logo">
-      <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:red;"></i>PACK YOUR BAGS</h3>
+      <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:red;"></i>IIT INDORE LIBRARY</h3>
     </div>
     <div id="navbar">
     <ul>
@@ -262,7 +262,7 @@ transform:scale(1.01);
       <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{Unpaid_fees}}</div>
       <div class="item"><a   href="/profile" style="text-decoration:none;" ><i class="fa fa-user" style="padding-right:10px;color:red"></i>profile</a></div>
       <div class="item"><a  href="/changepassword" style="text-decoration:none;"><i class="fa fa-key" style="padding-right:10px;color:red"></i>change password</a></div>
-      <div class="item"><a href="/mybookings" style="text-decoration:none;"><i class="fa fa-suitcase" style="padding-right:10px;color:red"></i>My bookings</a></div>
+      <!-- <div class="item"><a href="/mybookings" style="text-decoration:none;"><i class="fa fa-suitcase" style="padding-right:10px;color:red"></i>My bookings</a></div> -->
       <div class="item" ><a  href="{% url 'auth-login' %}" style="text-decoration:none;" onclick="return confirm('Do you really want to logout?');"><i class="fa fa-sign-out" style="padding-right:10px;color:red"></i>log out</a></div>
     </div>
   </div>
@@ -311,7 +311,6 @@ transform:scale(1.01);
   <h6>Date of Issue :{{onloan.date_of_issue}}</h5>
   <h6>Fine :{{onloan.Fine}}</h5>
   </div>
-
   <div class="col-sm-2" >
   <div style="width:140px;height:170px;">
   <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>

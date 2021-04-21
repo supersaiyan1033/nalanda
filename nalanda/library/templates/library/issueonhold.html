@@ -22,7 +22,7 @@ width:100%;
 margin:auto;
 position:fixed;
 height:70px;
-background-color:rgba(0,0,0,1);
+background-color:#004488;
 z-index:9999;
 }
 nav .logo{
@@ -214,16 +214,15 @@ transform:scale(1.01);
 <div class="wrap">
   <nav>
     <div class="logo">
-      <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:red;"></i>PACK YOUR BAGS</h3>
+      <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:blue;"></i>IIT INDORE LIBRARY</h3>
     </div>
     <div id="navbar">
     <ul>
-      <li><a href="/admin/home" ><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
-      <li><a href="/admin/flights"><i class="fa fa-plane" aria-hidden="true" style="padding-right:10px;"></i>Flights</a></li>
-      {% comment %} <li><a href="#"><i class="fa fa-train" aria-hidden="true" style="padding-right:10px;" class="icon"></i>Trains</a></li> {% endcomment %}
-      <li><a href="/admin/buses"><i class="fa fa-bus" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Buses</a></li>
-       <li><a href="/admin/routes"><i class="fa fa-map-marker" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Routes</a></li>
-        <li><a href="/admin/add"><i class="fa fa-user-plus" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Add admin</a></li>
+      <li><a href="http://127.0.0.1:8000/librarian/home" class="active"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
+      <li><a href="http://127.0.0.1:8000/librarian/book"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Books</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/shelf"><i class="fa fa-server" aria-hidden="true" style="padding-right:10px;"></i>Shelf</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/issue"><i class="fas fa-hand-holding fa-1.9x" aria-hidden="true" style="padding-right:10px;"></i>Issue</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/return"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Return</a></li>
       </ul>
       </div>
   </nav>

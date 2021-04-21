@@ -45,7 +45,7 @@ def Contact_us(request):
         message = request.POST.get('message')
         cursor = connection.cursor()
         cursor.execute(
-            """SELECT email FROM librarian WHERE librarian_ID=%d""", ['1'])
+            """SELECT email FROM librarian WHERE librarian_ID=%s""", ['1'])
         a = cursor.rowcount
         row = cursor.fetchall()
         admins = []
@@ -232,23 +232,23 @@ def Profile(request):
             'email': row[0][2],
             'DOB': dateOfBirth,
             'Password': row[0][4],
+            'Category': row[0][5],
             'address': row[0][6]
         }
         if request.method == "POST":
-            Name = request.session.get('Name')
-            email = request.session.get('email')
-            DOB = request.session.get('DOB')
-            Category = request.session.get('Category')
-            address = request.session.get('Address')
-            password = request.session.get('Password')
-            if bcrypt.checkpw(password.encode('utf8'), data['Password'].encode('utf8')):
+            Name = request.POST.get('Name')
+            email = request.POST.get('email')
+            DOB = request.POST.get('DOB')
+            Category = request.POST.get('Category')
+            address = request.POST.get('Address')
+            password = request.POST.get('Password')
+            if bcrypt.checkpw(password.encode('utf8'),data['Password'].encode('utf8')):
                 messages.success(request, 'Profile is Updated Successfully!')
-                cursor.execute("""UPDATE user SET Name=%s,Address=%s,email=%s,DOB=%s WHERE UserId=%s """,
-                               (Name, address, email, DOB, data['userId']))
+                cursor.execute("""UPDATE user SET Name=%s,Address=%s,email=%s,DOB=%s WHERE User_ID=%s """,
+                               (Name, address, email, DOB, data['UserId']))
                 return redirect('http://127.0.0.1:8000/home')
             else:
-                messages.success(
-                    request, 'incorrect password please try again!!')
+                messages.success(request, 'incorrect password please try again!!')
                 return render(request, 'authentication/profile.html', data)
         else:
             return render(request, "authentication/profile.html", data)
