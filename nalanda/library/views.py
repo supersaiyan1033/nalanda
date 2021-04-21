@@ -19,7 +19,8 @@ from django.utils.crypto import get_random_string
 
 # Create your views here.
 
-
+def friends(request):
+   return render(request,"library/friends.html")
 def booksearch(request):
     userId = request.session.get('userId')
     email = request.session.get('email')
@@ -224,7 +225,7 @@ def mybooks(request):
         row = cursor.fetchall()
         a = cursor.rowcount
         for n in range(a):
-            onhold.append({
+            onloan_onhold.append({
                 'ISBN': row[n][0],
                 'Title': row[n][1],
                 'Year_of_Publication': row[n][2],
@@ -702,7 +703,7 @@ def issue_onHold(request):
         row = cursor.fetchall()
         name = row[0][0]
         if 'userId' in request.POST:
-            userId = request.method.get('userId')
+            userId = request.POST.get('userId')
             cursor = connection.cursor()
             cursor.execute(
                 """SELECT isbn.ISBN,Title,Year_of_Publication,Copy_number,Genre,Rating,date_of_hold,Author,Publisher,on_hold.Hold_ID FROM on_hold JOIN book ON on_hold.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE User_ID= %s""", [userId])
@@ -728,7 +729,7 @@ def issue_onHold(request):
             }
             return render(request, 'library/issueonhold.html', data)
         elif 'issue' in request.POST:
-            holdId = request.method.get('issue')
+            holdId = request.POST.get('issue')
             cursor = connection.cursor()
             cursor.execute(
                 """SELECT User_ID,Book_ID FROM on_hold Where Hold_ID=%s""", [holdId])
