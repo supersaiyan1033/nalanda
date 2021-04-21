@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
  <meta charset="UTF-8">
- <title>My Bookings</title>
+ <title>ADD BOOK</title>
   <link href="https://fonts.googleapis.com/css2?family=Piedra&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
@@ -23,7 +23,7 @@ width:100%;
 margin:auto;
 position:fixed;
 height:70px;
-background-color:rgba(0,0,0,1);
+background-color:#004488;
 z-index:9999;
 }
 nav .logo{
@@ -237,15 +237,15 @@ transform:scale(1.01);
 <div class="wrap">
   <nav>
     <div class="logo">
-           <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:red;"></i>NALANDA LIBRARY</h3> 
+      <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:red;"></i>IIT INDORE LIBRARY</h3>
     </div>
     <div id="navbar">
     <ul>
-      <li><a href="http://127.0.0.1:8000/home"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
-            <!-- <li><a href="http://127.0.0.1:8000/friends"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Friends</a></li> -->
-       <li><a href="http://127.0.0.1:8000/booksearch"><i class="fa fa-search" aria-hidden="true" style="padding-right:10px;"></i>Search Books</a></li>
-       <li><a href="http://127.0.0.1:8000/mybooks"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Mybooks</a></li>
-       <li><a href="http://127.0.0.1:8000/bookshelf"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Bookshelf</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/home" ><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
+      <li><a href="http://127.0.0.1:8000/librarian/book"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Books</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/shelf" class="active"><i class="fa fa-server" aria-hidden="true" style="padding-right:10px;"></i>Shelf</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/issue"><i class="fas fa-hand-holding fa-1.9x" aria-hidden="true" style="padding-right:10px;"></i>Issue</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/return"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Return</a></li>
        
       </ul>
       </div>

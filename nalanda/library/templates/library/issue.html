@@ -237,15 +237,15 @@ transform:scale(1.01);
 <div class="wrap">
   <nav>
     <div class="logo">
-      <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:red;"></i>PACK YOUR BAGS</h3>
+      <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:blue;"></i>IIT INDORE LIBRARY</h3>
     </div>
     <div id="navbar">
     <ul>
-      <!-- <li><a href="" class="active"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li> -->
-      <!-- <li><a href="/login/{{userId}}/{{email}}/flights"><i class="fa fa-plane" aria-hidden="true" style="padding-right:10px;"></i>Flights</a></li> -->
-      <!-- {% comment %} <li><a href="#"><i class="fa fa-train" aria-hidden="true" style="padding-right:10px;" class="icon"></i>Trains</a></li> {% endcomment %} -->
-      <!-- <li><a href="/login/{{userId}}/{{email}}/buses"><i class="fa fa-bus" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Buses</a></li> -->
-      <!-- {% comment %} <li><a href="#"><i class="fa fa-suitcase" aria-hidden="true" style="padding-right:10px;"class="icon"></i>Trips</a></li> {% endcomment %} -->
+      <li><a href="http://127.0.0.1:8000/librarian/home" class="active"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
+      <li><a href="http://127.0.0.1:8000/librarian/book"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Books</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/shelf"><i class="fa fa-server" aria-hidden="true" style="padding-right:10px;"></i>Shelf</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/issue"><i class="fas fa-hand-holding fa-1.9x" aria-hidden="true" style="padding-right:10px;"></i>Issue</a></li>
+       <li><a href="http://127.0.0.1:8000/librarian/return"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Return</a></li>
 
       </ul>
       </div>
@@ -260,7 +260,7 @@ transform:scale(1.01);
       <div class="item"><i class="fa fa-user-circle fa-4x" style="color:red;" ></i>{{firstname}} {{lastname}}</div>
       <!-- <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{wallet}}</div> -->
       <!-- <div class="item"><a   href="/login/{{userId}}/{{email}}/profile" style="text-decoration:none;color:white;" ><i class="fa fa-user" style="padding-right:10px;color:red"></i>profile</a></div> -->
-      <div class="item"><a  href="/admin/changepassword" style="text-decoration:none;color:white;"><i class="fa fa-key" style="padding-right:10px;color:red"></i>change password</a></div>
+      <div class="item"><a  href="http://127.0.0.1:8000/librarian/changepassword" style="text-decoration:none;color:white;"><i class="fa fa-key" style="padding-right:10px;color:red"></i>change password</a></div>
       <!-- <div class="item"><a href="/login/{{userId}}/{{email}}/mybookings" style="text-decoration:none;color:white;"><i class="fa fa-suitcase" style="padding-right:10px;color:red"></i>My bookings</a></div> -->
       <div class="item" ><a  href="{% url 'auth-login' %}" style="text-decoration:none;color:white;" onclick="return confirm('Do you really want to logout?');"><i class="fa fa-sign-out" style="padding-right:10px;color:red"></i>log out</a></div>
     </div>
@@ -276,7 +276,7 @@ transform:scale(1.01);
     <table>
     <tr>
     <td style="padding:5px 30px;width:6vw">
-    <i class="fa fa-plane fa-2x" style="padding:20px;color:black;"></i>
+    <i class="fa fa-book fa-2x" style="padding:20px;color:black;"></i>
     </td>
     <td style="padding:5px 30px;width:20vw;">
     <div class="loginbtn">
@@ -290,7 +290,7 @@ transform:scale(1.01);
         <table>
         <tr>
         <td style="padding:5px 30px;width:6vw">
-        <i class="fa fa-bus fa-2x" style="padding:20px;"></i>
+        <i class="fa fa-book fa-2x" style="padding:20px;"></i>
         </td>
         <td style="padding:5px 30px;width:20vw;">
         <div class="loginbtn">

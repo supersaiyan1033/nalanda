@@ -26,11 +26,11 @@ def booksearch(request):
     category = request.session.get('category')
     if request.session.get('role') == 'user':
         cursor = connection.cursor()
-        user = cursor.execute(
-            """ select Unpaid_fees from user where User_Id=%s""", [userId])
-        fines = user
-        if fines == None:
-            fines = 0
+        cursor.execute(
+             """SELECT Name,Unpaid_fees FROM user WHERE email= %s""", [email])
+        row = cursor.fetchall()
+        name = row[0][0]
+        unpaid_fees = row[0][1]
 
         if 'review' in request.POST:
             isbn = request.POST.get('review')
@@ -143,14 +143,14 @@ def booksearch(request):
                 'books': books,
                 'category': search_category,
                 'key': search_key,
-                'fines': fines
+                'fines': unpaid_fees
             }
         else:
             data = {
                 'books': None,
                 'category': None,
                 'key': None,
-                'fines': fines
+                'fines': unpaid_fees
             }
 
         return render(request, 'library/book_search.html', data)
