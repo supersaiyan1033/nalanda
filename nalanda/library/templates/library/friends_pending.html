@@ -113,7 +113,7 @@ left:0;
     text-align:center;
     margin:0 10px;
 }
-.btn{
+{% comment %} .btn{
     text-align:center;
     color:white;
     background: #e60000;
@@ -125,7 +125,7 @@ left:0;
 }
 .btn:hover{
   background:#ff1a1a
-}
+} {% endcomment %}
 .signup{
     color:black;
     padding:20px;
@@ -241,21 +241,21 @@ transform:scale(1.01);
   
 <td style="padding:10px 20px;">
 <div class="ui-select">
-<select class="form-control" value = "Search_by"aria-label="Default select example">
+<select class="form-control" name = "Search_by"aria-label="Default select example">
   <option selected>Roll No</option>
-  <option value="1">Name</option>
+  <option >Name</option>
 </select>
 </div>
  
 </td>
 
 <td width="60%">
-    <input type="text" class="form-control" name='SearchData' placeholder="Search">
+    <input type="text" class="form-control" name='SearchData' placeholder="Search" required>
  
 </td>
 <td>
 <div class="loginbtn">
-           <input class="btn" type="submit" name="" value="Search">
+           <input class="btn btn-danger" type="submit" name="" value="Search">
         </div>
 </td>
 </form>
@@ -266,24 +266,26 @@ transform:scale(1.01);
 <tr>
 
 {% if friends %}
-<div class="friendlist" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;">
+
 <div>
-    {for f in friend}
+    {%for f in friends %}
+    <div class="friendlist" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;">
     <div class="row">
       <div class="col-sm-6" style="margin:12px 0px;padding:5px 15px;">
-       <h6>Name:{{f.friendIds}}
+       <h6>Name:{{f.friendName}}
       </div>
       <div class="col-sm-6"style="margin:12px 0px;padding:5px 15px;" >
-       <h6>Roll No:{{f.friendNames}}
+       <h6>Roll No:{{f.friendId}}
       </div>
     </div>
     <div class="row"> 
-     <form method = "POST"></form>
+     <form method = "POST">
+     {% csrf_token %}
       <div class="col-sm-6">
-       <input class="btn" type="submit" name="AcceptRequest" value="{{f.friendIds}}">
+       <button class="btn btn-success" type="submit" name="AcceptRequest" value="{{f.friendId}}">Accept Request</button>
       </div>
       <div class="col-sm-6">
-        <input class="btn" type="submit" name="RemoveRequest" value="{{f.friendIds}}">
+        <button class="btn btn-danger" type="submit" name="RejectRequest" value="{{f.friendId}}">Remove Request</button>
       </div>
      </div>
     </form>
@@ -292,9 +294,15 @@ transform:scale(1.01);
 </div>
 </div>
 </tr>
-    {%end for%}
+    {%endfor%}
 
-{%end if%}
- </script>
+{%endif%}
+{% if messages %}
+        {% for message in messages %}
+         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+
+        {% endfor %}
+
+    {% endif %}
 </body>   
 </html>

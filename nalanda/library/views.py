@@ -1054,23 +1054,37 @@ def pending_requests(request):
 
     userId = request.session.get('userId')
     cursor = connection.cursor()
-    cursor = cursor.execute(
+    if request.POST.get('AcceptRequest'):
+
+        ID = request.POST.get('AcceptRequest')
+        cursor.execute(
+            """UPDATE friend_list SET Status = 'Accepted' WHERE User_ID = %s AND Friend_ID = %s""", [ID, userId])
+        messages.success(request, "Friend request accepted!!")
+
+    if request.POST.get('RejectRequest'):
+        ID = request.POST.get('RejectRequest')
+        cursor.execute(
+            """DELETE  FROM friend_list WHERE User_ID = %s AND Friend_ID = %s""", [ID, userId])
+        messages.error(request, "Request removed successfully!")
+    cursor.execute(
         """SELECT User_ID,Status FROM friend_list WHERE %s = Friend_ID""", [userId])
     row = cursor.fetchall()
     a = cursor.rowcount
+    print(a)
     friends = []
     FriendIds = []
     FriendNames = []
     Status = []
-
     if a != 0:
         for n in range(a):
             if row[n][1] == 'Pending':
                 FriendIds.append(row[n][0])
                 Status.append(row[n][1])
-
+    for i in range(0, len(FriendIds)):
+        if FriendIds[i] == userId:
+            FriendIds.remove(userId)
+            del Status[i]
     for friendId in FriendIds:
-        cursor = connection.cursor
         cursor.execute(
             """ SELECT Name FROM user WHERE User_ID = %s""", [friendId])
         row = cursor.fetchall()
@@ -1078,12 +1092,13 @@ def pending_requests(request):
         for m in range(k):
             FriendNames.append(row[m][0])
 
-    friends = {
-
-        'friendIds': FriendIds,
-        'friendNames': FriendNames,
-        'status': Status
-    }
+    friends = []
+    for i in range(0, len(FriendIds)):
+        friends.append({
+            'friendId': FriendIds[i],
+            'friendName': FriendNames[i],
+            'status': Status[i]
+        })
 
     data = {
         'friends': friends
@@ -1091,16 +1106,18 @@ def pending_requests(request):
     if request.GET.get('Search_by') == 'Roll No':
 
         FriendIds = request.GET.get('SearchData')
-        row = cursor.execute(
-            """SELECT Name,Status FROM user INNERJOIN friend_list ON User_ID = Friend_ID WHERE friend_list.Friend_ID= %s""", [FriendIds])
+        cursor.execute(
+            """SELECT Name,Status FROM user INNER JOIN friend_list ON user.User_ID = friend_list.Friend_ID WHERE friend_list.Friend_ID= %s AND friend_list.User_ID=%s""", (userId, FriendIds))
+        row = cursor.fetchall()
         FriendNames = row[0][0]
         Status = row[0][1]
         friends = []
-        friends = {
-            'friendIds': FriendIds,
-            'friendNames': FriendNames,
-            'status': Status
-        }
+        for i in range(0, len(FriendIds)):
+            friends.append({
+                'friendId': FriendIds,
+                'friendName': FriendNames,
+                'status': Status
+            })
 
         data = {
             'friends': friends
@@ -1109,38 +1126,29 @@ def pending_requests(request):
     if request.GET.get('Search_by') == 'Name':
 
         FriendNames = request.GET.get('SearchData')
-        row = cursor.execute(
-            """SELECT Friend_ID,Status FROM user INNERJOIN friend_list ON user.User_ID = friend_list.Friend_ID WHERE user.Name = %s""", [FriendNames])
+        cursor.execute(
+            """SELECT user.User_ID,Status FROM user INNER JOIN friend_list ON user.User_ID = friend_list.User_ID WHERE user.Name = %s AND friend_list.Friend_ID=%s""", (FriendNames, userId))
+        row = cursor.fetchall()
         a = cursor.rowcount
         FriendIds = []
         Status = []
         friends = []
 
-        if(a != 0):
+        if a != 0:
             for n in range(a):
                 if row[n][1] == 'Pending':
                     FriendIds.append(row[n][0])
                     Status.append(row[n][1])
 
-        friends = {
-            'friendIds': FriendIds,
-            'friendNames': FriendNames
-        }
+        for i in range(0, len(FriendIds)):
+            friends.append({
+                'friendId': FriendIds[i],
+                'friendName': FriendNames,
+                'status': Status
+            })
 
         data = {
             'friends': friends
         }
-
-    if request.POST.get('AcceptRequest'):
-
-        ID = request.POST.get('AcceptRequest')
-        cursor.execute(
-            """UPDATE friend_list SET Status = 'Accepted' WHERE User_ID = %s AND Friend_ID = %s""", [ID, userId])
-
-    if request.POST.get('RejectRequest'):
-
-        ID = request.POST.get('RejectRequest')
-        cursor.execute(
-            """DELETE  FROM friend_list WHERE User_ID = %s AND Friend_ID = %s""", [ID, userId])
 
     return render(request, 'library/friends_pending.html', data)
