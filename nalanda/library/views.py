@@ -19,8 +19,11 @@ from django.utils.crypto import get_random_string
 
 # Create your views here.
 
+
 def friends(request):
-   return render(request,"library/friends.html")
+    return render(request, "library/friends.html")
+
+
 def booksearch(request):
     userId = request.session.get('userId')
     email = request.session.get('email')
@@ -206,7 +209,7 @@ def mybooks(request):
         row = cursor.fetchall()
         a = cursor.rowcount
         for n in range(a):
-            onhold.append({
+            onloan.append({
                 'ISBN': row[n][0],
                 'Title': row[n][1],
                 'Year_of_Publication': row[n][2],
@@ -585,9 +588,9 @@ def issue_available(request):
     email = request.session.get('email')
     if request.session.get('role') == 'librarian':
         if request.method == "POST":
-            userId = request.method.get('userId')
-            isbn = request.method.get('isbn')
-            copy_number = request.method.get('copy_number')
+            userId = request.POST.get('userId')
+            isbn = request.POST.get('isbn')
+            copy_number = request.POST.get('copy_number')
             cursor = connection.cursor()
             cursor.execute(
                 """SELECT Category FROM user Where User_ID=%s""", [userId])
@@ -602,6 +605,8 @@ def issue_available(request):
             cursor.execute(
                 """SELECT Loan_ID FROM on_loan WHERE User_ID=%s """, [userId])
             row = cursor.fetchall()
+            if unpaid_fees == None:
+                unpaid_fees = 0
             b = cursor.rowcount
             if category == "Student":
                 if b >= 3 or unpaid_fees > 1000:
@@ -629,7 +634,7 @@ def issue_available(request):
                         now = datetime.now()
                         date_time = now.strftime("%Y-%m-%d %H:%M:%S")
                         cursor = connection.cursor()
-                        cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""", (
+                        cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)values(%s,%s,%s,%s)""", (
                             bookId, userId, date_time, librarianId))
                         cursor = connection.cursor()
                         cursor.execute(
@@ -665,7 +670,7 @@ def issue_available(request):
                         now = datetime.now()
                         date_time = now.strftime("%Y-%m-%d %H:%M:%S")
                         cursor = connection.cursor()
-                        cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""", (
+                        cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)values(%s,%s,%s,%s)""", (
                             bookId, userId, date_time, librarianId))
                         cursor = connection.cursor()
                         cursor.execute(
@@ -746,17 +751,20 @@ def issue_onHold(request):
                 """SELECT Unpaid_fees FROM user Where User_ID=%s""", [userId])
             row = cursor.fetchall()
             unpaid_fees = row[0][0]
+            if unpaid_fees == None:
+                unpaid_fees = 0
             cursor = connection.cursor()
             cursor.execute(
                 """SELECT Loan_ID FROM on_loan WHERE User_ID=%s """, [userId])
             row = cursor.fetchall()
             b = cursor.rowcount
+            #  b >= int(3) or unpaid_fees > int(1000)
             if category == "Student":
-                if b >= 3 or unpaid_fees > 1000:
-                    if b >= 3 and unpaid_fees > 1000:
+                if b >= int(3) or unpaid_fees > int(1000):
+                    if b >= int(3) and unpaid_fees > int(1000):
                         messages.success(
                             request, 'Maximum Isuue Limit  Exceeded and Unpaid Fines exceeds 1000 rupees ! Book Cannot Be Issued')
-                    elif b >= 3:
+                    elif b >= int(3):
                         messages.success(
                             request, 'Maximum Isuue Limit  Exceeded ! Book Cannot Be Issued')
                     else:
@@ -773,7 +781,7 @@ def issue_onHold(request):
                     cursor.execute(
                         """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On loan', bookId))
                     cursor = connection.cursor()
-                    cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""", (
+                    cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID) values(%s,%s,%s,%s)""", (
                         bookId, userId, date_time, librarianId))
                     messages.success(
                         request, 'Book Issued successfully !')
@@ -793,7 +801,7 @@ def issue_onHold(request):
                     cursor.execute(
                         """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On loan', bookId))
                     cursor = connection.cursor()
-                    cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)""", (
+                    cursor.execute("""INSERT into on_loan(Book_ID,User_ID,Date_of_Issue,librarian_ID)values(%s,%s,%s,%s)""", (
                         bookId, userId, date_time, librarianId))
                     messages.success(
                         request, 'Book Issued successfully !')
@@ -916,8 +924,8 @@ def return_book(request):
             'Name': row[0][0]
         }
         if request.method == "POST":
-            isbn = request.method.get('isbn')
-            copy_number = request.method.get('copy_number')
+            isbn = request.POST.get('isbn')
+            copy_number = request.POST.get('copy_number')
             cursor = connection.cursor()
             cursor.execute(
                 """SELECT Book_ID FROM book WHERE ISBN=%s AND Copy_number=%s""", (isbn, copy_number))
@@ -925,7 +933,7 @@ def return_book(request):
             bookId = row[0][0]
             cursor = connection.cursor()
             cursor.execute(
-                """SELECT Loan_ID,User_ID FROM on_loan WHERE Book_ID=%s""", (bookId))
+                """SELECT Loan_ID,User_ID FROM on_loan WHERE Book_ID=%s""", [bookId])
             row = cursor.fetchall()
             loanId = row[0][0]
             userId = row[0][1]
@@ -940,6 +948,8 @@ def return_book(request):
             row = cursor.fetchall()
             fine = row[0][0]
             Date_Of_Issue = row[0][1]
+            if unpaid_fees == None:
+                unpaid_fees = 0
             unpaid_fees = unpaid_fees+fine
             cursor = connection.cursor()
             cursor.execute(
@@ -950,7 +960,7 @@ def return_book(request):
             now = datetime.now()
             date_time = now.strftime("%Y-%m-%d %H:%M:%S")
             cursor = connection.cursor()
-            cursor.execute("""INSERT into previous_books(User_ID,Book_ID,Date_of_issue,Date_of_return,Fine)""",
+            cursor.execute("""INSERT into previous_books(User_ID,Book_ID,Date_of_issue,Date_of_return,Fine)values(%s,%s,%s,%s,%s)""",
                            (userId, bookId, Date_Of_Issue, date_time, fine))
             cursor = connection.cursor()
             cursor.execute(
@@ -966,7 +976,7 @@ def return_book(request):
                 now = datetime.now()
                 date_time = now.strftime("%Y-%m-%d %H:%M:%S")
                 cursor.execute(
-                    """INSERT into on_hold(date_of_hold,User_ID,Book_ID)""", (date_time, newuserId, bookId))
+                    """INSERT into on_hold(date_of_hold,User_ID,Book_ID)values(%s,%s,%s)""", (date_time, newuserId, bookId))
                 #####################      Email to newuser about hold ##################
                 messages.success(
                     request, 'Book returned successfully !')
