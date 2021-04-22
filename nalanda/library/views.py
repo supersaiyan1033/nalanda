@@ -1576,16 +1576,44 @@ def suggestions(request):
         cursor = connection.cursor()
         cursor.execute(
             """select isbn.Title,isbn.Genre,isbn.Rating,isbn.Author from isbn where isbn.rating= ANY(select isbn.Rating from isbn order by Rating)order by Rating DESC LIMIT 3;""")
+
         row = cursor.fetchall()
         a = cursor.rowcount
-        suggestions = []
+        suggestions1 = []
+        suggestions2 = []
         for n in range(a):
-            suggestions.append({
+            suggestions1.append({
                 'Title': row[n][0],
                 'Genre': row[n][1],
                 'Rating': row[n][2],
                 'Author': row[n][3]
             })
+        cursor.execute("""select isbn.Title,isbn.Genre,isbn.Rating,isbn.Author
+from isbn 
+where isbn.genre= any(
+select isbn.genre
+from isbn
+where isbn.ISBN= any (select book.isbn 
+from previous_books 
+INNER JOIN book ON previous_books.Book_ID = book.Book_ID)
+group by genre 
+order by count(genre))
+order by rating DESC LIMIT 3""")
+        row = cursor.fetchall()
+        for n in range(a):
+            suggestions2.append({
+                'Title': row[n][0],
+                'Genre': row[n][1],
+                'Rating': row[n][2],
+                'Author': row[n][3]
+            })
+        suggestions = []
+        for suggestion1 in suggestions1:
+            suggestions.append(suggestion1)
+        for suggestion2 in suggestions2:
+            if suggestion2 not in suggestions:
+                suggestions.append(suggestion2)
+
         data = {
             'Name': name,
             'Unpaid_fees': unpaid_fees,
