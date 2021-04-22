@@ -116,7 +116,7 @@ left:0;
     text-align:center;
     margin:0 10px;
 }
-.btn{
+{% comment %} .btn{
     text-align:center;
     color:white;
     background: #e60000;
@@ -128,7 +128,7 @@ left:0;
 }
 .btn:hover{
   background:#ff1a1a
-}
+} {% endcomment %}
 .signup{
     color:black;
     padding:20px;
@@ -231,9 +231,10 @@ transform:scale(1.01);
   </table>
   </div style="float:right;">
   <div>
-    
-   <h4 style="text-align:center">SHELF</h4>
+    <br><br><br><br>
+   <h4 style="text-align:center">Add SHELF</h4>
     <!-- <td style="text-align:left;padding-left:50px;vertical-align:text-top;align:left"> -->
+     <div class="col-md-8 personal-info" style="margin:auto;">
         <form class="form-horizontal" role="form" method="POST">
             {%csrf_token%}
             <div class="form-group">
@@ -264,6 +265,7 @@ transform:scale(1.01);
               </div>
             {% comment %} </div> {% endcomment %}
           </form> 
+          </div>
   </div>
 <!-- </td> -->
 {% if messages %}

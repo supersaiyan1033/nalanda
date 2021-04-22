@@ -150,7 +150,7 @@ left:0;
   padding:10px;
   margin:auto;
     border-radius:7px;
-    background-color:#2F4F4F;
+    
 
 }
 .filter{
@@ -217,16 +217,15 @@ transform:scale(1.01);
 <div class="wrap">
   <nav>
     <div class="logo">
-      <h3><i class="fa fa-suitcase" aria-hidden="true" style="padding:5px 10px;color:red;"></i>IIT INDORE LIBRARY</h3>
+      <h3><i class="fa fa-book" aria-hidden="true" style="padding:5px 10px;color:red;"></i>IIT INDORE LIBRARY</h3> 
     </div>
     <div id="navbar">
     <ul>
-       <li><a href="http://127.0.0.1:8000/librarian/home" ><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
-      <li><a href="http://127.0.0.1:8000/librarian/book"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Books</a></li>
-       <li><a href="http://127.0.0.1:8000/librarian/shelf" class="active"><i class="fa fa-server" aria-hidden="true" style="padding-right:10px;"></i>Shelf</a></li>
-       <li><a href="http://127.0.0.1:8000/librarian/issue"><i class="fas fa-hand-holding fa-1.9x" aria-hidden="true" style="padding-right:10px;"></i>Issue</a></li>
-       <li><a href="http://127.0.0.1:8000/librarian/return"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Return</a></li>
-       <li><a href="http://127.0.0.1:8000/librarian/onholdbooks"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>On Hold Books</a></li>
+      <li><a href="http://127.0.0.1:8000/home"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Home</a></li>
+            <!-- <li><a href="http://127.0.0.1:8000/friends"><i class="fa fa-home" aria-hidden="true" style="padding-right:10px;"></i>Friends</a></li> -->
+       <li><a href="http://127.0.0.1:8000/booksearch"><i class="fa fa-search" aria-hidden="true" style="padding-right:10px;"></i>Search Books</a></li>
+       <li><a href="http://127.0.0.1:8000/mybooks"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Mybooks</a></li>
+       <li><a href="http://127.0.0.1:8000/bookshelf"><i class="fa fa-book" aria-hidden="true" style="padding-right:10px;"></i>Bookshelf</a></li>
        
       </ul>
       </div>
@@ -238,10 +237,10 @@ transform:scale(1.01);
       <span></span>
     </div>  
     <div class="list">
-      <div class="item" style="color:black;padding:6px;"><i class="fa fa-hand-paper fa-4x" style="color:red;" ></i>{{Name}}</div>
-      <!-- <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{fines}}</div>
-      <div class="item"><a   href="/profile" style="text-decoration:none;" ><i class="fa fa-user" style="padding-right:10px;color:red"></i>profile</a></div> -->
-      <div class="item"><a  href="http://127.0.0.1:8000/librarian/changepassword" style="text-decoration:none;"><i class="fa fa-key" style="padding-right:10px;color:red"></i>change password</a></div>
+      <div class="item"><i class="fa fa-user-circle fa-4x" style="color:blue;" ></i> {{name}}</div>
+      <div class="item"><i class="fa fa-credit-card-alt" style="color:red;padding-right:10px;"></i><i class="fa fa-inr" style="color:white;padding-right:5px;"></i>{{unpaid_fees}}</div>
+      <div class="item"><a   href="/profile" style="text-decoration:none;" ><i class="fa fa-user" style="padding-right:10px;color:red"></i>profile</a></div>
+      <div class="item"><a  href="/changepassword" style="text-decoration:none;"><i class="fa fa-key" style="padding-right:10px;color:red"></i>change password</a></div>
       
       <div class="item" ><a  href="{% url 'auth-login' %}" style="text-decoration:none;" onclick="return confirm('Do you really want to logout?');"><i class="fa fa-sign-out" style="padding-right:10px;color:red"></i>log out</a></div>
     </div>
@@ -249,47 +248,57 @@ transform:scale(1.01);
       </nav>
       </div>
       <br><br><br>
- <h4 style="text-align:center">Edit SHELF</h4>
+<table class="center">
+<tr>
+
+<td>
+<form method="POST">
+{% csrf_token %}
+<div class="loginbtn">
+           <button class="btn btn-danger" type="submit" name="" value="send emails"><span><i class="fa fa-envelope" style="color:white;padding-right:10px;"></i></span>send emails</button>
+        </div>
+        </form>
+</td>
+</tr>
+</table>
 <hr>
 <table style="width=80vw;">
 <tr>
-{% if shelves %}
+{% if messages %}
+        {% for message in messages %}
+       <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+       {{message}}
+       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+       </div>
+
+        {% endfor %}
+
+    {% endif %}
+{% if list %}
 <div class="results" style="margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; text-align:justify; ">
-{% for shelf in shelves%}
+
+{% for user in list%}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;">
 <div class="row">
   <div class="col-sm-10">
-  
-  <h6>shelf no: {{shelf.shelf_id}}</h6>
-  <h6>Capacity: {{shelf.capacity}}</h6>
-<div style="height:15px;"></div>
-<div class="row">
-{% comment %} <form method="POST">
-{% csrf_token %} {% endcomment %}
-<div class="col-sm-2">
-             <button class="btn btn-primary" type="submit" name="edit" value="{{shelf.shelf_id}}" id ="{{shelf.shelf_id}},{{shelf.capacity}}"data-toggle="modal" data-target="#exampleModalCenter" onclick=reply_click(this.id)><span><i class="fa fa-edit" style="color:white;padding-right:10px;" ></i></span>Update</button>
-        </div>
-        {% comment %} </form> {% endcomment %}
-        <form method="POST" onsubmit="return confirm('Confirm shelf deletion from LIBRARY?');">
-        {% csrf_token %}
-        <div class="col-sm-2">
-             <button class="btn btn-danger" type="submit" name="delete" value="{{shelf.shelf_id}}"><span><i class="fa fa-trash" style="color:white;padding-right:10px;" ></i></span>Remove</button>
-        </div>
-        </form>
-        </div>
+  <h5>Id:{{user.userId}}</h4>
+  <h6>Name:{{user.name}}</h5>
+  <h6>issued date:{{user.date_of_issue}}</h5>
+  <h6>last email date:{{user.last_email_date}}</h6>
+ </div>
+  <div class="col-sm-2" >
+  <div>
+  <img src="{% if book.image_url%}{{book.image_url}}{%else%}https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1{% endif %}"class="img-thumbnail" >
   </div>
-  <!-- <div class="col-sm-2" >
-  <div style="border:2px solid;width:140px;">
-  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="height:128px;width:128px;">
   </div>
-  </div> -->
 </div>
 </div>
 {%endfor%}
 </div>
 {%else%}
 <div class="results" style="margin:auto; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
-  
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are  available  for your search</h2>
   </div>
   {%endif%}
 </tr>
@@ -298,7 +307,7 @@ transform:scale(1.01);
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Update Shelf</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Rate and Review</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -306,55 +315,100 @@ transform:scale(1.01);
       <div class="modal-body">
       <form method="POST">
        {% csrf_token %}
- 
   <div class="form-group">
-    <label for="exampleInputPassword1">Capacity</label>
-    <input type="number" class="form-control" id="capacity_input" type="number" name="capacity_input" placeholder="Capacity">
+    <label for="exampleInputEmail1">Rating</label>
+    <div class="ui-select">
+<select class="form-control" aria-label="Default select example" name="rating">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+   <option value="4">4</option>
+    <option value="5">5</option>
+</select>
+</div>
   </div>
   <div class="form-group">
-                  <label for="exampleInputPassword1">Shelf_ID:</label>
-                 
-                    <input  id="shelf_input"class="form-control" type="number" value="" name="shelf_input" readonly>
-                 
-                </div>
-                 
+    <label for="exampleInputPassword1">Review</label>
+    <textarea  class="form-control"rows = "5" id="exampleInputPassword1" name="review_content" placeholder="Write a Review..."></textarea>
+  </div>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         <div width="20px"></div>
-        <button type="submit" id="myBtn" name="update_shelf" onclick="myFunction()" class="btn btn-success">Submit</button>
+        <button type="submit" id="myBtn" name="review" onclick="myFunction()" class="btn btn-success">Submit</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+{% comment %} {% if buses %}
+<td style="text-align:right;padding-left:50px;vertical-align:text-top;align:left;">
+<div class="results" style="float:right;margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; text-align:justify; ">
+{% for bus in buses %}
+<div class="flights" style="background-color:white;border-radius:7px;margin:20px;padding:20px;">
+<table>
+<tr>
+ <td style="padding:5px 30px;width:6vw">
+<i class="{{bus.image}}" style="padding:20px;"></i>
+ {% comment %} <img src= "{% static bus.image %}" height="70">  {% endcomment %}
+{% comment %} </td> 
+<td style="padding:5px 30px;width:6vw;">
+<h6>{{bus.company}}</h6>
+</td>
+<td style="padding:5px 30px;width:15vw;">
+<h6>{{bus.from_p}} - {{bus.to_p}}</h6>
+</td>
+
+<td style="padding:5px 30px;width:20vw;">
+<h6>{{bus.time_from}} - {{bus.time_to}}</h6>
+</td>
+<td style="padding:5px 30px;width:10vw;">
+<h6>Available:{{bus.available}}</h6>
+</td>
+<td style="padding:5px 30px;width:8vw">
+<h6><i class="fa fa-inr"></i>&nbsp&nbsp{{bus.price}}</h6>
+</td>
+<td style="padding:5px 30px;width:5vw;">
+<div class="loginbtn">
+             <input class="btn" type="submit" name="" value="Book" onclick="window.location.href='/buses/book/?c1={{bus.bus_schedule}}&c2={{passengers}}'">
+        </div>
+</td> {% endcomment %}
 </tr>
 </table>
-
-{% if messages %}
+{% comment %} </div>
+{% endfor %}
+</div>
+</td>
+{% else %}
+<td valign="middle" style="padding-left:50px;align:center;" >
+  <div class="results" style="margin:auto; margin:4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; ">
+  <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>No Books are  available  for your search</h2>
+  </div>
+  </td>
+{% endif %}
+</tr>
+</table> {% endcomment %}
+ {% comment %} {% if messages %}
         {% for message in messages %}
-         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+       <div class="alert alert-{% if message.tags=="error"%}danger{%else%}{{message.tags}}{%endif%}" role="alert">
+       {{message}}
+       </div>
 
         {% endfor %}
 
-    {% endif %}
+    {% endif %}  {% endcomment %}
 
  <script>
   var id;
-  var data;
-  var isbn;
   function reply_click(clicked_id)
   {
-      data = clicked_id.split(',');
-      var copy = document.getElementById("copy_input");
-      copy.value = data[1];
-      var shelf = document.getElementById("shelf_input");
-      shelf.value = data[0];
-      document.getElementById("status_input").value = data[3];
+      id = clicked_id;
+      console.log(id);
   }
   function myFunction() {
-  document.getElementById("myBtn").value = data[0];
+  document.getElementById("myBtn").value = id;
 }
   function toggleSidebar(ref){
     document.getElementById("sidebar").classList.toggle('active');

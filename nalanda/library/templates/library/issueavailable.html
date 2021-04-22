@@ -116,7 +116,7 @@ left:0;
     text-align:center;
     margin:0 10px;
 }
-.btn{
+{% comment %} .btn{
     text-align:center;
     color:white;
     background: #e60000;
@@ -128,7 +128,7 @@ left:0;
 }
 .btn:hover{
   background:#ff1a1a
-}
+} {% endcomment %}
 .signup{
     color:black;
     padding:20px;
@@ -231,31 +231,46 @@ transform:scale(1.01);
 <br>
 <br>
 <br>
+
 <div>
- <table style="width:90vw;margin:auto;">
-<form method="POST"  onsubmit="return confirm('Do you really wany to add these details?');">
+ <table style="width:50vw;margin:auto;position:absolute;top:50%;left:50%;">
+<form method="POST"  onsubmit="return confirm('Do you really want to add these details?');">
  {%csrf_token%}
-<tr>
- <td>
- <input class="form-control" type="number" value="" name="isbn" placeholder="ISBN" required >
- </td>
-</tr>
-<tr>
-  <td>
-    <input class="form-control" type="number" value="" name="copy_number" placeholder="Copy Number" required >
-    </td>
-</tr>
-<tr>
-  <td>
-    <input class="form-control" type="number" value="" name="userId" placeholder="User ID" required >
-    </td>
-</tr>
-<tr>
-<td>
-<div class="loginbtn">
-  <input class="btn" type="submit" name="" value="Issue Book" >
-</td>
-</tr>
+  <div class="col-md-8 personal-info" style="margin:auto;position:absolute;top:35%;left:30%;">
+  <div class="form-group">
+              <label class="col-lg-3 control-label">ISBN:</label>
+              <div class="col-lg-8">
+                <input class="form-control" type="number" value="" name="isbn" placeholder="ISBN" required >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Copy number:</label>
+              <div class="col-lg-8">
+                <input class="form-control" type="number" value="" name="copy_number" placeholder="Copy Number" required >
+              </div>
+            </div>
+             <div class="form-group">
+              <label class="col-lg-3 control-label">user Id:</label>
+              <div class="col-lg-8">
+                <in <input class="form-control" type="number" value="" name="userId" placeholder="User ID" required >
+              </div>
+            </div>
+            <div style="height:20px;"></div>
+            {% comment %} <div class="form-group">
+              <label class="row control-label"></label> {% endcomment %}
+              
+              <div class="row">
+              <div class="col-sm-2">
+               <input class="btn btn-success" type="submit" name="" value="Issue Book" >
+                </div>
+                  <div class="col-sm-2">
+                <input type="reset" class="btn btn-primary" value="Clear">
+                </div>
+              </div>
+
+
+</div>
 </form>
 </table>
 </div style="float:right;">

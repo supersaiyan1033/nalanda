@@ -18,6 +18,11 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.utils.crypto import get_random_string
 
+
+def days_between(d1, d2):
+    d1 = datetime.strptime(d1, "%Y-%m-%d %H:%M:%S")
+    d2 = datetime.strptime(d2, "%Y-%m-%d %H:%M:%S")
+    return abs((d2 - d1).days)
 # Create your views here.
 
 
@@ -1495,3 +1500,61 @@ def onholdbooks(request):
         return render(request, 'authentication/page_not_found.html')
     else:
         return render(request, 'authentication/error.html')
+
+
+def send_emails(request):
+    cursor = connection.cursor()
+    if request.method == 'POST':
+        cursor.execute(
+            """select user.User_ID,Name,Date_of_Issue,email,last_email_date from on_loan join user on user.User_ID=on_loan.User_ID""")
+        row = cursor.fetchall()
+        emails = []
+        users = []
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if cursor.rowcount > 0:
+            for n in range(cursor.rowcount):
+                if row[n][4] == None:
+                    if days_between(row[n][2].strftime("%Y-%m-%d %H:%M:%S"), now) >= 15:
+                        emails.append(row[n][3])
+                        users.append(row[n][0])
+                else:
+                    if days_between(row[n][4].strftime("%Y-%m-%d %H:%M:%S"), now) >= 15:
+                        emails.append(row[n][3])
+                        users.append(row[n][0])
+        send_mail(subject='Overdue of Loaned Books reminder!!', message='', from_email='nalanda3306@gmail.com', recipient_list=emails, fail_silently=True,
+
+                  html_message="reminder to return your book which is overdue!!")
+        if len(users) > 0:
+            for user in users:
+                cursor.execute(
+                    """ update on_loan set last_email_date=%s where User_ID=%s """, (now, user))
+        else:
+            messages.warning(request, "No due emails to send")
+    cursor.execute(
+        """select user.User_ID,Name,Date_of_Issue,last_email_date from on_loan join user on user.User_ID=on_loan.User_ID""")
+    list = []
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    row = cursor.fetchall()
+    if cursor.rowcount > 0:
+        for n in range(cursor.rowcount):
+            if row[n][3] == None:
+
+                if days_between(row[n][2].strftime("%Y-%m-%d %H:%M:%S"), now) >= 15:
+                    list.append({
+                        'userId': row[n][0],
+                        'name': row[n][1],
+                        'date_of_issue': row[n][2],
+                        'last_email_date': row[n][3]
+                    })
+            else:
+                if days_between(row[n][3].strftime("%Y-%m-%d %H:%M:%S"), now) >= 15:
+                    list.append({
+                        'userId': row[n][0],
+                        'name': row[n][1],
+                        'date_of_issue': row[n][2],
+                        'last_email_date': row[n][3]
+                    })
+    data = {
+        'list': list
+    }
+    return render(request, 'library/send_emails.html', data)

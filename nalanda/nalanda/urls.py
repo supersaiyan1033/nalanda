@@ -65,6 +65,7 @@ urlpatterns = [
     path('librarian/issue/onhold/',
          lib_views.issue_onHold, name='issue_onHold'),
     path('librarian/return', lib_views.return_book, name='return'),
+    path('librarian/emails', lib_views.send_emails, name='emails'),
 
     #     # shelf urls
     path('librarian/shelf', lib_views.shelf, name='shelf'),
