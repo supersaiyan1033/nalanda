@@ -274,10 +274,21 @@ transform:scale(1.01);
 <hr>
 <table style="width=80vw;">
 <tr>
+{% if messages %}
+        {% for message in messages %}
+       <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert" style="z-index:9999;">
+       {{message}}
+       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+       </div>
 
+        {% endfor %}
+
+    {% endif %}
 {% if friends %}
 {% comment %} <div class="friendlist" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;"> {% endcomment %}
 <div>
+
     {%for f in friends %}
     <div class="friendlist" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;">
     <div class="row">
@@ -290,10 +301,10 @@ transform:scale(1.01);
     </div>
     <div class="row"> 
       <div class="col-sm-6">
-       <input class="btn" type="submit" name="" value="Show BookShelf" onclick="window.location.href='friends/list/{{f.friendId}}/bookshelf' ">
+       <input class="btn" type="submit" name="" value="Show BookShelf" onclick="window.location.href='/friends/list/{{f.friendId}}/bookshelf' ">
       </div>
       <div class="col-sm-6">
-          <form method = "POST">
+          <form method = "POST"onsubmit="return confirm('Confirm friend removal?');">
            {% csrf_token %}
            <button class="btn" type="submit" name="RemoveFriend" value="{{f.friendId}}">Remove Friend</button>
           </form>
@@ -308,12 +319,5 @@ transform:scale(1.01);
   <h2 style="text-align:center;padding:20px;margin:10px;"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right:10px;color:red;"></i>Search Found 0 results</h2>
   </div>
 {%endif%}
-{% if messages %}
-        {% for message in messages %}
-         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
-
-        {% endfor %}
-
-    {% endif %}
 </body>   
 </html>

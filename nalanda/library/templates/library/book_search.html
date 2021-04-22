@@ -281,6 +281,17 @@ transform:scale(1.01);
 <tr>
 {% if books %}
 <div class="results" style="margin:auto; margin:4px, 4px; padding:4px;  height: 70vh;  overflow-x: hidden; overflow-y: auto; text-align:justify; ">
+{% if messages %}
+        {% for message in messages %}
+       <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+       {{message}}
+       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+       </div>
+
+        {% endfor %}
+
+    {% endif %}
 {% for book in books%}
 <div class="flights" style="background-color:white;border-radius:7px;margin:20px 15vw;padding:20px  15px 20px 25px;">
 <div class="row">
@@ -420,13 +431,15 @@ transform:scale(1.01);
 {% endif %}
 </tr>
 </table> {% endcomment %}
-{% if messages %}
+ {% comment %} {% if messages %}
         {% for message in messages %}
-         {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+       <div class="alert alert-{% if message.tags=="error"%}danger{%else%}{{message.tags}}{%endif%}" role="alert">
+       {{message}}
+       </div>
 
         {% endfor %}
 
-    {% endif %}
+    {% endif %}  {% endcomment %}
 
  <script>
   var id;

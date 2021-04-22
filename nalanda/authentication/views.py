@@ -86,11 +86,11 @@ def Log_In(request):
 
                 else:
 
-                    messages.success(
+                    messages.warning(
                         request, 'incorrect password please try again!!')
                     # return render(request, 'authentication/login.html')
             else:
-                messages.error(
+                messages.warning(
                     request, 'Account does not exist with the entered credentials!! signup to create an account')
                 # return render(request, 'authentication/login.html')
         else:
@@ -112,11 +112,11 @@ def Log_In(request):
 
                 else:
 
-                    messages.error(
+                    messages.warning(
                         request, 'incorrect password please try again!!')
                     # return render(request, 'authentication/login.html')
             else:
-                messages.error(
+                messages.warning(
                     request, 'Account does not exist with the entered credentials!!')
                 return render(request, 'authentication/login.html')
     return render(request, 'authentication/login.html')
@@ -149,7 +149,7 @@ def Sign_Up(request):
                 request, 'OTP sent to your email please check your inbox!!')
             return redirect('http://127.0.0.1:8000/login/emailverification')
         else:
-            messages.success(
+            messages.warning(
                 request, 'User with the entered email already exists please login to continue!!!')
             return redirect('http://127.0.0.1:8000/login')
 
@@ -242,13 +242,14 @@ def Profile(request):
             Category = request.POST.get('Category')
             address = request.POST.get('Address')
             password = request.POST.get('Password')
-            if bcrypt.checkpw(password.encode('utf8'),data['Password'].encode('utf8')):
+            if bcrypt.checkpw(password.encode('utf8'), data['Password'].encode('utf8')):
                 messages.success(request, 'Profile is Updated Successfully!')
                 cursor.execute("""UPDATE user SET Name=%s,Address=%s,email=%s,DOB=%s WHERE User_ID=%s """,
                                (Name, address, email, DOB, data['UserId']))
                 return redirect('http://127.0.0.1:8000/home')
             else:
-                messages.success(request, 'incorrect password please try again!!')
+                messages.success(
+                    request, 'incorrect password please try again!!')
                 return render(request, 'authentication/profile.html', data)
         else:
             return render(request, "authentication/profile.html", data)
