@@ -286,7 +286,19 @@ transform:scale(1.01);
   </div>
   </nav>
 </div>
+
 <div id="section1">
+ {% if messages %}
+        {% for message in messages %}
+       <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert" style="z-index:9999;position:relative;">
+       {{message}}
+       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+       </div>
+
+        {% endfor %}
+
+    {% endif %}
   <div id="introduction" style="position:absolute;padding:20px;width:100vw;height:65vh;background-color:rgba(0,0,0,0.4);">
     <br><br><br><br>
    <h4 style="text-align:center;color:white;font-family:'Inconsolata',serif;font-weight:bold;"> welcome to </h4>

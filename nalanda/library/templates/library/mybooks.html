@@ -312,8 +312,8 @@ transform:scale(1.01);
   <h6>Fine :{{onloan.Fine}}</h5>
   </div>
   <div class="col-sm-2" >
-  <div style="width:140px;height:170px;">
-  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
+  <div style="width:140px;">
+  <img src="{% if onloan.image_url%}{{onloan.image_url}}{%else%}https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1{% endif %}"class="img-thumbnail">
   <h5 class="stamp" style="text-align:center;">On Loan</h5>
   </div>
   </div>
@@ -347,8 +347,8 @@ transform:scale(1.01);
   </div>
 
   <div class="col-sm-2" >
-  <div style="width:140px;height:170px;">
-  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
+  <div style="width:140px;">
+  <img src="{% if onhold.image_url%}{{onhold.image_url}}{%else%}https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1{% endif %}"class="img-thumbnail">
   <h5 class="stamp" style="text-align:center;">On Hold</h5>
   </div>
   </div>
@@ -380,12 +380,12 @@ transform:scale(1.01);
   <h6>Year of Publication : {{previous.Year_of_Publication}}</h5>
   <h6>Date of Issue :{{previous.date_of_issue}}</h5>
   <h6>Date of Return :{{previous.date_of_return}}</h5>
-  <h6>Fine :{{previous.Fine}}</h5>
+  <h6>Fine :  <span><i class="fa fa-inr" style="padding-right:5px;"></i></span>{{previous.Fine}}</h5>
   </div>
 
   <div class="col-sm-2" >
   <div style="width:140px;height:170px;">
-  <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
+  <img src="{% if previous.image_url%}{{previous.image_url}}{%else%}https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1{% endif %}"class="img-thumbnail"><br><br>
   {% comment %} <h5 class="stamp" style="text-align:center;">On Loan</h5> {% endcomment %}
   </div>
   </div>
@@ -418,8 +418,8 @@ transform:scale(1.01);
     </div>
   
     <div class="col-sm-2" >
-    <div style="width:140px;height:170px;">
-    <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1" alt="W3Schools.com" style="border:2px solid;height:128px;width:128px;"><br><br>
+    <div style="width:115px;">
+    <img src="{% if onloan_onhold.image_url%}{{onloan_onhold.image_url}}{%else%}https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.bsmc.net.au%2Fwp-content%2Fuploads%2FNo-image-available.jpg&f=1&nofb=1{% endif %}"class="img-thumbnail">
     <h5 class="stamp" style="text-align:center;">On Loan & On Hold</h5>
     </div>
     </div>
