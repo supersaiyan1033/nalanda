@@ -1461,8 +1461,10 @@ def onholdbooks(request):
                         """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On hold', row[n][0]))
                     now = datetime.now()
                     date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-                    cursor.execute("""INSERT INTO on_hold(date_of_hold,User_ID,Book_ID) VALUES(%s,%s,%s)""",(date_time,newrow[0][0],row[n][0]))
-                    cursor.execute("""DELETE FROM on_loan_on_hold WHERE User_Id=%s AND ISBN=%s""",(newrow[0][0],row[n][1]))
+                    cursor.execute("""INSERT INTO on_hold(date_of_hold,User_ID,Book_ID) VALUES(%s,%s,%s)""", (
+                        date_time, newrow[0][0], row[n][0]))
+                    cursor.execute(
+                        """DELETE FROM on_loan_on_hold WHERE User_Id=%s AND ISBN=%s""", (newrow[0][0], row[n][1]))
                     #######################################################################################################
                 else:
                     cursor.execute(
@@ -1475,7 +1477,7 @@ def onholdbooks(request):
             now = datetime.now()
             date_time = now.strftime("%Y-%m-%d %H:%M:%S")
             cursor = connection.cursor()
-            cursor.execute("""SELECT isbn.ISBN,Title,Year_of_Publication,Copy_number,Genre,date_of_hold,Author,Publisher,Name,email  FROM on_hold JOIN user ON on_hold.User_ID=user.User_ID JOIN book ON on_hold.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE TIMESTAMPADD(DAY,10,date_of_hold)<=%s AND Category= %s""", (date_time,'Student'))
+            cursor.execute("""SELECT isbn.ISBN,Title,Year_of_Publication,Copy_number,Genre,date_of_hold,Author,Publisher,Name,email  FROM on_hold JOIN user ON on_hold.User_ID=user.User_ID JOIN book ON on_hold.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE TIMESTAMPADD(DAY,10,date_of_hold)<=%s AND Category= %s""", (date_time, 'Student'))
             row = cursor.fetchall()
             a = cursor.rowcount
             books = []
@@ -1489,8 +1491,8 @@ def onholdbooks(request):
                     'date_of_hold': row[n][5],
                     'Author': row[n][6],
                     'Publisher': row[n][7],
-                    'NAME':row[n][8],
-                    'EMAIL':row[n][9]
+                    'NAME': row[n][8],
+                    'EMAIL': row[n][9]
                 })
             data = {
                 'Name': name,
@@ -1559,3 +1561,38 @@ def send_emails(request):
         'list': list
     }
     return render(request, 'library/send_emails.html', data)
+
+
+def suggestions(request):
+    userId = request.session.get('userId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'user':
+        cursor = connection.cursor()
+        cursor.execute(
+            """SELECT Name,Unpaid_fees FROM user WHERE email= %s""", [email])
+        row = cursor.fetchall()
+        name = row[0][0]
+        unpaid_fees = row[0][1]
+        cursor = connection.cursor()
+        cursor.execute(
+            """select isbn.Title,isbn.Genre,isbn.Rating,isbn.Author from isbn where isbn.rating= ANY(select isbn.Rating from isbn order by Rating)order by Rating DESC LIMIT 3;""")
+        row = cursor.fetchall()
+        a = cursor.rowcount
+        suggestions = []
+        for n in range(a):
+            suggestions.append({
+                'Title': row[n][0],
+                'Genre': row[n][1],
+                'Rating': row[n][2],
+                'Author': row[n][3]
+            })
+        data = {
+            'Name': name,
+            'Unpaid_fees': unpaid_fees,
+            'suggestions': suggestions
+        }
+        return render(request, 'library/suggestions.html', data)
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')

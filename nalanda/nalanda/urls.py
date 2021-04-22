@@ -43,6 +43,7 @@ urlpatterns = [
     #     path('booksearch/<isbn>/', lib_views.book_details, name='book_details'),
     path('bookshelf', lib_views.bookshelf, name='bookshelf'),
     path('mybooks', lib_views.mybooks, name='mybooks'),
+    path('suggestions', lib_views.suggestions, name="suggestions"),
     #     # friends urls
     path('friends', lib_views.friends, name='friends'),
     path('friends/list', lib_views.friends_list, name='friends_list'),
