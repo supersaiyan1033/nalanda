@@ -1517,7 +1517,7 @@ def send_emails(request):
         if cursor.rowcount > 0:
             for n in range(cursor.rowcount):
                 if row[n][4] == None:
-                    if days_between(row[n][2].strftime("%Y-%m-%d %H:%M:%S"), now) >= 15:
+                    if days_between(row[n][2].strftime("%Y-%m-%d %H:%M:%S"), now) >= 30:
                         emails.append(row[n][3])
                         users.append(row[n][0])
                 else:
@@ -1542,7 +1542,7 @@ def send_emails(request):
         for n in range(cursor.rowcount):
             if row[n][3] == None:
 
-                if days_between(row[n][2].strftime("%Y-%m-%d %H:%M:%S"), now) >= 15:
+                if days_between(row[n][2].strftime("%Y-%m-%d %H:%M:%S"), now) >= 30:
                     list.append({
                         'userId': row[n][0],
                         'name': row[n][1],
