@@ -1461,10 +1461,9 @@ def onholdbooks(request):
                         """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On hold', row[n][0]))
                     now = datetime.now()
                     date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-                    cursor.execute("""INSERT INTO on_hold(date_of_hold,User_ID,Book_ID) VALUES(%s,%s,%s)""", (
-                        date_time, newrow[0][0], row[n][0]))
-                    cursor.execute(
-                        """DELETE FROM on_loan_on_hold WHERE User_Id=%s AND ISBN=%s""", (newrow[0][0], row[n][1]))
+                    cursor.execute("""INSERT INTO on_hold(date_of_hold,User_ID,Book_ID) VALUES(%s,%s,%s)""",(date_time,newrow[0][0],row[n][0]))
+                    cursor.execute("""DELETE FROM on_loan_on_hold WHERE User_Id=%s AND ISBN=%s""",(newrow[0][0],row[n][1]))
+                    #######################################################################################################
                 else:
                     cursor.execute(
                         """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On shelf', row[n][0]))
@@ -1476,7 +1475,7 @@ def onholdbooks(request):
             now = datetime.now()
             date_time = now.strftime("%Y-%m-%d %H:%M:%S")
             cursor = connection.cursor()
-            cursor.execute("""SELECT isbn.ISBN,Title,Year_of_Publication,Copy_number,Genre,date_of_hold,Author,Publisher  FROM on_hold JOIN user ON on_hold.User_ID=user.User_ID JOIN book ON on_hold.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE TIMESTAMPADD(DAY,10,date_of_hold)<=%s AND Category= %s""", (date_time, 'Student'))
+            cursor.execute("""SELECT isbn.ISBN,Title,Year_of_Publication,Copy_number,Genre,date_of_hold,Author,Publisher,Name,email  FROM on_hold JOIN user ON on_hold.User_ID=user.User_ID JOIN book ON on_hold.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE TIMESTAMPADD(DAY,10,date_of_hold)<=%s AND Category= %s""", (date_time,'Student'))
             row = cursor.fetchall()
             a = cursor.rowcount
             books = []
@@ -1490,6 +1489,8 @@ def onholdbooks(request):
                     'date_of_hold': row[n][5],
                     'Author': row[n][6],
                     'Publisher': row[n][7],
+                    'NAME':row[n][8],
+                    'EMAIL':row[n][9]
                 })
             data = {
                 'Name': name,
