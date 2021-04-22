@@ -10,6 +10,7 @@ import sys
 import base64
 from datetime import datetime
 from datetime import date
+from datetime import timedelta
 from django.http import HttpResponse
 from django.template.loader import get_template
 import smtplib
@@ -1424,3 +1425,73 @@ def add_friend(request):
 
 
 # def suggestions(request):
+
+def onholdbooks(request):
+    librarianId = request.session.get('librarianId')
+    email = request.session.get('email')
+    if request.session.get('role') == 'librarian':
+        cursor = connection.cursor()
+        cursor.execute(
+            """SELECT Name FROM librarian WHERE email= %s""", [email])
+        row = cursor.fetchall()
+        name = row[0][0]
+        if request.method == "POST":
+            now = datetime.now()
+            date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+            cursor = connection.cursor()
+            cursor.execute("""SELECT on_hold.Book_ID,isbn.ISBN FROM on_hold JOIN user ON on_hold.User_ID=user.User_ID JOIN book ON on_hold.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE TIMESTAMPADD(DAY,10,date_of_hold)<=%s AND Category= %s""", (date_time, 'Student'))
+            row = cursor.fetchall()
+            a = cursor.rowcount
+            for n in range(a):
+                cursor.execute(
+                    """DELETE FROM on_hold WHERE Book_ID=%s""", [row[n][0]])
+
+            for n in range(a):
+                cursor.execute(
+                    """SELECT User_Id FROM on_loan_on_hold WHERE ISBN=%s ORDER BY Time_stamp LIMIT 1""", [row[n][1]])
+                newrow = cursor.fetchall()
+                count = cursor.rowcount
+                if count > 0:
+                    cursor.execute(
+                        """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On hold', row[n][0]))
+                    now = datetime.now()
+                    date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+                    cursor.execute("""INSERT INTO on_hold(date_of_hold,User_ID,Book_ID) VALUES(%s,%s,%s)""", (
+                        date_time, newrow[0][0], row[n][0]))
+                    cursor.execute(
+                        """DELETE FROM on_loan_on_hold WHERE User_Id=%s AND ISBN=%s""", (newrow[0][0], row[n][1]))
+                else:
+                    cursor.execute(
+                        """UPDATE book SET Status=%s WHERE Book_ID=%s""", ('On shelf', row[n][0]))
+
+            messages.success(
+                request, 'Overdue On Hold Books Of Students Cancelled Successfully !')
+            return redirect('http://127.0.0.1:8000/librarian/home')
+        else:
+            now = datetime.now()
+            date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+            cursor = connection.cursor()
+            cursor.execute("""SELECT isbn.ISBN,Title,Year_of_Publication,Copy_number,Genre,date_of_hold,Author,Publisher  FROM on_hold JOIN user ON on_hold.User_ID=user.User_ID JOIN book ON on_hold.Book_ID=book.Book_ID JOIN isbn ON book.ISBN=isbn.ISBN WHERE TIMESTAMPADD(DAY,10,date_of_hold)<=%s AND Category= %s""", (date_time, 'Student'))
+            row = cursor.fetchall()
+            a = cursor.rowcount
+            books = []
+            for n in range(a):
+                books.append({
+                    'ISBN': row[n][0],
+                    'Title': row[n][1],
+                    'Year_of_Publication': row[n][2],
+                    'Copy_Number': row[n][3],
+                    'Genre': row[n][4],
+                    'date_of_hold': row[n][5],
+                    'Author': row[n][6],
+                    'Publisher': row[n][7],
+                })
+            data = {
+                'Name': name,
+                'books': books
+            }
+            return render(request, 'library/onholdbooks.html', data)
+    elif request.session.get('role') != None:
+        return render(request, 'authentication/page_not_found.html')
+    else:
+        return render(request, 'authentication/error.html')

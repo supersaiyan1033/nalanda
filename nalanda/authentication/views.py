@@ -21,17 +21,7 @@ from django.utils.crypto import get_random_string
 
 
 def Home(request):
-    if request.session.get('role') == 'user':
-        url = "http://127.0.0.1:8000/home"
-        return redirect(url)
-    elif request.session.get('role') == 'librarian':
-        url = "http://127.0.0.1:8000/librarian/home"
-        return redirect(url)
-        return render(request, 'library/librarian.html')
-    elif request.session.get('role') != None:
-        return render(request, 'authentication/page_not_found.html')
-    else:
-        return render(request, 'authentication/home.html')
+    return render(request, 'authentication/home.html')
 
 
 def About_us(request):
@@ -45,7 +35,7 @@ def Contact_us(request):
         message = request.POST.get('message')
         cursor = connection.cursor()
         cursor.execute(
-            """SELECT email FROM librarian WHERE librarian_ID=%s""", ['1'])
+            """SELECT email FROM librarian WHERE librarian_ID=%d""", ['1'])
         a = cursor.rowcount
         row = cursor.fetchall()
         admins = []
@@ -88,11 +78,11 @@ def Log_In(request):
 
                     messages.warning(
                         request, 'incorrect password please try again!!')
-                    # return render(request, 'authentication/login.html')
+                    return render(request, 'authentication/login.html')
             else:
                 messages.warning(
                     request, 'Account does not exist with the entered credentials!! signup to create an account')
-                # return render(request, 'authentication/login.html')
+                return render(request, 'authentication/login.html')
         else:
             cursor = connection.cursor()
             cursor.execute(
@@ -114,12 +104,13 @@ def Log_In(request):
 
                     messages.warning(
                         request, 'incorrect password please try again!!')
-                    # return render(request, 'authentication/login.html')
+                    return render(request, 'authentication/login.html')
             else:
                 messages.warning(
                     request, 'Account does not exist with the entered credentials!!')
                 return render(request, 'authentication/login.html')
-    return render(request, 'authentication/login.html')
+    else:
+        return render(request, 'authentication/login.html')
 
 
 def Sign_Up(request):
@@ -218,7 +209,7 @@ def Forgot_Password(request):
 
 
 def Profile(request):
-    UserId = request.session.get('userId')
+    UserId = request.session.get('UserId')
     email = request.session.get('email')
     if request.session.get('role') == 'user':
         cursor = connection.cursor()
@@ -227,12 +218,11 @@ def Profile(request):
 
         dateOfBirth = row[0][3].strftime("%Y-%m-%d")
         data = {
-            'userId': row[0][0],
+            'UserId': row[0][0],
             'Name': row[0][1],
             'email': row[0][2],
             'DOB': dateOfBirth,
             'Password': row[0][4],
-            'Category': row[0][5],
             'address': row[0][6]
         }
         if request.method == "POST":
@@ -244,8 +234,8 @@ def Profile(request):
             password = request.POST.get('Password')
             if bcrypt.checkpw(password.encode('utf8'), data['Password'].encode('utf8')):
                 messages.success(request, 'Profile is Updated Successfully!')
-                cursor.execute("""UPDATE user SET Name=%s,Address=%s,email=%s,DOB=%s WHERE User_ID=%s """,
-                               (Name, address, email, DOB, data['UserId']))
+                cursor.execute("""UPDATE user SET Name=%s,Address=%s,email=%s,DOB=%s WHERE UserId=%s """,
+                               (Name, address, email, DOB, data['userId']))
                 return redirect('http://127.0.0.1:8000/home')
             else:
                 messages.success(
@@ -326,12 +316,9 @@ def user(request):
         cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
         row = cursor.fetchall()
         dateOfBirth = row[0][3].strftime("%Y-%m-%d")
-        fees = row[0][7]
-        if fees == None:
-            fees = 0
         data = {
             'Name': row[0][1],
-            'Unpaid_fees': fees
+            'Unpaid_fees': row[0][7]
         }
 
         return render(request, 'library/user.html', data)
