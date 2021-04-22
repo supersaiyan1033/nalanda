@@ -215,7 +215,7 @@ def Profile(request):
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM user WHERE email= %s""", [email])
         row = cursor.fetchall()
-
+        
         dateOfBirth = row[0][3].strftime("%Y-%m-%d")
         data = {
             'UserId': row[0][0],
@@ -230,7 +230,7 @@ def Profile(request):
             email = request.POST.get('email')
             DOB = request.POST.get('DOB')
             Category = request.POST.get('Category')
-            address = request.POST.get('Address')
+            address = request.POST.get('address')
             password = request.POST.get('Password')
             if bcrypt.checkpw(password.encode('utf8'), data['Password'].encode('utf8')):
                 messages.success(request, 'Profile is Updated Successfully!')
